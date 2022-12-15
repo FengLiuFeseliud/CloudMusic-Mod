@@ -1,0 +1,103 @@
+package fengliu.cloudmusic.util.music163;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import fengliu.cloudmusic.util.HttpClient;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.text.Text;
+
+public class PlayList extends Music163Object implements MusicList {
+    public final long id;
+    public final String name;
+    public final String cover;
+    public final int count;
+    public final long playCount;
+    public final JsonObject creator;
+    public final String[] description;
+    public final JsonArray tags;
+    public final String tagsStr;
+    private final JsonArray tracks;
+    private List<Music> musics;
+
+    public PlayList(HttpClient api, JsonObject data) {
+        super(api, data);
+
+        JsonObject playlist;
+        if(data.has("playlist")){
+            playlist = data.get("playlist").getAsJsonObject();
+        }else{
+            playlist = data;
+        }
+
+        this.id = playlist.get("id").getAsLong();
+        this.name = playlist.get("name").getAsString();
+        this.cover = playlist.get("coverImgUrl").getAsString();
+        this.count = playlist.get("trackCount").getAsInt();
+        this.playCount = playlist.get("playCount").getAsLong();
+        this.creator = playlist.get("creator").getAsJsonObject();
+        if(!playlist.get("description").isJsonNull()){
+            this.description = playlist.get("description").getAsString().split("\n");
+        }else{
+            this.description = null;
+        }
+        this.tags = playlist.get("tags").getAsJsonArray();
+
+        String[] _tagsStr = {""};
+        this.tags.forEach(element -> {
+            _tagsStr[0] += element.getAsString() + "/";
+        });
+        if(!_tagsStr[0].isEmpty()){
+            this.tagsStr = (String) _tagsStr[0].subSequence(0, _tagsStr[0].length() - 1);
+        }else{
+            this.tagsStr = "";
+        }
+
+        if(!playlist.get("tracks").isJsonNull()){
+            this.tracks = playlist.get("tracks").getAsJsonArray();
+        }else{
+            this.tracks = new JsonArray();
+        }
+        
+    }
+
+    public List<Music> getMusics(){
+        if(this.musics != null){
+            return this.musics;
+        }
+
+        this.musics = new ArrayList<>();
+        this.tracks.forEach(element -> {
+            this.musics.add(new Music(api, element.getAsJsonObject()));
+        });
+        return this.musics;
+    }
+
+    public void printToChatHud(FabricClientCommandSource source) {
+        source.sendFeedback(Text.literal(""));
+
+        source.sendFeedback(Text.literal(this.name));
+
+        source.sendFeedback(Text.literal(""));
+
+        source.sendFeedback(Text.translatable("cloudmusic.info.music.platlist.creator", this.creator.get("nickname").getAsString()));
+        if(!this.tagsStr.isEmpty()){
+            source.sendFeedback(Text.translatable("cloudmusic.info.music.platlist.tags", this.tagsStr));
+        }
+        source.sendFeedback(Text.translatable("cloudmusic.info.music.platlist.count", this.count, this.playCount));
+        source.sendFeedback(Text.translatable("cloudmusic.info.music.platlist.id", this.id));
+
+        if(this.description == null){
+            return;
+        }
+        
+        source.sendFeedback(Text.literal(""));
+        for (String row : this.description) {
+            source.sendFeedback(Text.literal("§7" + row));
+        }
+    }
+    
+}

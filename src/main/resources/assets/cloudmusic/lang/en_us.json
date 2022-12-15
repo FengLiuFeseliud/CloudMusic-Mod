@@ -1,0 +1,14 @@
+{
+    "cloudmusic.info.volume": "当前音量: %d",
+    "cloudmusic.info.music.artist": "%d",
+    "cloudmusic.info.music.album": "专辑: %d",
+    "cloudmusic.info.music.id": "id: %d",
+    "cloudmusic.info.music.platlist.creator": "创建者: %d",
+    "cloudmusic.info.music.platlist.tags": "标签: %d",
+    "cloudmusic.info.music.platlist.count": "单曲数: %d 播放数: %d",
+    "cloudmusic.info.album.id": "id: %d",
+    "cloudmusic.info.album.size": "单曲数: %d",
+    "cloudmusic.info.user.level": "等级: %d",
+    "cloudmusic.info.user.vip": "会员: %d",
+    "cloudmusic.info.user.id": "id: %d"
+}
