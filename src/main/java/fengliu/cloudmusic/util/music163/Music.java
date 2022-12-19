@@ -6,17 +6,20 @@ import java.util.Map;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import fengliu.cloudmusic.util.HttpClient;
+import fengliu.cloudmusic.util.TextClick;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.block.enums.Thickness;
 import net.minecraft.text.Text;
 
 public class Music extends Music163Object implements PrintObject {
     public final long id;
     public final String name;
     public final String aliasName;
-    public final Map<String, Long> artists;
+    public final JsonArray artists;
     public final long albumId;
     public final String albumName;
     public final long duration;
@@ -41,17 +44,23 @@ public class Music extends Music163Object implements PrintObject {
             this.aliasName = "";
         }
 
-        Map<String, Long> artists = new HashMap<>();
-        music.get("ar").getAsJsonArray().forEach(element -> {
-            JsonObject artist = element.getAsJsonObject();
-            artists.put(artist.get("name").getAsString(), artist.get("id").getAsLong());
-        });
-        this.artists = artists;
+        this.artists = music.get("ar").getAsJsonArray();
 
         JsonObject album = music.get("al").getAsJsonObject();
         this.albumId = album.get("id").getAsLong();
         this.albumName = album.get("name").getAsString();
         this.duration = music.get("dt").getAsLong() / 1000;
+    }
+
+    public JsonObject like(boolean like){
+        Map<String, Object> data = new HashMap<>();
+        data.put("alg", "itembased");
+        data.put("trackId", this.id);
+        data.put("like", like);
+        data.put("time", 3);
+
+        JsonObject result = this.api.POST_API("/api/radio/like", data);
+        return result;
     }
 
     public String getPlayUrl(@Nullable int br){
@@ -85,14 +94,21 @@ public class Music extends Music163Object implements PrintObject {
        
        source.sendFeedback(Text.literal(""));
 
-       String artistName = "";
-       for (String artist : this.artists.keySet()) {
-            artistName += artist + "/";
+       Map<String, String> artistsTextData = new HashMap<>();
+       for (JsonElement artistData : this.artists.asList()) {
+            JsonObject artist = artistData.getAsJsonObject();
+            artistsTextData.put("§b§n" + artist.get("name").getAsString(), "/cloudmusic artist " + artist.get("id").getAsLong());
        }
-       artistName = (String) artistName.subSequence(0, artistName.length() - 1);
-       source.sendFeedback(Text.translatable("cloudmusic.info.music.artist", artistName));
-       source.sendFeedback(Text.translatable("cloudmusic.info.music.album", this.albumName));
+       
+       source.sendFeedback(TextClick.suggestTextMap("cloudmusic.info.music.artist", artistsTextData, "§f§l/"));
+       source.sendFeedback(TextClick.suggestText("cloudmusic.info.music.album", "§b" + this.albumName, "/cloudmusic album " + this.albumId));
        source.sendFeedback(Text.translatable("cloudmusic.info.music.id", this.id));
+
+       Map<String, String> optionsTextData = new HashMap<>();
+       optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic music play " + this.id);
+       optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.like").getString(), "/cloudmusic music like " + this.id);
+       optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic subscribe " + this.id);
+       source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
     
 }

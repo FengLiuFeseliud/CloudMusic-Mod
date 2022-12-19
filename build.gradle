@@ -25,11 +25,17 @@ dependencies {
 
 	// 以支持 mp3 播放
 
+	// https://mvnrepository.com/artifact/javazoom/jlayer
+	implementation group: 'javazoom', name: 'jlayer', version: '1.0.1'
+	include group: 'javazoom', name: 'jlayer', version: '1.0.1'
+
 	// https://mvnrepository.com/artifact/com.googlecode.soundlibs/mp3spi
 	implementation group: 'com.googlecode.soundlibs', name: 'mp3spi', version: '1.9.5.4'
+	include group: 'com.googlecode.soundlibs', name: 'mp3spi', version: '1.9.5.4'
 
 	// https://mvnrepository.com/artifact/com.googlecode.soundlibs/tritonus-share
 	implementation group: 'com.googlecode.soundlibs', name: 'tritonus-share', version: '0.3.7.4'
+	include group: 'com.googlecode.soundlibs', name: 'tritonus-share', version: '0.3.7.4'
 }
 
 processResources {
@@ -43,13 +49,6 @@ processResources {
 tasks.withType(JavaCompile).configureEach {
 	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
 	it.options.release = 17
-}
-
-java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
-	withSourcesJar()
 }
 
 jar {

@@ -2,6 +2,7 @@ package fengliu.cloudmusic.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -169,7 +170,12 @@ public class HttpClient {
         }
 
         public String getString(){
-            return new String(this.data);
+            try {
+                return new String(this.data, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                return "";
+            }
         }
 
         public JsonObject getJson(){

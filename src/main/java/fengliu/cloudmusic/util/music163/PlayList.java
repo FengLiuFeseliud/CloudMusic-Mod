@@ -1,12 +1,15 @@
 package fengliu.cloudmusic.util.music163;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import fengliu.cloudmusic.util.HttpClient;
+import fengliu.cloudmusic.util.TextClick;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
@@ -83,21 +86,24 @@ public class PlayList extends Music163Object implements MusicList {
 
         source.sendFeedback(Text.literal(""));
 
-        source.sendFeedback(Text.translatable("cloudmusic.info.music.platlist.creator", this.creator.get("nickname").getAsString()));
+        source.sendFeedback(TextClick.suggestText("cloudmusic.info.music.platlist.creator", "§b" + this.creator.get("nickname").getAsString(), "/cloudmusic user " + this.creator.get("userId").getAsLong()));
         if(!this.tagsStr.isEmpty()){
             source.sendFeedback(Text.translatable("cloudmusic.info.music.platlist.tags", this.tagsStr));
         }
         source.sendFeedback(Text.translatable("cloudmusic.info.music.platlist.count", this.count, this.playCount));
         source.sendFeedback(Text.translatable("cloudmusic.info.music.platlist.id", this.id));
 
-        if(this.description == null){
-            return;
+        if(this.description != null){
+            source.sendFeedback(Text.literal(""));
+            for (String row : this.description) {
+                source.sendFeedback(Text.literal("§7" + row));
+            }
         }
-        
-        source.sendFeedback(Text.literal(""));
-        for (String row : this.description) {
-            source.sendFeedback(Text.literal("§7" + row));
-        }
+
+        Map<String, String> optionsTextData = new HashMap<>();
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic platlist play " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic platlist subscribe " + this.id);
+        source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
     
 }

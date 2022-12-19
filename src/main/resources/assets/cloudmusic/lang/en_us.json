@@ -6,9 +6,14 @@
     "cloudmusic.info.music.platlist.creator": "创建者: %d",
     "cloudmusic.info.music.platlist.tags": "标签: %d",
     "cloudmusic.info.music.platlist.count": "单曲数: %d 播放数: %d",
+    "cloudmusic.info.music.platlist.id": "id: %d",
     "cloudmusic.info.album.id": "id: %d",
     "cloudmusic.info.album.size": "单曲数: %d",
     "cloudmusic.info.user.level": "等级: %d",
     "cloudmusic.info.user.vip": "会员: %d",
-    "cloudmusic.info.user.id": "id: %d"
+    "cloudmusic.info.user.id": "id: %d",
+
+    "cloudmusic.options.play": "[播放]",
+    "cloudmusic.options.like": "[红心]",
+    "cloudmusic.options.subscribe": "[收藏]"
 }

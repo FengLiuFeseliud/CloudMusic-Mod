@@ -1,0 +1,154 @@
+{
+	"songs": [{
+		"name": "Here With Me (陪伴)",
+		"id": 1451660507,
+		"pst": 0,
+		"t": 0,
+		"ar": [{
+			"id": 1060127,
+			"name": "1-Zero",
+			"tns": [],
+			"alias": []
+		}, {
+			"id": 12227377,
+			"name": "Kevinz",
+			"tns": [],
+			"alias": []
+		}, {
+			"id": 0,
+			"name": "赤羽",
+			"tns": [],
+			"alias": []
+		}, {
+			"id": 0,
+			"name": "ShizukaYY",
+			"tns": [],
+			"alias": []
+		}],
+		"alia": [],
+		"pop": 40.0,
+		"st": 0,
+		"rt": "",
+		"fee": 0,
+		"v": 7,
+		"crbt": null,
+		"cf": "",
+		"al": {
+			"id": 89999558,
+			"name": "L // O V E",
+			"picUrl": "https://p3.music.126.net/_a_sAAcYGvW_MFSIrZ2r8A==/109951165023490039.jpg",
+			"tns": [],
+			"pic_str": "109951165023490039",
+			"pic": 109951165023490039
+		},
+		"dt": 169363,
+		"h": {
+			"br": 320000,
+			"fid": 0,
+			"size": 6777252,
+			"vd": -67091.0,
+			"sr": 44100
+		},
+		"m": {
+			"br": 192000,
+			"fid": 0,
+			"size": 4066369,
+			"vd": -64562.0,
+			"sr": 44100
+		},
+		"l": {
+			"br": 128000,
+			"fid": 0,
+			"size": 2710927,
+			"vd": -63133.0,
+			"sr": 44100
+		},
+		"sq": {
+			"br": 1622835,
+			"fid": 0,
+			"size": 34356164,
+			"vd": -67078.0,
+			"sr": 44100
+		},
+		"hr": null,
+		"a": null,
+		"cd": "01",
+		"no": 1,
+		"rtUrl": null,
+		"ftype": 0,
+		"rtUrls": [],
+		"djId": 0,
+		"copyright": 0,
+		"s_id": 0,
+		"mark": 192,
+		"originCoverType": 0,
+		"originSongSimpleData": null,
+		"tagPicList": null,
+		"resourceState": true,
+		"version": 7,
+		"songJumpInfo": null,
+		"entertainmentTags": null,
+		"awardTags": null,
+		"single": 0,
+		"noCopyrightRcmd": null,
+		"rtype": 0,
+		"rurl": null,
+		"mst": 9,
+		"cp": 0,
+		"mv": 0,
+		"publishTime": 0
+	}],
+	"privileges": [{
+		"id": 1451660507,
+		"fee": 0,
+		"payed": 0,
+		"st": 0,
+		"pl": 320000,
+		"dl": 999000,
+		"sp": 7,
+		"cp": 1,
+		"subp": 1,
+		"cs": false,
+		"maxbr": 999000,
+		"fl": 320000,
+		"toast": false,
+		"flag": 3,
+		"preSell": false,
+		"playMaxbr": 999000,
+		"downloadMaxbr": 999000,
+		"maxBrLevel": "lossless",
+		"playMaxBrLevel": "lossless",
+		"downloadMaxBrLevel": "lossless",
+		"plLevel": "exhigh",
+		"dlLevel": "lossless",
+		"flLevel": "exhigh",
+		"rscl": null,
+		"freeTrialPrivilege": {
+			"resConsumable": false,
+			"userConsumable": false,
+			"listenType": null
+		},
+		"chargeInfoList": [{
+			"rate": 128000,
+			"chargeUrl": null,
+			"chargeMessage": null,
+			"chargeType": 0
+		}, {
+			"rate": 192000,
+			"chargeUrl": null,
+			"chargeMessage": null,
+			"chargeType": 0
+		}, {
+			"rate": 320000,
+			"chargeUrl": null,
+			"chargeMessage": null,
+			"chargeType": 0
+		}, {
+			"rate": 999000,
+			"chargeUrl": null,
+			"chargeMessage": null,
+			"chargeType": 1
+		}]
+	}],
+	"code": 200
+}
