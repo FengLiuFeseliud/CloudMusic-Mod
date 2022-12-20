@@ -1,4 +1,5 @@
 {
+    "cloudmusic.info.page.count": "§c§l===========%d页§c§l===========",
     "cloudmusic.info.volume": "当前音量: %d",
     "cloudmusic.info.music.artist": "%d",
     "cloudmusic.info.music.album": "专辑: %d",
@@ -12,8 +13,17 @@
     "cloudmusic.info.user.level": "等级: %d",
     "cloudmusic.info.user.vip": "会员: %d",
     "cloudmusic.info.user.id": "id: %d",
+    "cloudmusic.info.artist.music": "单曲数: %d",
+    "cloudmusic.info.artist.album": "专辑数: %d",
+    "cloudmusic.info.artist.id": "id: %d",
 
     "cloudmusic.options.play": "[播放]",
+    "cloudmusic.options.play.top50": "[热门50首]",
+    "cloudmusic.options.music": "[音乐]",
+    "cloudmusic.options.album": "[专辑]",
     "cloudmusic.options.like": "[红心]",
-    "cloudmusic.options.subscribe": "[收藏]"
+    "cloudmusic.options.subscribe": "[收藏]",
+    "cloudmusic.options.page.up": "[上一页]",
+    "cloudmusic.options.page.down": "[下一页]",
+    "cloudmusic.options.page.to": "[跳转至...]"
 }

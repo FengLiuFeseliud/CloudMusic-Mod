@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonObject;
 
-import fengliu.cloudmusic.CloudMusicMod;
+
 import fengliu.cloudmusic.util.HttpClient;
 
 public class Music163 {
@@ -50,21 +50,27 @@ public class Music163 {
         return new PlayList(getHttpClient(), json);
     }
 
-    public void artist(long id){
+    public Artist artist(long id){
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("id", id);
 
         JsonObject json = this.api.POST_API("/api/artist/head/info/get", data);
-        CloudMusicMod.LOGGER.info(json.toString());
+        return new Artist(this.api, json);
     }
 
     public Album album(long id){
-        JsonObject json = this.api.POST_API("/api/v1/album/" + id, null);
-        return new Album(getHttpClient(), json);
+        return new Album(getHttpClient(), this.api.POST_API("/api/v1/album/" + id, null));
+    }
+
+    public User user(long id){
+        return new User(this.api, this.api.POST_API("/api/v1/user/detail/" + id, null));
     }
 
     public My my(){
         JsonObject json = this.api.POST_API("/api/w/nuser/account/get", null);
-        return new My(getHttpClient(), json);
+        if(json.get("account").isJsonNull()){
+            return null;
+        }
+        return new My(this.api, this.api.POST_API("/api/v1/user/detail/" + json.getAsJsonObject("profile").get("userId").getAsLong(), null));
     }
 }

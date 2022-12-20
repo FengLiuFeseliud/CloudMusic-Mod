@@ -1,7 +1,7 @@
 package fengliu.cloudmusic.util.music163;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +61,7 @@ public class Album extends Music163Object implements MusicList {
 
         source.sendFeedback(Text.literal(""));
         
-        Map<String, String> artistsTextData = new HashMap<>();
+        Map<String, String> artistsTextData = new LinkedHashMap<>();
         for (JsonElement artistData : this.artists.asList()) {
                 JsonObject artist = artistData.getAsJsonObject();
                 artistsTextData.put("§b§n" + artist.get("name").getAsString(), "/cloudmusic artist " + artist.get("id").getAsLong());
@@ -78,7 +78,7 @@ public class Album extends Music163Object implements MusicList {
             }
         }
 
-        Map<String, String> optionsTextData = new HashMap<>();
+        Map<String, String> optionsTextData = new LinkedHashMap<>();
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic album play " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic album subscribe " + this.id);
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));

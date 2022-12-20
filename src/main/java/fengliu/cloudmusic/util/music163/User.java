@@ -7,9 +7,11 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import fengliu.cloudmusic.util.HttpClient;
+import fengliu.cloudmusic.util.music163.page.PlayListPage;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
@@ -20,23 +22,25 @@ public class User implements MusicList {
     public final String signature;
     public final int level;
     public final int vip;
+    public final long listenSongs;
+    public final int playlistCount;
+    public final int createTime;
+    public final int createDay;
     private long likePlayListId = 0;
 
     public User(HttpClient api, JsonObject data) {
         this.api = api;
-        if(data.has("profile")){
-            data = data.get("profile").getAsJsonObject();
-        }
+        JsonObject profile = data.getAsJsonObject("profile");
 
-        this.id = data.get("userId").getAsLong();
-        this.name = data.get("nickname").getAsString();
-        this.signature = data.get("signature").getAsString();
-        if(data.has("level")){
-            this.level = data.get("level").getAsInt();
-        }else{
-            this.level = 0;
-        }
-        this.vip = data.get("vipType").getAsInt();
+        this.id = profile.get("userId").getAsLong();
+        this.name = profile.get("nickname").getAsString();
+        this.signature = profile.get("signature").getAsString();
+        this.vip = profile.get("vipType").getAsInt();
+        this.playlistCount = profile.get("playlistCount").getAsInt();
+        this.listenSongs = data.get("listenSongs").getAsInt();
+        this.level = data.get("level").getAsInt();
+        this.createTime = data.get("createTime").getAsInt();
+        this.createDay = data.get("createDays").getAsInt();
     }
 
     private long getLikePlayListId(){
@@ -66,6 +70,24 @@ public class User implements MusicList {
         });
 
         return playLists;
+    }
+
+    public PlayListPage.UncertaintyPlayList playListsPage(){
+        Map<String, Object> postData = new HashMap<String, Object>();
+        postData.put("uid", this.id);
+        postData.put("limit", 24);
+        postData.put("offset", 0);
+        postData.put("includeVideo", true);
+
+        JsonObject data = this.api.POST_API("/api/user/playlist", postData);
+        return new PlayListPage.UncertaintyPlayList(data.getAsJsonArray("playlist"), this.playlistCount, "/api/user/playlist", this.api, postData) {
+
+            @Override
+            protected JsonArray getNewPageDataJsonArray(JsonObject result) {
+                return result.getAsJsonArray("playlist");
+            }
+            
+        };
     }
 
     public PlayList likeMusicPlayList(){

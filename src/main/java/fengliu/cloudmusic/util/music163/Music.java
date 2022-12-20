@@ -1,5 +1,6 @@
 package fengliu.cloudmusic.util.music163;
 
+import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +13,6 @@ import com.google.gson.JsonObject;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.TextClick;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.block.enums.Thickness;
 import net.minecraft.text.Text;
 
 public class Music extends Music163Object implements PrintObject {
@@ -94,7 +94,7 @@ public class Music extends Music163Object implements PrintObject {
        
        source.sendFeedback(Text.literal(""));
 
-       Map<String, String> artistsTextData = new HashMap<>();
+       Map<String, String> artistsTextData = new LinkedHashMap<>();
        for (JsonElement artistData : this.artists.asList()) {
             JsonObject artist = artistData.getAsJsonObject();
             artistsTextData.put("§b§n" + artist.get("name").getAsString(), "/cloudmusic artist " + artist.get("id").getAsLong());
@@ -104,7 +104,7 @@ public class Music extends Music163Object implements PrintObject {
        source.sendFeedback(TextClick.suggestText("cloudmusic.info.music.album", "§b" + this.albumName, "/cloudmusic album " + this.albumId));
        source.sendFeedback(Text.translatable("cloudmusic.info.music.id", this.id));
 
-       Map<String, String> optionsTextData = new HashMap<>();
+       Map<String, String> optionsTextData = new LinkedHashMap<>();
        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic music play " + this.id);
        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.like").getString(), "/cloudmusic music like " + this.id);
        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic subscribe " + this.id);

@@ -14,19 +14,24 @@ import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.util.MusicPlayer;
 import fengliu.cloudmusic.util.MusicPlayer.MusicPlayList;
 import fengliu.cloudmusic.util.music163.*;
+import fengliu.cloudmusic.util.page.Page;
 
 public class MusicCommand {
     private static Music163 music163 = new Music163(CloudMusicClient.CONFIG.getOrDefault( "cookie", ""));
     private static int volumePercentage = CloudMusicClient.CONFIG.getOrDefault("volume", 80);
     private static MusicPlayer player;
+    private static Page page = null;
     private static Object data = null;
     private static My my = null;
 
-    private static boolean getMy(boolean reset){
+    private static void getMy(boolean reset, FabricClientCommandSource source){
         if(my == null || reset){
             my = music163.my();
         }
-        return true;
+
+        if(my == null){
+            source.sendFeedback(Text.literal("not cookie user"));
+        }
     }
 
     private static void resetPlayer(MusicPlayer newPlayer){
@@ -39,7 +44,6 @@ public class MusicCommand {
     private static void resetConfig(){
         CloudMusicClient.resetConfig();
         music163 = new Music163(CloudMusicClient.CONFIG.getOrDefault( "cookie", ""));
-        getMy(true);
     }
 
     private interface Job{
@@ -68,8 +72,10 @@ public class MusicCommand {
         LiteralArgumentBuilder<FabricClientCommandSource> PlayList = literal("playlist");
         LiteralArgumentBuilder<FabricClientCommandSource> Artist = literal("artist");
         LiteralArgumentBuilder<FabricClientCommandSource> Album = literal("album");
+        LiteralArgumentBuilder<FabricClientCommandSource> User = literal("user");
         LiteralArgumentBuilder<FabricClientCommandSource> My = literal("my");
         LiteralArgumentBuilder<FabricClientCommandSource> Volume = literal("volume");
+        LiteralArgumentBuilder<FabricClientCommandSource> Page = literal("page");
 
         CloudMusic.executes(context -> {
             return Command.SINGLE_SUCCESS;
@@ -133,11 +139,23 @@ public class MusicCommand {
         CloudMusic.then(Artist.then(
             argument("id", LongArgumentType.longArg()).executes(contextdata -> {
                 runCommand(contextdata, context -> {
-                    music163.artist(LongArgumentType.getLong(context, "id"));
+                    data = music163.artist(LongArgumentType.getLong(context, "id"));
+                    ((Artist) data).printToChatHud(context.getSource());
                 });
                 return Command.SINGLE_SUCCESS;
             })
         ));
+
+        // cloudmusic artist top id
+        CloudMusic.then(Artist.then(literal("top").then(
+            argument("id", LongArgumentType.longArg()).executes(contextdata -> {
+                runCommand(contextdata, context -> {
+                    resetPlayer((new MusicPlayList(music163.artist(LongArgumentType.getLong(context, "id")).topSong())).createMusicPlayer(false));
+                    player.start();
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
 
         // cloudmusic album id
         CloudMusic.then(Album.then(
@@ -160,11 +178,44 @@ public class MusicCommand {
                 return Command.SINGLE_SUCCESS;
             })
         )));
+
+        // cloudmusic user id
+        CloudMusic.then(User.then(
+            argument("id", LongArgumentType.longArg()).executes(contextdata -> {
+                runCommand(contextdata, context -> {
+                    data = music163.user(LongArgumentType.getLong(context, "id"));
+                    ((User) data).printToChatHud(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        ));
+
+        // cloudmusic user playlist id
+        CloudMusic.then(User.then(literal("playlist").then(
+            argument("id", LongArgumentType.longArg()).executes(contextdata -> {
+                runCommand(contextdata, context -> {
+                    page = music163.user(LongArgumentType.getLong(context, "id")).playListsPage();
+                    page.look(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            }))
+        ));
+
+        // cloudmusic user like id
+        CloudMusic.then(User.then(literal("like").then(
+            argument("id", LongArgumentType.longArg()).executes(contextdata -> {
+                runCommand(contextdata, context -> {
+                    resetPlayer(new MusicPlayList(music163.user(LongArgumentType.getLong(context, "id")).likeMusicPlayList().getMusics()).createMusicPlayer(false));
+                    player.start();
+                });
+                return Command.SINGLE_SUCCESS;
+            }))
+        ));
         
         // cloudmusic my
         CloudMusic.then(My.executes(contextdata -> {
             runCommand(contextdata, context -> {
-                getMy(true);
+                getMy(true, context.getSource());
                 my.printToChatHud(context.getSource());
             });
             return Command.SINGLE_SUCCESS;
@@ -173,22 +224,67 @@ public class MusicCommand {
         // cloudmusic my like
         CloudMusic.then(My.then(literal("like").executes(contextdata -> {
             runCommand(contextdata, context -> {
-                getMy(true);
+                getMy(false, context.getSource());
                 resetPlayer((new MusicPlayList(my.likeMusicPlayList().getMusics())).createMusicPlayer(false));
                 player.start();
             });
             return Command.SINGLE_SUCCESS;
         })));
 
-        // cloudmusic my recommend
-        CloudMusic.then(My.then(literal("recommend").executes(contextdata -> {
+        // cloudmusic my playlist
+        CloudMusic.then(My.then(literal("playlist").executes(contextdata -> {
             runCommand(contextdata, context -> {
-                getMy(true);
+                getMy(false, context.getSource());
+                page = my.playListsPage();
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        })));
+
+        LiteralArgumentBuilder<FabricClientCommandSource> Recommend = literal("recommend");
+
+        // cloudmusic my recommend music
+        CloudMusic.then(My.then(Recommend.then(literal("music").executes(contextdata -> {
+            runCommand(contextdata, context -> {
+                getMy(false, context.getSource());
                 resetPlayer((new MusicPlayList(my.recommend_songs())).createMusicPlayer(false));
                 player.start();
             });
             return Command.SINGLE_SUCCESS;
-        })));
+        }))));
+
+        // cloudmusic my recommend playlist
+        CloudMusic.then(My.then(Recommend.then(literal("playlist").executes(contextdata -> {
+            runCommand(contextdata, context -> {
+                getMy(false, context.getSource());
+                page = my.recommend_resource();
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        }))));
+
+        LiteralArgumentBuilder<FabricClientCommandSource> Sublist = literal("sublist");
+
+        // cloudmusic my sublist album
+        CloudMusic.then(My.then(Sublist.then(literal("album").executes(contextdata -> {
+            runCommand(contextdata, context -> {
+                getMy(false, context.getSource());
+                page = my.sublist_album();
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        }))));
+
+        // cloudmusic my sublist artist
+        CloudMusic.then(My.then(Sublist.then(literal("artist").executes(contextdata -> {
+            runCommand(contextdata, context -> {
+                getMy(false, context.getSource());
+                page = my.sublist_artist();
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        }))));
+
 
         // cloudmusic volume
         CloudMusic.then(Volume.executes(context -> {
@@ -209,16 +305,45 @@ public class MusicCommand {
                 return Command.SINGLE_SUCCESS;
             }))
         );
+        
+        // cloudmusic page up
+        CloudMusic.then(Page.then(literal("up").executes(context -> {
+            if(page == null){
+                return Command.SINGLE_SUCCESS;
+            }
+            page.up(context.getSource());
+            return Command.SINGLE_SUCCESS;
+        })));
+
+        // cloudmusic page down
+        CloudMusic.then(Page.then(literal("down").executes(contextdata -> {
+            if(page == null){
+                return Command.SINGLE_SUCCESS;
+            }
+
+            runCommand(contextdata, context -> {
+                page.down(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        })));
+
+        // cloudmusic page to page
+        CloudMusic.then(Page.then(literal("to").then(
+            argument("page", IntegerArgumentType.integer()).executes(contextdata -> {
+                if(page == null){
+                    return Command.SINGLE_SUCCESS;
+                }
+
+                runCommand(contextdata, context -> {
+                    page.to(IntegerArgumentType.getInteger(context, "page") - 1, context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
 
         ClientCommandRegistrationCallback.EVENT.register((  dispatcher, registryAccess) -> {
             dispatcher.register(
                 CloudMusic
-                    .then(Music)
-                    .then(PlayList)
-                    .then(Artist)
-                    .then(Album)
-                    .then(My)
-                    .then(Volume)
                     .then(
                         // cloudmusic stop
                         literal("stop").executes(context -> {
@@ -249,8 +374,11 @@ public class MusicCommand {
                     )
                     .then(
                         // cloudmusic reset
-                        literal("reset").executes(context -> {
-                            resetConfig();
+                        literal("reset").executes(contextdata -> {
+                            runCommand(contextdata, context -> {
+                                resetConfig();
+                                getMy(true, context.getSource());
+                            });
                             return Command.SINGLE_SUCCESS;
                         })
                     )

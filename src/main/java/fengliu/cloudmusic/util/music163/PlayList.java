@@ -1,7 +1,7 @@
 package fengliu.cloudmusic.util.music163;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -100,8 +100,8 @@ public class PlayList extends Music163Object implements MusicList {
             }
         }
 
-        Map<String, String> optionsTextData = new HashMap<>();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic platlist play " + this.id);
+        Map<String, String> optionsTextData = new LinkedHashMap<>();
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic playlist play " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic platlist subscribe " + this.id);
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
