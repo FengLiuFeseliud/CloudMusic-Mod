@@ -1,11 +1,17 @@
 package fengliu.cloudmusic.util;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -147,6 +153,46 @@ public class HttpClient {
         byte[] edata = {};
         return new HttpResult(500, false, edata);
     }
+
+    public static File download(String path, File targetFile) {
+        try {
+            if (!targetFile.getParentFile().exists()) {
+                targetFile.getParentFile().mkdirs();
+            } else if (targetFile.exists()){
+                return targetFile;
+            }
+
+            // 统一资源
+            URL url = new URL(path);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
+            // 设定请求的方法
+            httpURLConnection.setInstanceFollowRedirects(true);
+            httpURLConnection.setRequestMethod("GET");
+            // 设置字符编码
+            httpURLConnection.setRequestProperty("Charset", "UTF-8");
+            // 打开到此 URL 引用的资源的通信链接
+            httpURLConnection.connect();
+
+            BufferedInputStream bin = new BufferedInputStream(httpURLConnection.getInputStream());
+            OutputStream out = new FileOutputStream(targetFile);
+            
+            int size = 0;
+            byte[] buf = new byte[1024];
+            while ((size = bin.read(buf)) != -1) {
+                out.write(buf, 0, size);
+            }
+
+            bin.close();
+            out.close();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return targetFile;
+    }
+
 
     private interface Connection{
         HttpURLConnection set(HttpURLConnection connection);

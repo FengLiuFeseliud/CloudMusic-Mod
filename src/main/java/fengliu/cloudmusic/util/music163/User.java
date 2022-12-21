@@ -9,9 +9,10 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 
 import fengliu.cloudmusic.util.HttpClient;
-import fengliu.cloudmusic.util.music163.page.PlayListPage;
+import fengliu.cloudmusic.util.page.ApiPage;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
@@ -72,7 +73,7 @@ public class User implements MusicList {
         return playLists;
     }
 
-    public PlayListPage.UncertaintyPlayList playListsPage(){
+    public ApiPage playListsPage(){
         Map<String, Object> postData = new HashMap<String, Object>();
         postData.put("uid", this.id);
         postData.put("limit", 24);
@@ -80,11 +81,18 @@ public class User implements MusicList {
         postData.put("includeVideo", true);
 
         JsonObject data = this.api.POST_API("/api/user/playlist", postData);
-        return new PlayListPage.UncertaintyPlayList(data.getAsJsonArray("playlist"), this.playlistCount, "/api/user/playlist", this.api, postData) {
+        return new ApiPage(data.getAsJsonArray("playlist"), this.playlistCount, "/api/user/playlist", this.api, postData) {
 
             @Override
             protected JsonArray getNewPageDataJsonArray(JsonObject result) {
                 return result.getAsJsonArray("playlist");
+            }
+
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject playList = ((JsonElement) data).getAsJsonObject(); 
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
+                return newPageData;
             }
             
         };

@@ -1,5 +1,10 @@
 package fengliu.cloudmusic.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +14,14 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.jetbrains.annotations.Nullable;
 
 import fengliu.cloudmusic.CloudMusicClient;
+import fengliu.cloudmusic.client.command.MusicCommand;
 import fengliu.cloudmusic.util.music163.Music;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
@@ -51,20 +59,25 @@ public class MusicPlayer implements Runnable {
     @Override
     public void run() {
         int size = this.playList.size();
-        int splayIn = this.playIn;
 
         while(this.loopPlayIn){
-            for (this.playIn = splayIn; playIn < size; this.playIn++) {
+            for (this.playIn = 0; playIn < size; this.playIn++) {
                 Music music = this.playList.get(playIn);
-                String playUrl = music.getPlayUrl(0);
+
                 this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.name), false);
-                this.play(playUrl);
+                if(!MusicCommand.isPlayUrl()){
+                    File file = HttpClient.download(music.getPlayUrl(0), CloudMusicClient.cacheHelper.getWaitCacheFile(music.id + ".mp3"));
+                    CloudMusicClient.cacheHelper.addUseSize(file);
+                    this.play(file);
+                }else{
+                    this.play(music.getPlayUrl(0));
+                }
 
                 if(!this.loopPlayIn){
                     break;
                 }
 
-                if(this.playIn == this.playList.size() - 1 && !loopPlay){
+                if(this.playIn == this.playList.size() - 1 && !this.loopPlay){
                     this.loopPlayIn = false;
                 }
             }
@@ -78,42 +91,53 @@ public class MusicPlayer implements Runnable {
         thread.start();
     }
 
-    public void play(String path){
+    private void play(AudioInputStream audioInputStream) throws IOException, InterruptedException, LineUnavailableException{
+        AudioFormat audioFormat = audioInputStream.getFormat();
+        // 转换文件编码
+        if (audioFormat.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
+            System.out.println(audioFormat.getEncoding());
+            audioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, audioFormat.getSampleRate(), 16, audioFormat.getChannels(), audioFormat.getChannels() * 2, audioFormat.getSampleRate(), false);
+            audioInputStream = AudioSystem.getAudioInputStream(audioFormat, audioInputStream);
+        }
+
+        DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat, AudioSystem.NOT_SPECIFIED);
+        play = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
+        play.open(audioFormat);
+        //设置音量
+        FloatControl gainControl = (FloatControl) this.play.getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(this.Volume);
+
+        play.start();
+
+        int count;
+        byte tempBuff[] = new byte[1024];
+
+        this.load = true;
+        while((count = audioInputStream.read(tempBuff,0,tempBuff.length)) != -1){
+            synchronized(this){
+            while(!load)
+                wait();
+            }
+            play.write(tempBuff,0,count);
+
+        }
+        play.drain();
+        play.stop();
+        play.close();
+    }
+
+    public void play(String url){
         try {
-            this.load = true;
-            // 文件流
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new URL(path));
-            // 文件编码
-            AudioFormat audioFormat = audioInputStream.getFormat();
-            // 转换文件编码
-            if (audioFormat.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
-                System.out.println(audioFormat.getEncoding());
-                audioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, audioFormat.getSampleRate(), 16, audioFormat.getChannels(), audioFormat.getChannels() * 2, audioFormat.getSampleRate(), false);
-                audioInputStream = AudioSystem.getAudioInputStream(audioFormat, audioInputStream);
-            }
+            this.play(AudioSystem.getAudioInputStream(AudioSystem.getAudioInputStream(new URL(url))));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat, AudioSystem.NOT_SPECIFIED);
-            play = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
-            play.open(audioFormat);
-            //设置音量
-            FloatControl gainControl = (FloatControl) this.play.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(this.Volume);
-
-            play.start();
-
-            int bytesPerFrame = audioInputStream.getFormat().getFrameSize();
-            // 将流数据逐渐写入数据行,边写边播
-            int numBytes = 1024 * bytesPerFrame;
-            byte[] audioBytes = new byte[numBytes];
-
-            while (audioInputStream.read(audioBytes) != -1 && load) {
-                play.write(audioBytes, 0, audioBytes.length);
-            }
-            play.drain();
-            play.stop();
-            play.close();
-
-        } catch (Exception e){
+    public void play(File file){
+        try {
+            this.play(AudioSystem.getAudioInputStream(file));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -141,8 +165,7 @@ public class MusicPlayer implements Runnable {
         return this.Volume;
     }
 
-    private void stopPlayMusic(){
-        this.load = false;
+    public void down(){
         this.play.stop();
         this.play.close();
     }
@@ -153,16 +176,26 @@ public class MusicPlayer implements Runnable {
             this.playIn = -1;
         }
 
-        stopPlayMusic();
+        down();
     }
 
-    public void down(){
-        stopPlayMusic();
+    public void exit(){
+        this.loopPlayIn = false;
+        down();
     }
 
     public void stop(){
-        this.loopPlayIn = false;
-        stopPlayMusic();
+        synchronized(this){
+            this.load = false;
+            notifyAll();
+        }
+    }
+
+    public void continues(){
+        synchronized(this){
+            this.load = true;
+            notifyAll();
+        }
     }
 
     public Music playing(){

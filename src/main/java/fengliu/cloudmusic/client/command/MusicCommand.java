@@ -7,6 +7,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
+
+import java.util.ArrayList;
+
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
@@ -19,10 +22,15 @@ import fengliu.cloudmusic.util.page.Page;
 public class MusicCommand {
     private static Music163 music163 = new Music163(CloudMusicClient.CONFIG.getOrDefault( "cookie", ""));
     private static int volumePercentage = CloudMusicClient.CONFIG.getOrDefault("volume", 80);
-    private static MusicPlayer player;
+    private static boolean playUrl = CloudMusicClient.CONFIG.getOrDefault("play.url", false);
+    private static MusicPlayer player = new MusicPlayer(new ArrayList<>(), false);
     private static Page page = null;
     private static Object data = null;
     private static My my = null;
+
+    public static boolean isPlayUrl(){
+        return playUrl;
+    }
 
     private static void getMy(boolean reset, FabricClientCommandSource source){
         if(my == null || reset){
@@ -30,20 +38,22 @@ public class MusicCommand {
         }
 
         if(my == null){
-            source.sendFeedback(Text.literal("not cookie user"));
+            source.sendFeedback(Text.translatable("cloudmusic.info.not.cookie"));
         }
     }
 
     private static void resetPlayer(MusicPlayer newPlayer){
-        if(player != null){
-            player.stop();
-        }
+        player.exit();
         player = newPlayer;
     }
 
     private static void resetConfig(){
+        my = null;
+
         CloudMusicClient.resetConfig();
         music163 = new Music163(CloudMusicClient.CONFIG.getOrDefault( "cookie", ""));
+        volumePercentage = CloudMusicClient.CONFIG.getOrDefault("volume", 80);
+        playUrl = CloudMusicClient.CONFIG.getOrDefault("play.url", false);
     }
 
     private interface Job{
@@ -297,9 +307,7 @@ public class MusicCommand {
             argument("volume", IntegerArgumentType.integer()).executes(contextdata -> {
                 runCommand(contextdata, context -> {
                     volumePercentage = IntegerArgumentType.getInteger(context, "volume");
-                    if(player != null){
-                        player.volumeSet(MusicPlayer.toVolume(volumePercentage));
-                    }
+                    player.volumeSet(MusicPlayer.toVolume(volumePercentage));
                     CloudMusicClient.setConfigValue("volume", volumePercentage);
                 });
                 return Command.SINGLE_SUCCESS;
@@ -352,6 +360,13 @@ public class MusicCommand {
                         })
                     )
                     .then(
+                        // cloudmusic continue
+                        literal("continue").executes(context -> {
+                            player.continues();
+                            return Command.SINGLE_SUCCESS;
+                        })
+                    )
+                    .then(
                         // cloudmusic up
                         literal("up").executes(context -> {
                             player.up();
@@ -366,6 +381,13 @@ public class MusicCommand {
                         })
                     )
                     .then(
+                        // cloudmusic exit
+                        literal("exit").executes(context -> {
+                            player.exit();
+                            return Command.SINGLE_SUCCESS;
+                        })
+                    )
+                    .then(
                         // cloudmusic playing
                         literal("playing").executes(context -> {
                             player.playing().printToChatHud(context.getSource());
@@ -376,8 +398,23 @@ public class MusicCommand {
                         // cloudmusic reset
                         literal("reset").executes(contextdata -> {
                             runCommand(contextdata, context -> {
+                                player.stop();
+                                FabricClientCommandSource source = context.getSource();
+                                source.sendFeedback(Text.translatable("cloudmusic.info.config.reset"));
+
                                 resetConfig();
-                                getMy(true, context.getSource());
+                                getMy(true, source);
+
+                                source.sendFeedback(Text.translatable("cloudmusic.info.config.complete"));
+                                if(my == null){
+                                    source.sendFeedback(Text.translatable("cloudmusic.info.config.cookie", "§cnull"));
+                                }else{
+                                    source.sendFeedback(Text.translatable("cloudmusic.info.config.cookie", "§c" + my.name));
+                                }
+
+                                source.sendFeedback(Text.translatable("cloudmusic.info.config.volume", "§c" + volumePercentage));
+                                source.sendFeedback(Text.translatable("cloudmusic.info.config.play.url", "§c" + playUrl));
+                                CloudMusicClient.cacheHelper.printToChatHud(source);
                             });
                             return Command.SINGLE_SUCCESS;
                         })
