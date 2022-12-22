@@ -41,12 +41,23 @@ public class MusicCommand {
             source.sendFeedback(Text.translatable("cloudmusic.info.not.cookie"));
         }
     }
-
+    
+    /**
+     * 重置音乐播放器
+     * @param newPlayer 新音乐播放对象
+     */
     private static void resetPlayer(MusicPlayer newPlayer){
-        player.exit();
+        try {
+            player.exit();
+        } catch (Exception e) {
+            
+        }
         player = newPlayer;
     }
 
+    /**
+     * 重置配置
+     */
     private static void resetConfig(){
         my = null;
 
@@ -60,6 +71,11 @@ public class MusicCommand {
         void fun(CommandContext<FabricClientCommandSource> context) throws Exception;
     }
 
+    /**
+     * 新开线程运行指令
+     * @param context 指令上下文
+     * @param job 任务
+     */
     private static void runCommand(CommandContext<FabricClientCommandSource> context, Job job){
         Thread commandThread = new Thread(){
             @Override
@@ -166,6 +182,28 @@ public class MusicCommand {
                 return Command.SINGLE_SUCCESS;
             })
         )));
+
+        // cloudmusic artist album id
+        CloudMusic.then(Artist.then(literal("album").then(
+            argument("id", LongArgumentType.longArg()).executes(contextdata -> {
+                runCommand(contextdata, context -> {
+                    page = music163.artist(LongArgumentType.getLong(context, "id")).albumPage();
+                    page.look(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
+
+        // cloudmusic artist music id
+        // CloudMusic.then(Artist.then(literal("music").then(
+        //     argument("id", LongArgumentType.longArg()).executes(contextdata -> {
+        //         runCommand(contextdata, context -> {
+        //             resetPlayer((new MusicPlayList(music163.artist(LongArgumentType.getLong(context, "id")).music())).createMusicPlayer(false));
+        //             player.start();
+        //         });
+        //         return Command.SINGLE_SUCCESS;
+        //     })
+        // )));
 
         // cloudmusic album id
         CloudMusic.then(Album.then(

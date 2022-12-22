@@ -12,12 +12,21 @@ import fengliu.cloudmusic.util.TextClick;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
+/**
+ * 页对象, 处理翻页
+ */
 public abstract class Page {
     protected final int limit = CloudMusicClient.CONFIG.getOrDefault("page.limit", 8);
     protected final List<List<?>> data;
     protected final int pageCount;
     protected int pageIn;
 
+    /**
+     * 设置每一项的数据格式
+     * @param newPageData 当前页所有数据
+     * @param data 当前页一项数据
+     * @return 当前页所有数据
+     */
     protected abstract Map<String, String> putPageItem(Map<String, String> newPageData, Object data);
 
     protected Map<String, String> setPageData(List<?> pageData) {
@@ -71,11 +80,19 @@ public abstract class Page {
         this.data = this.splitData(data);
     }
 
+    /**
+     * 查看当前页
+     * @param source Fabric 命令源
+     */
     public void look(FabricClientCommandSource source){
         Map<String, String> pageData = this.setPageData(this.data.get(this.pageIn));
         this.printToChatHud(source, pageData);
     }
     
+    /**
+     * 查看上一页
+     * @param source Fabric 命令源
+     */
     public void up(FabricClientCommandSource source){
         if(this.pageIn <= 0){
             return;
@@ -85,6 +102,10 @@ public abstract class Page {
         this.look(source);
     }
 
+    /**
+     * 查看下一页
+     * @param source Fabric 命令源
+     */
     public void down(FabricClientCommandSource source){
         if(this.pageIn >= this.pageCount - 1){
             return;
@@ -94,6 +115,11 @@ public abstract class Page {
         this.look(source);
     }
 
+    /**
+     * 跳转至
+     * @param page 页索引
+     * @param source Fabric 命令源
+     */
     public void to(int page, FabricClientCommandSource source){
         if(page < 0){
             page = 0;

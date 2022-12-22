@@ -13,6 +13,9 @@ import fengliu.cloudmusic.util.TextClick;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
+/**
+ * 歌单对象
+ */
 public class PlayList extends Music163Object implements MusicList {
     public final long id;
     public final String name;
@@ -67,6 +70,7 @@ public class PlayList extends Music163Object implements MusicList {
         
     }
 
+    @Override
     public List<Music> getMusics(){
         if(this.musics != null){
             return this.musics;
@@ -79,6 +83,7 @@ public class PlayList extends Music163Object implements MusicList {
         return this.musics;
     }
 
+    @Override
     public void printToChatHud(FabricClientCommandSource source) {
         source.sendFeedback(Text.literal(""));
 

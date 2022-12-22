@@ -19,9 +19,14 @@ public class CloudMusicClient implements ClientModInitializer  {
 
     public static ConfigRequest configRequest = SimpleConfig.of("cloud_music_config").provider(CloudMusicClient::provider);
     public static SimpleConfig CONFIG = configRequest.request();
-
+    /**
+     * 缓存工具对象
+     */
     public static CacheHelper cacheHelper = new CacheHelper();
 
+    /**
+     * 默认配置文件
+     */
     private static String provider(String filename) {
       return """
             # CloudMusic 配置
@@ -48,12 +53,20 @@ public class CloudMusicClient implements ClientModInitializer  {
               """;
     }
 
+    /**
+     * 重新加载配置
+     */
     public static void resetConfig(){
         configRequest = SimpleConfig.of("cloud_music_config").provider(CloudMusicClient::provider);
         CONFIG = configRequest.request();
         cacheHelper = new CacheHelper();
     }
 
+    /**
+     * 设置配置值
+     * @param key 键
+     * @param value 值
+     */
     public static void setConfigValue(String key, Object value){
         StringBuilder sb = new StringBuilder();
         PrintWriter pw = null;

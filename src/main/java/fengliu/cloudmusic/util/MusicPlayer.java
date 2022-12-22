@@ -2,9 +2,6 @@ package fengliu.cloudmusic.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +13,6 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -26,6 +22,9 @@ import fengliu.cloudmusic.util.music163.Music;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
+/**
+ * 音乐播放对象
+ */
 public class MusicPlayer implements Runnable {
     private int volumePercentage = CloudMusicClient.CONFIG.getOrDefault("volume", 80);
     private final MinecraftClient client;
@@ -37,6 +36,11 @@ public class MusicPlayer implements Runnable {
     private boolean load;
     private int Volume;
 
+    /**
+     * 通过音量百分比计算音量增益
+     * @param volumePercentage 音量百分比
+     * @return 音量增益
+     */
     public static int toVolume(int volumePercentage){
         if(volumePercentage < 0){
             volumePercentage = 0;
@@ -49,6 +53,11 @@ public class MusicPlayer implements Runnable {
         return (int) (86 * 0.01 * volumePercentage);
     }
 
+    /**
+     * 音乐播放对象
+     * @param playList 音乐列表
+     * @param loopPlay 
+     */
     public MusicPlayer(List<Music> playList, boolean loopPlay){
         this.client = MinecraftClient.getInstance();
         this.playList = playList;
@@ -84,6 +93,9 @@ public class MusicPlayer implements Runnable {
         }
     }
 
+    /**
+     * 启动音乐播放
+     */
     public void start(){
         Thread thread = new Thread(this);
         thread.setDaemon(true);
@@ -91,6 +103,9 @@ public class MusicPlayer implements Runnable {
         thread.start();
     }
 
+    /**
+     * 播放音乐
+     */
     private void play(AudioInputStream audioInputStream) throws IOException, InterruptedException, LineUnavailableException{
         AudioFormat audioFormat = audioInputStream.getFormat();
         // 转换文件编码
@@ -126,6 +141,10 @@ public class MusicPlayer implements Runnable {
         play.close();
     }
 
+    /**
+     * 通过 URL 播放音乐
+     * @param url 音乐 url
+     */
     public void play(String url){
         try {
             this.play(AudioSystem.getAudioInputStream(AudioSystem.getAudioInputStream(new URL(url))));
@@ -134,6 +153,10 @@ public class MusicPlayer implements Runnable {
         }
     }
 
+    /**
+     * 通过文件对象播放音乐
+     * @param file 文件对象
+     */
     public void play(File file){
         try {
             this.play(AudioSystem.getAudioInputStream(file));
@@ -142,6 +165,11 @@ public class MusicPlayer implements Runnable {
         }
     }
 
+    /**
+     * 设置音量增益
+     * @param volume 音量增益
+     * @return 音量增益
+     */
     public int volumeSet(int volume){
         if(volume < 0){
             volume = 0;
@@ -165,11 +193,17 @@ public class MusicPlayer implements Runnable {
         return this.Volume;
     }
 
+    /**
+     * 播放下一首
+     */
     public void down(){
         this.play.stop();
         this.play.close();
     }
 
+    /**
+     * 播放上一首
+     */
     public void up(){
         this.playIn -= 2;
         if(this.playIn < -1){
@@ -179,11 +213,17 @@ public class MusicPlayer implements Runnable {
         down();
     }
 
+    /**
+     * 退出播放
+     */
     public void exit(){
         this.loopPlayIn = false;
         down();
     }
 
+    /**
+     * 停止播放
+     */
     public void stop(){
         synchronized(this){
             this.load = false;
@@ -191,6 +231,9 @@ public class MusicPlayer implements Runnable {
         }
     }
 
+    /**
+     * 继续播放
+     */
     public void continues(){
         synchronized(this){
             this.load = true;
@@ -198,6 +241,10 @@ public class MusicPlayer implements Runnable {
         }
     }
 
+    /**
+     * 正在播放 
+     * @return 音乐对象
+     */
     public Music playing(){
         return this.playList.get(this.playIn);
     }

@@ -36,7 +36,7 @@ public class Music extends Music163Object implements PrintObject {
         
         this.id = music.get("id").getAsLong();
         this.name = music.get("name").getAsString();
-
+        
         JsonArray alias = music.get("alia").getAsJsonArray();
         if(alias.size() > 0){
             this.aliasName = alias.get(0).getAsString();

@@ -14,6 +14,9 @@ import fengliu.cloudmusic.util.TextClick;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
+/**
+ * 专辑对象
+ */
 public class Album extends Music163Object implements MusicList {
     public final long id;
     public final String name;

@@ -13,12 +13,19 @@ import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.page.ApiPage;
 import fengliu.cloudmusic.util.page.JsonPage;
 
+/**
+ * cookie 用户对象
+ */
 public class My extends User {
 
     public My(HttpClient api, JsonObject data) {
         super(api, data);
     }
     
+    /**
+     * 日推歌
+     * @return 音乐列表
+     */
     public List<Music> recommend_songs(){
         JsonObject data = this.api.POST_API("/api/v3/discovery/recommend/songs", null);
 
@@ -29,6 +36,10 @@ public class My extends User {
         return musics;
     }
 
+    /**
+     * 日推歌单 
+     * @return 页对象
+     */
     public JsonPage recommend_resource(){
         JsonObject data = this.api.POST_API("/api/v1/discovery/recommend/resource", null);
         return new JsonPage(data.get("recommend").getAsJsonArray()) {
@@ -43,6 +54,10 @@ public class My extends User {
         };
     }
 
+    /**
+     * cookie 用户收藏的专辑
+     * @return 页对象
+     */
     public ApiPage sublist_album(){
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("limit", 24);
@@ -67,6 +82,10 @@ public class My extends User {
         };
     }
 
+    /**
+     * cookie 用户收藏的歌手
+     * @return 页对象
+     */
     public ApiPage sublist_artist(){
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("limit", 24);

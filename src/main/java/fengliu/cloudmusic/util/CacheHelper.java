@@ -13,6 +13,9 @@ import fengliu.cloudmusic.CloudMusicClient;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
+/**
+ * 缓存工具对象, 仅在创建时遍历一次缓存目录
+ */
 public class CacheHelper {
     private Path cachePath;
     private List<String> fileaCacheList = new ArrayList<>();
@@ -20,6 +23,11 @@ public class CacheHelper {
     private int deleteMb;
     private float useMb;
 
+    /**
+     * 文件创建时间排序
+     * @param fileList 文件数组
+     * @return 文件数组
+     */
     public static File[] orderByDate(File[] fileList) {
         Arrays.sort(fileList, new Comparator<File>() {
             public int compare(File f1, File f2) {
@@ -41,10 +49,18 @@ public class CacheHelper {
        return fileList;
     }
 
+    /**
+     * 字节大小转 mb
+     * @param size 字节大小
+     * @return mb 大小
+     */
     public static float setMbSize(long size){
         return Float.valueOf((new DecimalFormat("#.00")).format(size / 1048576));
     }
 
+    /**
+     * 缓存工具对象, 仅在创建时遍历一次缓存目录
+     */
     public CacheHelper(){
         this.cachePath = Paths.get(CloudMusicClient.CONFIG.getOrDefault("cache.path", Paths.get(CloudMusicClient.MC_PATH.toString(), "cloud_music_cache").toAbsolutePath().toString()));
         this.maxMb = (int) CloudMusicClient.CONFIG.getOrDefault("cache.maxmb", 512);
@@ -52,6 +68,9 @@ public class CacheHelper {
         this.loadCachePath();
     } 
     
+    /**
+     * 加载缓存目录
+     */
     public void loadCachePath(){
         File cacheDir = new File(this.cachePath.toString());
         if(!cacheDir.exists()){
@@ -77,6 +96,9 @@ public class CacheHelper {
         this.useMb = setMbSize(dirSize);
     }
 
+    /**
+     * 删除最旧文件
+     */
     protected void deleteOldFile(){
         File oldFile = this.getOldCacheFile();
         if(!oldFile.exists()){
@@ -106,6 +128,10 @@ public class CacheHelper {
         this.deleteOldFile();
     }
 
+    /**
+     * 一直删除最旧文件, 至到目标缓存大小
+     * @param targetMdSize 目标缓存大小
+     */
     public void deleteOldFileToTargetSize(int targetMdSize){
         if(targetMdSize == 0){
             targetMdSize = (int) this.useMb;
@@ -135,6 +161,10 @@ public class CacheHelper {
 
     }
 
+    /**
+     * 向缓存对象记录文件
+     * @param file 文件
+     */
     public void addUseSize(File file){
         if(this.fileaCacheList.contains(file.getName())){
             return;
@@ -147,14 +177,27 @@ public class CacheHelper {
         deleteOldFileThread.start();
     }
 
+    /**
+     * 获取最旧文件对象
+     * @return 最旧文件对象
+     */
     public File getOldCacheFile(){
         return new File(this.cachePath.toString(), this.fileaCacheList.get(0));
     }
 
+    /**
+     * 获取一个在缓存目录下的新文件对象
+     * @param fileName 文件名
+     * @return 新文件对象
+     */
     public File getWaitCacheFile(String fileName){
         return new File(this.cachePath.toString(), fileName);
     }
 
+    /**
+     * 向游戏聊天框打印缓存信息
+     * @param source Fabric 命令源
+     */
     public void printToChatHud(FabricClientCommandSource source) {
         source.sendFeedback(Text.translatable("cloudmusic.info.config.cache", "§c" + this.useMb, "§c" + this.maxMb, "§c" + this.deleteMb));
         source.sendFeedback(Text.translatable("cloudmusic.info.config.cache.path", "§c" + this.cachePath));

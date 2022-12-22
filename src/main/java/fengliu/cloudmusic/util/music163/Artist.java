@@ -1,14 +1,18 @@
 package fengliu.cloudmusic.util.music163;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.TextClick;
+import fengliu.cloudmusic.util.page.ApiPage;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
@@ -24,7 +28,11 @@ public class Artist extends Music163Object implements PrintObject {
         JsonObject data_ = data.getAsJsonObject("data").getAsJsonObject("artist");
         this.id = data_.get("id").getAsLong();
         this.name = data_.get("name").getAsString();
-        this.briefDesc = data_.get("briefDesc").getAsString();
+        if(!data_.get("briefDesc").isJsonNull()){
+            this.briefDesc = data_.get("briefDesc").getAsString();
+        } else {
+            this.briefDesc = null;
+        }
         this.albumSize = data_.get("albumSize").getAsInt();
         this.musicSize = data_.get("musicSize").getAsInt();
     }
@@ -41,6 +49,53 @@ public class Artist extends Music163Object implements PrintObject {
 
         return musics;
     }
+
+    public ApiPage albumPage(){
+        Map<String, Object> data = new HashMap<>();
+        data.put("limit", 24);
+        data.put("offset", 0);
+        data.put("total", false);
+
+        JsonObject json = this.api.POST_API("/api/artist/albums/" + this.id, data);
+        return new ApiPage(json.getAsJsonArray("hotAlbums"), albumSize, "/api/artist/albums/" + this.id, api, data) {
+
+            @Override
+            protected JsonArray getNewPageDataJsonArray(JsonObject result) {
+                return result.getAsJsonArray("hotAlbums");
+            }
+
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject album = ((JsonElement) data).getAsJsonObject(); 
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + album.get("name").getAsString() + "§r - id: " + album.get("id").getAsLong(), "/cloudmusic album " + album.get("id").getAsLong());
+                return newPageData;
+            }
+            
+        };
+    }
+
+    // public List<Music> music(){
+    //     Map<String, Object> data = new HashMap<>();
+    //     data.put("id", this.id);
+    //     data.put("limit", 200);
+    //     data.put("offset", 0);
+    //     data.put("order", "time");
+
+    //     List<Music> musics = new ArrayList<>();
+    //     int musicsSize = 0;
+    //     while(musicsSize != this.musicSize){
+    //         JsonObject json = this.api.POST_API("/api/v1/artist/songs", data);
+    //         json.getAsJsonArray("songs").forEach(music -> {
+    //             musics.add(new Music(this.api, music.getAsJsonObject()));
+    //         });
+
+    //         musicsSize += json.get("total").getAsInt();
+    //         data.put("offset", ((int) data.get("offset")) + 200);
+    //     }
+
+    //     return musics;
+    // }
+
     @Override
     public void printToChatHud(FabricClientCommandSource source) {
         source.sendFeedback(Text.literal(""));

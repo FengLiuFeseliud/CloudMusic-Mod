@@ -10,6 +10,9 @@ import com.google.gson.JsonObject;
 
 import fengliu.cloudmusic.util.HttpClient;
 
+/**
+ * Music163 api
+ */
 public class Music163 {
     private Map<String, String> Header = new HashMap<String, String>();
     private final HttpClient api;
@@ -33,6 +36,11 @@ public class Music163 {
         return this.api; 
     }
 
+    /**
+     * 获取音乐
+     * @param id 音乐 id
+     * @return 音乐对象
+     */
     public Music music(long id){
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("c", "[{\"id\": " + id + "}]");
@@ -41,6 +49,11 @@ public class Music163 {
         return new Music(getHttpClient(), json);
     }
 
+    /**
+     * 获取歌单
+     * @param id 歌单 id
+     * @return 歌单对象
+     */
     public PlayList playlist(long id){
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("id", id);
@@ -50,6 +63,11 @@ public class Music163 {
         return new PlayList(getHttpClient(), json);
     }
 
+    /**
+     * 获取歌手
+     * @param id 歌手 id
+     * @return 歌手对象
+     */
     public Artist artist(long id){
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("id", id);
@@ -58,14 +76,28 @@ public class Music163 {
         return new Artist(this.api, json);
     }
 
+    /**
+     * 获取专辑
+     * @param id 专辑 id
+     * @return 专辑对象
+     */
     public Album album(long id){
         return new Album(getHttpClient(), this.api.POST_API("/api/v1/album/" + id, null));
     }
 
+    /**
+     * 获取用户
+     * @param id 用户 id
+     * @return 用户对象
+     */
     public User user(long id){
         return new User(this.api, this.api.POST_API("/api/v1/user/detail/" + id, null));
     }
 
+    /**
+     * 获取 cookie 用户
+     * @return cookie 用户对象
+     */
     public My my(){
         JsonObject json = this.api.POST_API("/api/w/nuser/account/get", null);
         if(json.get("account").isJsonNull()){

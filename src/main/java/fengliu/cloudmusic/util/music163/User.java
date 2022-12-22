@@ -16,6 +16,9 @@ import fengliu.cloudmusic.util.page.ApiPage;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
+/**
+ * 用户对象
+ */
 public class User implements MusicList {
     protected final HttpClient api;
     public final long id;
@@ -51,7 +54,11 @@ public class User implements MusicList {
         this.likePlayListId = this.playLists(0, 1).get(0).id;
         return this.likePlayListId;
     }
-
+    
+    /**
+     * 用户歌单
+     * @return 歌单列表
+     */
     public List<PlayList> playLists(int page, @Nullable int limit){
         if(limit == 0){
             limit = 30;
@@ -73,6 +80,10 @@ public class User implements MusicList {
         return playLists;
     }
 
+    /**
+     * 用户歌单
+     * @return 页对象
+     */
     public ApiPage playListsPage(){
         Map<String, Object> postData = new HashMap<String, Object>();
         postData.put("uid", this.id);
@@ -98,6 +109,10 @@ public class User implements MusicList {
         };
     }
 
+    /**
+     * 用户喜欢音乐歌单
+     * @return 歌单
+     */
     public PlayList likeMusicPlayList(){
         return (new Music163(this.api.getCookies())).playlist(getLikePlayListId());
     }
