@@ -103,11 +103,12 @@ public class MusicPlayer implements Runnable {
         if(!MusicCommand.isPlayUrl()){
             File file = HttpClient.download(music.getPlayUrl(0), CloudMusicClient.cacheHelper.getWaitCacheFile(music.id + ".mp3"));
             CloudMusicClient.cacheHelper.addUseSize(file);
+            this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.name), false);
             this.play(file);
         }else{
+            this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.name), false);
             this.play(music.getPlayUrl(0));
         }
-        this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.name), false);
     }
 
     /**
@@ -253,7 +254,15 @@ public class MusicPlayer implements Runnable {
      * @return 音乐对象
      */
     public Music playing(){
-        return this.playList.get(this.playIn);
+        if(this.playList.isEmpty()){
+            return null;
+        }
+        
+        try {
+            return this.playList.get(this.playIn);
+        } catch (Exception err) {
+            return null;
+        }
     }
 
     public static class MusicPlayList{

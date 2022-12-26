@@ -193,6 +193,29 @@ public class HttpClient {
         return targetFile;
     }
 
+    public static InputStream downloadStream(String path) {
+        InputStream bin = null;
+        try {
+            // 统一资源
+            URL url = new URL(path);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
+            // 设定请求的方法
+            httpURLConnection.setInstanceFollowRedirects(true);
+            httpURLConnection.setRequestMethod("GET");
+            // 设置字符编码
+            httpURLConnection.setRequestProperty("Charset", "UTF-8");
+            // 打开到此 URL 引用的资源的通信链接
+            httpURLConnection.connect();
+
+            bin = httpURLConnection.getInputStream();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bin;
+    }
 
     private interface Connection{
         HttpURLConnection set(HttpURLConnection connection);

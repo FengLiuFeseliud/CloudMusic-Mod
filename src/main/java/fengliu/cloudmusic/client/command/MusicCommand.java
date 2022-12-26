@@ -95,6 +95,10 @@ public class MusicCommand {
         commandThread.start();
     }
 
+    public static Music playing(){
+        return player.playing();
+    }
+
     public static void registerAll(){
         LiteralArgumentBuilder<FabricClientCommandSource> CloudMusic = literal("cloudmusic");
         LiteralArgumentBuilder<FabricClientCommandSource> Music = literal("music");

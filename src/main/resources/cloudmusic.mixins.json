@@ -1,12 +1,12 @@
 {
-  "required": false,
+  "required": true,
   "minVersion": "0.8",
   "package": "fengliu.cloudmusic.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
   ],
   "client": [
-    
+    "InGameHubMixin"
   ],
   "injectors": {
     "defaultRequire": 1

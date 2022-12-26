@@ -22,6 +22,7 @@ public class Music extends Music163Object implements PrintObject {
     public final JsonArray artists;
     public final JsonObject album;
     public final long duration;
+    public final String picUrl;
 
     public Music(HttpClient api, JsonObject data) {
         super(api, data);
@@ -66,6 +67,8 @@ public class Music extends Music163Object implements PrintObject {
         }else{
             this.duration = music.get("duration").getAsLong() / 1000;
         }
+
+        this.picUrl = this.album.get("picUrl").getAsString();
     }
 
     /**
