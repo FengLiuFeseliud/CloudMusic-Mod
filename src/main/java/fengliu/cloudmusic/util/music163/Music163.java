@@ -5,10 +5,13 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 
 
 import fengliu.cloudmusic.util.HttpClient;
+import fengliu.cloudmusic.util.page.ApiPage;
 
 /**
  * Music163 api
@@ -105,4 +108,122 @@ public class Music163 {
         }
         return new My(this.api, this.api.POST_API("/api/v1/user/detail/" + json.getAsJsonObject("profile").get("userId").getAsLong(), null));
     }
+
+    /**
+     * 获取搜索数据
+     * @param key 搜索内容
+     * @param type 搜索类型 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户
+        1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频
+     * @return POST_API data
+     */
+    private Map<String, Object> searchData(String key, int type){
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("s", key);
+        data.put("type", type);
+        data.put("limit", 30);
+        data.put("offset", 0);
+        data.put("total", true);
+        return data;
+    }
+
+    /**
+     * 搜索歌曲
+     * @param key 搜索内容
+     * @return 页对象
+     */
+    public ApiPage searchMusic(String key){
+        Map<String, Object> data = this.searchData(key, 1);
+        JsonObject json = this.api.POST_API("/api/cloudsearch/pc", data);
+        return new ApiPage(json.getAsJsonObject("result").getAsJsonArray("songs"), json.getAsJsonObject("result").get("songCount").getAsInt(), "/api/cloudsearch/pc", this.api, data) {
+
+            @Override
+            protected JsonArray getNewPageDataJsonArray(JsonObject result) {
+                return result.getAsJsonObject("result").getAsJsonArray("songs");
+            }
+
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject music = ((JsonElement) data).getAsJsonObject(); 
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + music.get("name").getAsString() + "§r - id: " + music.get("id").getAsLong(), "/cloudmusic music " + music.get("id").getAsLong());
+                return newPageData;
+            }
+            
+        }; 
+    }
+
+    /**
+     * 搜索歌单
+     * @param key 搜索内容
+     * @return 页对象
+     */
+    public ApiPage searchPlayList(String key){
+        Map<String, Object> data = this.searchData(key, 1000);
+        JsonObject json = this.api.POST_API("/api/cloudsearch/pc", data);
+        return new ApiPage(json.getAsJsonObject("result").getAsJsonArray("playlists"), json.getAsJsonObject("result").get("playlistCount").getAsInt(), "/api/cloudsearch/pc", this.api, data) {
+
+            @Override
+            protected JsonArray getNewPageDataJsonArray(JsonObject result) {
+                return result.getAsJsonObject("result").getAsJsonArray("playlists");
+            }
+
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject playList = ((JsonElement) data).getAsJsonObject(); 
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
+                return newPageData;
+            }
+            
+        }; 
+    }
+
+    /**
+     * 搜索专辑
+     * @param key 搜索内容
+     * @return 页对象
+     */
+    public ApiPage searchAlbum(String key){
+        Map<String, Object> data = this.searchData(key, 10);
+        JsonObject json = this.api.POST_API("/api/cloudsearch/pc", data);
+        return new ApiPage(json.getAsJsonObject("result").getAsJsonArray("albums"), json.getAsJsonObject("result").get("albumCount").getAsInt(), "/api/cloudsearch/pc", this.api, data) {
+
+            @Override
+            protected JsonArray getNewPageDataJsonArray(JsonObject result) {
+                return result.getAsJsonObject("result").getAsJsonArray("albums");
+            }
+
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject album = ((JsonElement) data).getAsJsonObject(); 
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + album.get("name").getAsString() + "§r - id: " + album.get("id").getAsLong(), "/cloudmusic album " + album.get("id").getAsLong());
+                return newPageData;
+            }
+            
+        }; 
+    }
+
+    /**
+     * 搜索歌手
+     * @param key 搜索内容
+     * @return 页对象
+     */
+    public ApiPage searchArtist(String key){
+        Map<String, Object> data = this.searchData(key, 100);
+        JsonObject json = this.api.POST_API("/api/cloudsearch/pc", data);
+        return new ApiPage(json.getAsJsonObject("result").getAsJsonArray("artists"), json.getAsJsonObject("result").get("artistCount").getAsInt(), "/api/cloudsearch/pc", this.api, data) {
+
+            @Override
+            protected JsonArray getNewPageDataJsonArray(JsonObject result) {
+                return result.getAsJsonObject("result").getAsJsonArray("artists");
+            }
+
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject artist = ((JsonElement) data).getAsJsonObject(); 
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + artist.get("name").getAsString() + "§r - id: " + artist.get("id").getAsLong(), "/cloudmusic artist " + artist.get("id").getAsLong());
+                return newPageData;
+            }
+            
+        }; 
+    }
+
 }

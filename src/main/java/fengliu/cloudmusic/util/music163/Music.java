@@ -20,8 +20,7 @@ public class Music extends Music163Object implements PrintObject {
     public final String name;
     public final String aliasName;
     public final JsonArray artists;
-    public final long albumId;
-    public final String albumName;
+    public final JsonObject album;
     public final long duration;
 
     public Music(HttpClient api, JsonObject data) {
@@ -37,21 +36,43 @@ public class Music extends Music163Object implements PrintObject {
         this.id = music.get("id").getAsLong();
         this.name = music.get("name").getAsString();
         
-        JsonArray alias = music.get("alia").getAsJsonArray();
+        JsonArray alias;
+        if(music.has("alia")){
+            alias = music.get("alia").getAsJsonArray();
+        } else {
+            alias = music.get("alias").getAsJsonArray();
+        }
+        
         if(alias.size() > 0){
             this.aliasName = alias.get(0).getAsString();
         }else{
             this.aliasName = "";
         }
 
-        this.artists = music.get("ar").getAsJsonArray();
+        if(music.has("ar")){
+            this.artists = music.get("ar").getAsJsonArray();
+        }else{
+            this.artists = music.get("artists").getAsJsonArray();
+        }
 
-        JsonObject album = music.get("al").getAsJsonObject();
-        this.albumId = album.get("id").getAsLong();
-        this.albumName = album.get("name").getAsString();
-        this.duration = music.get("dt").getAsLong() / 1000;
+        if(music.has("al")){
+            this.album = music.get("al").getAsJsonObject();
+        }else{
+            this.album = music.get("album").getAsJsonObject();
+        }
+        
+        if(music.has("dt")){
+            this.duration = music.get("dt").getAsLong() / 1000;
+        }else{
+            this.duration = music.get("duration").getAsLong() / 1000;
+        }
     }
 
+    /**
+     * 红心音乐
+     * @param like
+     * @return
+     */
     public JsonObject like(boolean like){
         Map<String, Object> data = new HashMap<>();
         data.put("alg", "itembased");
@@ -63,6 +84,11 @@ public class Music extends Music163Object implements PrintObject {
         return result;
     }
 
+    /**
+     * 获得音乐 url
+     * @param br
+     * @return
+     */
     public String getPlayUrl(@Nullable int br){
         if(br == 0){
             br = 999000;
@@ -101,7 +127,7 @@ public class Music extends Music163Object implements PrintObject {
        }
        
        source.sendFeedback(TextClick.suggestTextMap("cloudmusic.info.music.artist", artistsTextData, "§f§l/"));
-       source.sendFeedback(TextClick.suggestText("cloudmusic.info.music.album", "§b" + this.albumName, "/cloudmusic album " + this.albumId));
+       source.sendFeedback(TextClick.suggestText("cloudmusic.info.music.album", "§b" + this.album.get("name").getAsString(), "/cloudmusic album " + this.album.get("id").getAsLong()));
        source.sendFeedback(Text.translatable("cloudmusic.info.music.id", this.id));
 
        Map<String, String> optionsTextData = new LinkedHashMap<>();

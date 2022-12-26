@@ -110,6 +110,18 @@ public class My extends User {
         };
     }
 
+    /**
+     * 获取 fm 曲目
+     * @return 音乐列表
+     */
+    public List<Music> fm (){
+        JsonObject json = this.api.POST_API("/api/v1/radio/get", null);
 
+        List<Music> musics = new ArrayList<>();
+        json.getAsJsonArray("data").forEach(music -> {
+            musics.add(new Music(this.api, music.getAsJsonObject()));
+        });
+        return musics;
+    }
 
 }

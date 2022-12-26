@@ -28,10 +28,10 @@ import net.minecraft.text.Text;
 public class MusicPlayer implements Runnable {
     private int volumePercentage = CloudMusicClient.CONFIG.getOrDefault("volume", 80);
     private final MinecraftClient client;
-    private final List<Music> playList;
+    protected final List<Music> playList;
     private SourceDataLine play;
-    private int playIn = 0;
-    private boolean loopPlayIn = true;
+    protected int playIn = 0;
+    protected boolean loopPlayIn = true;
     private boolean loopPlay;
     private boolean load;
     private int Volume;
@@ -71,16 +71,7 @@ public class MusicPlayer implements Runnable {
 
         while(this.loopPlayIn){
             for (this.playIn = 0; playIn < size; this.playIn++) {
-                Music music = this.playList.get(playIn);
-
-                this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.name), false);
-                if(!MusicCommand.isPlayUrl()){
-                    File file = HttpClient.download(music.getPlayUrl(0), CloudMusicClient.cacheHelper.getWaitCacheFile(music.id + ".mp3"));
-                    CloudMusicClient.cacheHelper.addUseSize(file);
-                    this.play(file);
-                }else{
-                    this.play(music.getPlayUrl(0));
-                }
+                playMusic();
 
                 if(!this.loopPlayIn){
                     break;
@@ -101,6 +92,22 @@ public class MusicPlayer implements Runnable {
         thread.setDaemon(true);
         thread.setName("CloudMusicPlayer thread");
         thread.start();
+    }
+
+    /**
+     * 播放音乐
+     */
+    protected void playMusic(){
+        Music music = this.playList.get(this.playIn);
+
+        if(!MusicCommand.isPlayUrl()){
+            File file = HttpClient.download(music.getPlayUrl(0), CloudMusicClient.cacheHelper.getWaitCacheFile(music.id + ".mp3"));
+            CloudMusicClient.cacheHelper.addUseSize(file);
+            this.play(file);
+        }else{
+            this.play(music.getPlayUrl(0));
+        }
+        this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.name), false);
     }
 
     /**

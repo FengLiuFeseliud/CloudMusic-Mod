@@ -3,13 +3,13 @@ package fengliu.cloudmusic.client.command;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
-
 import java.util.ArrayList;
 
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
@@ -32,14 +32,17 @@ public class MusicCommand {
         return playUrl;
     }
 
-    private static void getMy(boolean reset, FabricClientCommandSource source){
+    private static boolean getMy(boolean reset, FabricClientCommandSource source){
         if(my == null || reset){
             my = music163.my();
         }
 
         if(my == null){
             source.sendFeedback(Text.translatable("cloudmusic.info.not.cookie"));
+            return false;
         }
+
+        return true;
     }
     
     /**
@@ -100,6 +103,7 @@ public class MusicCommand {
         LiteralArgumentBuilder<FabricClientCommandSource> Album = literal("album");
         LiteralArgumentBuilder<FabricClientCommandSource> User = literal("user");
         LiteralArgumentBuilder<FabricClientCommandSource> My = literal("my");
+        LiteralArgumentBuilder<FabricClientCommandSource> Search = literal("search");
         LiteralArgumentBuilder<FabricClientCommandSource> Volume = literal("volume");
         LiteralArgumentBuilder<FabricClientCommandSource> Page = literal("page");
 
@@ -263,7 +267,9 @@ public class MusicCommand {
         // cloudmusic my
         CloudMusic.then(My.executes(contextdata -> {
             runCommand(contextdata, context -> {
-                getMy(true, context.getSource());
+                if(!getMy(true, context.getSource())){
+                    return;
+                }
                 my.printToChatHud(context.getSource());
             });
             return Command.SINGLE_SUCCESS;
@@ -279,10 +285,24 @@ public class MusicCommand {
             return Command.SINGLE_SUCCESS;
         })));
 
+        // cloudmusic my fm
+        CloudMusic.then(My.then(literal("fm").executes(contextdata -> {
+            runCommand(contextdata, context -> {
+                if(!getMy(false, context.getSource())){
+                    return;
+                }
+                resetPlayer(new Fm(my));
+                player.start();
+            });
+            return Command.SINGLE_SUCCESS;
+        })));
+
         // cloudmusic my playlist
         CloudMusic.then(My.then(literal("playlist").executes(contextdata -> {
             runCommand(contextdata, context -> {
-                getMy(false, context.getSource());
+                if(!getMy(false, context.getSource())){
+                    return;
+                }
                 page = my.playListsPage();
                 page.look(context.getSource());
             });
@@ -294,7 +314,9 @@ public class MusicCommand {
         // cloudmusic my recommend music
         CloudMusic.then(My.then(Recommend.then(literal("music").executes(contextdata -> {
             runCommand(contextdata, context -> {
-                getMy(false, context.getSource());
+                if(!getMy(false, context.getSource())){
+                    return;
+                }
                 resetPlayer((new MusicPlayList(my.recommend_songs())).createMusicPlayer(false));
                 player.start();
             });
@@ -304,7 +326,9 @@ public class MusicCommand {
         // cloudmusic my recommend playlist
         CloudMusic.then(My.then(Recommend.then(literal("playlist").executes(contextdata -> {
             runCommand(contextdata, context -> {
-                getMy(false, context.getSource());
+                if(!getMy(false, context.getSource())){
+                    return;
+                }
                 page = my.recommend_resource();
                 page.look(context.getSource());
             });
@@ -316,7 +340,9 @@ public class MusicCommand {
         // cloudmusic my sublist album
         CloudMusic.then(My.then(Sublist.then(literal("album").executes(contextdata -> {
             runCommand(contextdata, context -> {
-                getMy(false, context.getSource());
+                if(!getMy(false, context.getSource())){
+                    return;
+                }
                 page = my.sublist_album();
                 page.look(context.getSource());
             });
@@ -326,13 +352,58 @@ public class MusicCommand {
         // cloudmusic my sublist artist
         CloudMusic.then(My.then(Sublist.then(literal("artist").executes(contextdata -> {
             runCommand(contextdata, context -> {
-                getMy(false, context.getSource());
+                if(!getMy(false, context.getSource())){
+                    return;
+                }
                 page = my.sublist_artist();
                 page.look(context.getSource());
             });
             return Command.SINGLE_SUCCESS;
         }))));
 
+        // cloudmusic search music
+        CloudMusic.then(Search.then(literal("music").then(
+            argument("key", StringArgumentType.string()).executes(contextdata -> {
+                runCommand(contextdata, context -> {
+                    page = music163.searchMusic(StringArgumentType.getString(context, "key"));
+                    page.look(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
+
+        // cloudmusic search album
+        CloudMusic.then(Search.then(literal("album").then(
+            argument("key", StringArgumentType.string()).executes(contextdata -> {
+                runCommand(contextdata, context -> {
+                    page = music163.searchAlbum(StringArgumentType.getString(context, "key"));
+                    page.look(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
+
+        // cloudmusic search artist
+        CloudMusic.then(Search.then(literal("artist").then(
+            argument("key", StringArgumentType.string()).executes(contextdata -> {
+                runCommand(contextdata, context -> {
+                    page = music163.searchArtist(StringArgumentType.getString(context, "key"));
+                    page.look(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
+
+        // cloudmusic search playlist
+        CloudMusic.then(Search.then(literal("playlist").then(
+            argument("key", StringArgumentType.string()).executes(contextdata -> {
+                runCommand(contextdata, context -> {
+                    page = music163.searchPlayList(StringArgumentType.getString(context, "key"));
+                    page.look(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
 
         // cloudmusic volume
         CloudMusic.then(Volume.executes(context -> {
@@ -441,12 +512,11 @@ public class MusicCommand {
                                 source.sendFeedback(Text.translatable("cloudmusic.info.config.reset"));
 
                                 resetConfig();
-                                getMy(true, source);
 
                                 source.sendFeedback(Text.translatable("cloudmusic.info.config.complete"));
-                                if(my == null){
+                                if(!getMy(true, context.getSource())){
                                     source.sendFeedback(Text.translatable("cloudmusic.info.config.cookie", "§cnull"));
-                                }else{
+                                } else {
                                     source.sendFeedback(Text.translatable("cloudmusic.info.config.cookie", "§c" + my.name));
                                 }
 
