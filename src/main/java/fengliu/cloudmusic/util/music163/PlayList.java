@@ -78,7 +78,7 @@ public class PlayList extends Music163Object implements MusicList {
 
         this.musics = new ArrayList<>();
         this.tracks.forEach(element -> {
-            this.musics.add(new Music(api, element.getAsJsonObject()));
+            this.musics.add(new Music(api, element.getAsJsonObject(), null));
         });
         return this.musics;
     }

@@ -49,7 +49,7 @@ public class Music163 {
         data.put("c", "[{\"id\": " + id + "}]");
 
         JsonObject json = this.api.POST_API("/api/v3/song/detail", data);
-        return new Music(getHttpClient(), json);
+        return new Music(getHttpClient(), json, null);
     }
 
     /**

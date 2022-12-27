@@ -44,7 +44,7 @@ public class Artist extends Music163Object implements PrintObject {
         JsonObject json = this.api.POST_API("/api/artist/top/song", data);
         List<Music> musics = new ArrayList<>();
         json.get("songs").getAsJsonArray().forEach(music -> {
-            musics.add(new Music(this.api, music.getAsJsonObject()));
+            musics.add(new Music(this.api, music.getAsJsonObject(), null));
         });
 
         return musics;

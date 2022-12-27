@@ -24,7 +24,10 @@ public class Music extends Music163Object implements PrintObject {
     public final long duration;
     public final String picUrl;
 
-    public Music(HttpClient api, JsonObject data) {
+    /**
+     * 专辑歌曲没有 picUrl, 通过 cover 传入封面 picUrl
+     */
+    public Music(HttpClient api, JsonObject data, @Nullable String cover) {
         super(api, data);
 
         JsonObject music;
@@ -68,7 +71,11 @@ public class Music extends Music163Object implements PrintObject {
             this.duration = music.get("duration").getAsLong() / 1000;
         }
 
-        this.picUrl = this.album.get("picUrl").getAsString();
+        if(this.album.has("picUrl")){
+            this.picUrl = this.album.get("picUrl").getAsString();
+        }else{
+            this.picUrl = cover;
+        }
     }
 
     /**

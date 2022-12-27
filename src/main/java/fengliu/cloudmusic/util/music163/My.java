@@ -31,7 +31,7 @@ public class My extends User {
 
         List<Music> musics = new ArrayList<>();
         data.get("data").getAsJsonObject().get("dailySongs").getAsJsonArray().forEach(musicData -> {
-            musics.add(new Music(api, musicData.getAsJsonObject()));
+            musics.add(new Music(api, musicData.getAsJsonObject(), null));
         });
         return musics;
     }
@@ -119,7 +119,7 @@ public class My extends User {
 
         List<Music> musics = new ArrayList<>();
         json.getAsJsonArray("data").forEach(music -> {
-            musics.add(new Music(this.api, music.getAsJsonObject()));
+            musics.add(new Music(this.api, music.getAsJsonObject(), null));
         });
         return musics;
     }

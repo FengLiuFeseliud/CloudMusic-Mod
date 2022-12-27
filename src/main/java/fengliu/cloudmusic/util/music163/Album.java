@@ -95,7 +95,7 @@ public class Album extends Music163Object implements MusicList {
 
         this.musics = new ArrayList<>();
         this.songs.forEach(element -> {
-            this.musics.add(new Music(api, element.getAsJsonObject()));
+            this.musics.add(new Music(api, element.getAsJsonObject(), this.cover));
         });
         return this.musics;
     }

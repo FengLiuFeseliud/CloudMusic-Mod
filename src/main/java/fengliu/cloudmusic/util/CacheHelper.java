@@ -103,7 +103,6 @@ public class CacheHelper {
         File oldFile = this.getOldCacheFile();
         if(!oldFile.exists()){
             this.fileaCacheList.remove(0);
-            this.deleteOldFile();
             return;
         }
 
@@ -112,20 +111,11 @@ public class CacheHelper {
             if(oldFile.delete()){
                 this.useMb -= setMbSize(size);
             }
-
-            this.fileaCacheList.remove(0);
-            this.deleteOldFile();
         } catch (Exception e) {
             this.fileaCacheList.add(oldFile.getName());
-            this.fileaCacheList.remove(0);
-
-            if(this.fileaCacheList.size() > 1){
-                this.deleteOldFile();
-            }
             return;
         }
         this.fileaCacheList.remove(0);
-        this.deleteOldFile();
     }
 
     /**
@@ -137,7 +127,7 @@ public class CacheHelper {
             targetMdSize = (int) this.useMb;
         }
 
-        if((this.useMb + targetMdSize) < maxMb || this.fileaCacheList.size() == 0){
+        if(!((this.useMb + targetMdSize) > maxMb && this.fileaCacheList.size() != 0)){
             return;
         }
 
@@ -166,10 +156,12 @@ public class CacheHelper {
      * @param file 文件
      */
     public void addUseSize(File file){
-        if(this.fileaCacheList.contains(file.getName())){
+        String name = file.getName();
+        if(this.fileaCacheList.contains(name)){
             return;
         }
         this.useMb += setMbSize(file.length());
+        this.fileaCacheList.add(name);
 
         Thread deleteOldFileThread = new Thread(new deleteOldFileThread(this, this.deleteMb));
         deleteOldFileThread.setDaemon(true);

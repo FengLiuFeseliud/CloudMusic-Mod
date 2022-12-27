@@ -58,7 +58,12 @@ public class InGameHubMixin {
         imgMatrices.scale(0.25f,0.25f,0.25f);
         DrawableHelper.drawTexture(imgMatrices, 0, 0, 0, 0, 128, 128, 128, 128);
         DrawableHelper.drawStringWithShadow(matrices, client.textRenderer, music.name.length() > 16 ? music.name.substring(0, 16) + "...": music.name, width - 135, 4, 0xFFFFFF);
-        DrawableHelper.drawStringWithShadow(matrices, client.textRenderer, music.aliasName.length() > 16 ? music.aliasName.substring(0, 16) + "...": music.aliasName, width - 135, 14, 0x9E9E9E);
+        if(!music.aliasName.isEmpty()){
+            DrawableHelper.drawStringWithShadow(matrices, client.textRenderer, music.aliasName.length() > 16 ? music.aliasName.substring(0, 16) + "...": music.aliasName, width - 135, 14, 0x9E9E9E);
+        }else{
+            String album = music.album.get("name").getAsString();
+            DrawableHelper.drawStringWithShadow(matrices, client.textRenderer, album.length() > 16 ? album.substring(0, 16) + "...": album, width - 135, 14, 0x9E9E9E);
+        }
 
         String artist = "";
         for (JsonElement artistData : music.artists.asList()) {
