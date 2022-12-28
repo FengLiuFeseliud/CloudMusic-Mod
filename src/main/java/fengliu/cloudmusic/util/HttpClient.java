@@ -20,6 +20,9 @@ import org.jetbrains.annotations.Nullable;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import fengliu.cloudmusic.music163.ActionException;
+import net.minecraft.text.Text;
+
 public class HttpClient {
     private final String MainPath;
     private Map<String, String> Header;
@@ -93,8 +96,17 @@ public class HttpClient {
     public JsonObject POST_API(String paht, @Nullable Map<String, Object> data){
         HttpResult result = this.POST(paht, data);
         JsonObject json = result.getJson();
+        
+        int code = json.get("code").getAsInt();
+        if(code == 301){
+            throw new ActionException(Text.translatable("cloudmusic.exception.cookie.use"));
+        }
 
-        if(json.get("code").getAsInt() != 200){
+        if(code != 200){
+            if(json.has("msg")){
+                throw new ApiException(json.get("code").getAsInt(), json.get("msg").getAsString());
+            }
+
             throw new ApiException(json.get("code").getAsInt(), json.get("message").getAsString());
         }
 

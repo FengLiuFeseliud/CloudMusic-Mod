@@ -1,4 +1,4 @@
-package fengliu.cloudmusic.util.music163;
+package fengliu.cloudmusic.music163;
 
 import com.google.gson.JsonObject;
 

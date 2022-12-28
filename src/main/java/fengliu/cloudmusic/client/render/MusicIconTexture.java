@@ -1,9 +1,8 @@
 package fengliu.cloudmusic.client.render;
 
 import fengliu.cloudmusic.CloudMusicMod;
+import fengliu.cloudmusic.music163.Music;
 import fengliu.cloudmusic.util.HttpClient;
-import fengliu.cloudmusic.util.music163.Music;
-
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;

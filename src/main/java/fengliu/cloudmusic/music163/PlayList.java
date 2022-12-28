@@ -1,6 +1,7 @@
-package fengliu.cloudmusic.util.music163;
+package fengliu.cloudmusic.music163;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ import net.minecraft.text.Text;
 /**
  * 歌单对象
  */
-public class PlayList extends Music163Object implements MusicList {
+public class PlayList extends Music163Object implements MusicList, CanSubscribeObject {
     public final long id;
     public final String name;
     public final String cover;
@@ -70,6 +71,26 @@ public class PlayList extends Music163Object implements MusicList {
         
     }
 
+    public void add(long id){
+        Map<String, Object> data = new HashMap<>();
+        data.put("op", "add");
+        data.put("pid", this.id);
+        data.put("trackIds", "[\"" + this.id + "\"]");
+        data.put("imme", "true");
+
+        this.api.POST_API("/api/playlist/manipulate/tracks", data);
+    }
+
+    public void del(long id){
+        Map<String, Object> data = new HashMap<>();
+        data.put("op", "del");
+        data.put("pid", this.id);
+        data.put("trackIds", "[\"" + this.id + "\"]");
+        data.put("imme", "true");
+
+        this.api.POST_API("/api/playlist/manipulate/tracks", data);
+    }
+
     @Override
     public List<Music> getMusics(){
         if(this.musics != null){
@@ -108,7 +129,24 @@ public class PlayList extends Music163Object implements MusicList {
         Map<String, String> optionsTextData = new LinkedHashMap<>();
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic playlist play " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic platlist subscribe " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unsubscribe").getString(), "/cloudmusic platlist unsubscribe " + this.id);
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
+    }
+
+    @Override
+    public void subscribe() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("id", this.id);
+
+        this.api.POST_API("/api/playlist/subscribe", data);
+    }
+
+    @Override
+    public void unsubscribe() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("id", this.id);
+
+        this.api.POST_API("/api/playlist/unsubscribe", data);
     }
     
 }

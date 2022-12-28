@@ -3,7 +3,6 @@ package fengliu.cloudmusic.util;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.sound.sampled.AudioFormat;
@@ -14,11 +13,9 @@ import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
-import org.jetbrains.annotations.Nullable;
-
 import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.client.command.MusicCommand;
-import fengliu.cloudmusic.util.music163.Music;
+import fengliu.cloudmusic.music163.Music;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
@@ -32,7 +29,6 @@ public class MusicPlayer implements Runnable {
     private SourceDataLine play;
     protected int playIn = 0;
     protected boolean loopPlayIn = true;
-    private boolean loopPlay;
     private boolean load;
     private int Volume;
 
@@ -58,7 +54,7 @@ public class MusicPlayer implements Runnable {
      * @param playList 音乐列表
      * @param loopPlay 
      */
-    public MusicPlayer(List<Music> playList, boolean loopPlay){
+    public MusicPlayer(List<Music> playList){
         this.client = MinecraftClient.getInstance();
         this.playList = playList;
 
@@ -77,7 +73,7 @@ public class MusicPlayer implements Runnable {
                     break;
                 }
 
-                if(this.playIn == this.playList.size() - 1 && !this.loopPlay){
+                if(this.playIn == this.playList.size() - 1 && !MusicCommand.isLoopPlay()){
                     this.loopPlayIn = false;
                 }
             }
@@ -263,31 +259,5 @@ public class MusicPlayer implements Runnable {
         } catch (Exception err) {
             return null;
         }
-    }
-
-    public static class MusicPlayList{
-        private List<Music> musicList;
-
-        public MusicPlayList(List<Music> musicList){
-            this.musicList = musicList;
-        }
-        
-        public MusicPlayList(Music music){
-            this.musicList = new ArrayList<>();
-            this.musicList.add(music);
-        }
-
-        public void addMusic(Music music){
-            this.musicList.add(music);
-        }
-
-        public void addMusics(List<Music> musicList){
-            this.musicList.addAll(musicList);
-        }
-
-        public MusicPlayer createMusicPlayer(@Nullable boolean loopPlay){
-            return new MusicPlayer(musicList, loopPlay);
-        }
-        
     }
 }

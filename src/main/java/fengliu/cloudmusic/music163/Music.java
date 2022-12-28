@@ -1,4 +1,4 @@
-package fengliu.cloudmusic.util.music163;
+package fengliu.cloudmusic.music163;
 
 import java.util.LinkedHashMap;
 import java.util.HashMap;
@@ -29,22 +29,14 @@ public class Music extends Music163Object implements PrintObject {
      */
     public Music(HttpClient api, JsonObject data, @Nullable String cover) {
         super(api, data);
-
-        JsonObject music;
-        if(data.get("songs") != null){
-            music = data.get("songs").getAsJsonArray().get(0).getAsJsonObject();
-        }else{
-            music = data;
-        }
-        
-        this.id = music.get("id").getAsLong();
-        this.name = music.get("name").getAsString();
+        this.id = data.get("id").getAsLong();
+        this.name = data.get("name").getAsString();
         
         JsonArray alias;
-        if(music.has("alia")){
-            alias = music.get("alia").getAsJsonArray();
+        if(data.has("alia")){
+            alias = data.get("alia").getAsJsonArray();
         } else {
-            alias = music.get("alias").getAsJsonArray();
+            alias = data.get("alias").getAsJsonArray();
         }
         
         if(alias.size() > 0){
@@ -53,22 +45,22 @@ public class Music extends Music163Object implements PrintObject {
             this.aliasName = "";
         }
 
-        if(music.has("ar")){
-            this.artists = music.get("ar").getAsJsonArray();
+        if(data.has("ar")){
+            this.artists = data.get("ar").getAsJsonArray();
         }else{
-            this.artists = music.get("artists").getAsJsonArray();
+            this.artists = data.get("artists").getAsJsonArray();
         }
 
-        if(music.has("al")){
-            this.album = music.get("al").getAsJsonObject();
+        if(data.has("al")){
+            this.album = data.get("al").getAsJsonObject();
         }else{
-            this.album = music.get("album").getAsJsonObject();
+            this.album = data.get("album").getAsJsonObject();
         }
         
-        if(music.has("dt")){
-            this.duration = music.get("dt").getAsLong() / 1000;
+        if(data.has("dt")){
+            this.duration = data.get("dt").getAsLong() / 1000;
         }else{
-            this.duration = music.get("duration").getAsLong() / 1000;
+            this.duration = data.get("duration").getAsLong() / 1000;
         }
 
         if(this.album.has("picUrl")){
@@ -81,17 +73,25 @@ public class Music extends Music163Object implements PrintObject {
     /**
      * 红心音乐
      * @param like
-     * @return
      */
-    public JsonObject like(boolean like){
+    public void like(){
         Map<String, Object> data = new HashMap<>();
         data.put("alg", "itembased");
         data.put("trackId", this.id);
-        data.put("like", like);
+        data.put("like", true);
         data.put("time", 3);
 
-        JsonObject result = this.api.POST_API("/api/radio/like", data);
-        return result;
+        this.api.POST_API("/api/radio/like", data);
+    }
+
+    public void unlike(){
+        Map<String, Object> data = new HashMap<>();
+        data.put("alg", "itembased");
+        data.put("trackId", this.id);
+        data.put("like", false);
+        data.put("time", 3);
+
+        this.api.POST_API("/api/radio/like", data);
     }
 
     /**
@@ -111,10 +111,6 @@ public class Music extends Music163Object implements PrintObject {
 
         JsonObject result = playApi.POST_API("/api/song/enhance/player/url", data);
         JsonObject music = result.get("data").getAsJsonArray().get(0).getAsJsonObject();
-
-        if(music.get("code").getAsInt() != 200){
-            return null;
-        }
         return music.get("url").getAsString();
     }
 
@@ -143,7 +139,7 @@ public class Music extends Music163Object implements PrintObject {
        Map<String, String> optionsTextData = new LinkedHashMap<>();
        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic music play " + this.id);
        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.like").getString(), "/cloudmusic music like " + this.id);
-       optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic subscribe " + this.id);
+       optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unlike").getString(), "/cloudmusic music unlike " + this.id);
        source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
     

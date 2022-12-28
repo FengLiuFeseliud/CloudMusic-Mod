@@ -1,6 +1,7 @@
-package fengliu.cloudmusic.util.music163;
+package fengliu.cloudmusic.music163;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ import net.minecraft.text.Text;
 /**
  * 专辑对象
  */
-public class Album extends Music163Object implements MusicList {
+public class Album extends Music163Object implements MusicList, CanSubscribeObject {
     public final long id;
     public final String name;
     public final String cover;
@@ -84,6 +85,7 @@ public class Album extends Music163Object implements MusicList {
         Map<String, String> optionsTextData = new LinkedHashMap<>();
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic album play " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic album subscribe " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unsubscribe").getString(), "/cloudmusic album unsubscribe " + this.id);
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
 
@@ -98,6 +100,28 @@ public class Album extends Music163Object implements MusicList {
             this.musics.add(new Music(api, element.getAsJsonObject(), this.cover));
         });
         return this.musics;
+    }
+
+    @Override
+    public void subscribe() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("id", this.id);
+
+        JsonObject json = this.api.POST_API("/api/album/sub", data);
+        if(json.has("message")){
+            throw new ActionException(json.get("message").getAsString());
+        }
+    }
+
+    @Override
+    public void unsubscribe() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("id", this.id);
+
+        JsonObject json = this.api.POST_API("/api/album/unsub", data);
+        if(json.has("message")){
+            throw new ActionException(json.get("message").getAsString());
+        }
     }
     
 }

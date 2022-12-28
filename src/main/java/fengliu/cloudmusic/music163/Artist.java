@@ -1,4 +1,4 @@
-package fengliu.cloudmusic.util.music163;
+package fengliu.cloudmusic.music163;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +16,7 @@ import fengliu.cloudmusic.util.page.ApiPage;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
-public class Artist extends Music163Object implements PrintObject {
+public class Artist extends Music163Object implements PrintObject, CanSubscribeObject {
     public final long id;
     public final String name;
     public final String briefDesc;
@@ -37,6 +37,10 @@ public class Artist extends Music163Object implements PrintObject {
         this.musicSize = data_.get("musicSize").getAsInt();
     }
 
+    /**
+     * 热门 50 首
+     * @return 音乐列表
+     */
     public List<Music> topSong(){
         Map<String, Object> data = new LinkedHashMap<String, Object>();
         data.put("id", this.id);
@@ -50,6 +54,10 @@ public class Artist extends Music163Object implements PrintObject {
         return musics;
     }
 
+    /**
+     * 获取专辑
+     * @return 页对象
+     */
     public ApiPage albumPage(){
         Map<String, Object> data = new HashMap<>();
         data.put("limit", 24);
@@ -116,7 +124,26 @@ public class Artist extends Music163Object implements PrintObject {
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.music").getString(), "/cloudmusic artist music " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.album").getString(), "/cloudmusic artist album " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic artist subscribe " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unsubscribe").getString(), "/cloudmusic artist unsubscribe " + this.id);
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
+    }
+
+    @Override
+    public void subscribe() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("artistId", this.id);
+        data.put("artistIds", "[\"" + this.id + "\"]");
+
+        this.api.POST_API("/api/artist/sub", data);
+    }
+
+    @Override
+    public void unsubscribe() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("artistId", this.id);
+        data.put("artistIds", "[\"" + this.id + "\"]");
+
+        this.api.POST_API("/api/artist/unsub", data);
     }
     
 }

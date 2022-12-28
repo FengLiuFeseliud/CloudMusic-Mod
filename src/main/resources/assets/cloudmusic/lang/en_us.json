@@ -30,8 +30,16 @@
     "cloudmusic.options.music": "[音乐]",
     "cloudmusic.options.album": "[专辑]",
     "cloudmusic.options.like": "[红心]",
+    "cloudmusic.options.unlike": "[取消红心]",
     "cloudmusic.options.subscribe": "[收藏]",
+    "cloudmusic.options.unsubscribe": "[取消收藏]",
     "cloudmusic.options.page.up": "[上一页]",
     "cloudmusic.options.page.down": "[下一页]",
-    "cloudmusic.options.page.to": "[跳转至...]"
+    "cloudmusic.options.page.to": "[跳转至...]",
+
+    "cloudmusic.exception.music.id": "§c§l找不到音乐, 请检查音乐 id",
+    "cloudmusic.exception.album.id": "§c§l找不到专辑, 请检查专辑 id",
+    "cloudmusic.exception.user.id": "§c§l无法获取用户, 请检查用户 id",
+    "cloudmusic.exception.cookie": "§c§l无效的 cookie, 请检查 cookie 有效性 (尝试重新登录)",
+    "cloudmusic.exception.cookie.use": "§c§l现在还没有登录, 无法执行该操作, 请检查 cookie 有效性 (尝试重新登录)"
 }

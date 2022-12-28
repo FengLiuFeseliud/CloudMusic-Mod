@@ -1,4 +1,4 @@
-package fengliu.cloudmusic.util.music163;
+package fengliu.cloudmusic.music163;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +12,7 @@ import com.google.gson.JsonElement;
 
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.page.ApiPage;
+import net.minecraft.text.Text;
 
 /**
  * Music163 api
@@ -48,8 +49,11 @@ public class Music163 {
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("c", "[{\"id\": " + id + "}]");
 
-        JsonObject json = this.api.POST_API("/api/v3/song/detail", data);
-        return new Music(getHttpClient(), json, null);
+        JsonArray json = this.api.POST_API("/api/v3/song/detail", data).getAsJsonArray("songs");
+        if(json.isEmpty()){
+            throw new ActionException(Text.translatable("cloudmusic.exception.music.id"));
+        }
+        return new Music(getHttpClient(), json.get(0).getAsJsonObject(), null);
     }
 
     /**
@@ -85,7 +89,12 @@ public class Music163 {
      * @return 专辑对象
      */
     public Album album(long id){
-        return new Album(getHttpClient(), this.api.POST_API("/api/v1/album/" + id, null));
+        JsonObject json = this.api.POST_API("/api/v1/album/" + id, null);
+        if(!json.get("resourceState").getAsBoolean()){
+            throw new ActionException(Text.translatable("cloudmusic.exception.album.id"));
+        }
+
+        return new Album(getHttpClient(), json);
     }
 
     /**
@@ -94,7 +103,12 @@ public class Music163 {
      * @return 用户对象
      */
     public User user(long id){
-        return new User(this.api, this.api.POST_API("/api/v1/user/detail/" + id, null));
+        JsonObject json = this.api.POST_API("/api/v1/user/detail/" + id, null);
+        if(json.get("code").getAsInt() != 200){
+            throw new ActionException(Text.translatable("cloudmusic.exception.user.id"));
+        }
+
+        return new User(this.api, json);
     }
 
     /**
@@ -104,7 +118,7 @@ public class Music163 {
     public My my(){
         JsonObject json = this.api.POST_API("/api/w/nuser/account/get", null);
         if(json.get("account").isJsonNull()){
-            return null;
+            throw new ActionException(Text.translatable("cloudmusic.exception.cookie"));
         }
         return new My(this.api, this.api.POST_API("/api/v1/user/detail/" + json.getAsJsonObject("profile").get("userId").getAsLong(), null));
     }

@@ -18,7 +18,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import fengliu.cloudmusic.client.command.MusicCommand;
 import fengliu.cloudmusic.client.render.MusicIconTexture;
-import fengliu.cloudmusic.util.music163.Music;
+import fengliu.cloudmusic.music163.Music;
 
 @Environment(EnvType.CLIENT)
 @Mixin(InGameHud.class)

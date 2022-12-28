@@ -1,4 +1,4 @@
-package fengliu.cloudmusic.util.music163;
+package fengliu.cloudmusic.music163;
 
 import fengliu.cloudmusic.util.MusicPlayer;
 
@@ -9,7 +9,7 @@ public class Fm extends MusicPlayer {
     private My my;
 
     public Fm(My my) {
-        super(my.fm(), false);
+        super(my.fm());
         this.my = my;
     }
 
