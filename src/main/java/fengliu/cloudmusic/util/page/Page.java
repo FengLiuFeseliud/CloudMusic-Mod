@@ -20,6 +20,7 @@ public abstract class Page {
     protected final List<List<?>> data;
     protected final int pageCount;
     protected int pageIn;
+    private Text infoText;
 
     /**
      * 设置每一项的数据格式
@@ -39,6 +40,9 @@ public abstract class Page {
 
     protected void printToChatHud(FabricClientCommandSource source, Map<String, String> pageData) {
         source.sendFeedback(Text.literal(""));
+        if(this.infoText != null){
+            source.sendFeedback(this.infoText);
+        }
         source.sendFeedback(Text.translatable("cloudmusic.info.page.count", this.pageIn + 1 + "§c§l/§r" + this.pageCount));
 
         for(Entry<String, String> data: pageData.entrySet()){
@@ -135,6 +139,11 @@ public abstract class Page {
         
         this.pageIn = page;
         this.look(source);
+    }
+
+    public Page setInfoText(Text info){
+        this.infoText = info;
+        return this;
     }
 
 }

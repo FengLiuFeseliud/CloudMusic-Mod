@@ -121,7 +121,6 @@ public class Artist extends Music163Object implements PrintObject, CanSubscribeO
 
         Map<String, String> optionsTextData = new LinkedHashMap<>();
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play.top50").getString(), "/cloudmusic artist top " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.music").getString(), "/cloudmusic artist music " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.album").getString(), "/cloudmusic artist album " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic artist subscribe " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unsubscribe").getString(), "/cloudmusic artist unsubscribe " + this.id);

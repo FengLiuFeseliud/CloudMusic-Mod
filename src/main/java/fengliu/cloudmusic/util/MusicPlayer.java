@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -16,6 +17,7 @@ import javax.sound.sampled.SourceDataLine;
 import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.client.command.MusicCommand;
 import fengliu.cloudmusic.music163.Music;
+import fengliu.cloudmusic.util.page.Page;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
@@ -217,6 +219,21 @@ public class MusicPlayer implements Runnable {
         down();
     }
 
+    public void to(int in){
+        in -= 1;
+        if(in < 0){
+            in = 0;
+        }
+
+        int maxIndex = this.playList.size() - 1;
+        if(in > maxIndex){
+            in = maxIndex;
+        }
+
+        this.playIn = in - 1;
+        down();
+    }
+
     /**
      * 退出播放
      */
@@ -259,5 +276,18 @@ public class MusicPlayer implements Runnable {
         } catch (Exception err) {
             return null;
         }
+    }
+
+    public Page playingAll(){
+        return new Page(this.playList) {
+
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                Music music = (Music) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + music.name + "§r - " + music.artists.get(0).getAsJsonObject().get("name").getAsString(), "/cloudmusic to " + (this.limit * this.pageIn + newPageData.size() + 1));
+                return newPageData;
+            }
+            
+        };
     }
 }
