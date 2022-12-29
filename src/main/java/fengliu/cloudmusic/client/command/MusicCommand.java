@@ -8,7 +8,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -28,6 +30,71 @@ public class MusicCommand {
     private static Page page = null;
     private static Object data = null;
     private static My my = null;
+    private static final Text[] helps = {
+            Text.translatable("cloudmusic.help"),
+
+            Text.translatable("cloudmusic.help.music"),
+            Text.translatable("cloudmusic.help.music.play"),
+            Text.translatable("cloudmusic.help.music.like"),
+            Text.translatable("cloudmusic.help.music.unlike"),
+            Text.translatable("cloudmusic.help.music.unlike"),
+
+            Text.translatable("cloudmusic.help.playlist"),
+            Text.translatable("cloudmusic.help.playlist.play"),
+            Text.translatable("cloudmusic.help.playlist.subscribe"),
+            Text.translatable("cloudmusic.help.playlist.unsubscribe"),
+            Text.translatable("cloudmusic.help.playlist.add"),
+            Text.translatable("cloudmusic.help.playlist.del"),
+
+            Text.translatable("cloudmusic.help.artist"),
+            Text.translatable("cloudmusic.help.artist.top"),
+            Text.translatable("cloudmusic.help.artist.album"),
+            Text.translatable("cloudmusic.help.artist.subscribe"),
+            Text.translatable("cloudmusic.help.artist.unsubscribe"),
+
+            Text.translatable("cloudmusic.help.album"),
+            Text.translatable("cloudmusic.help.album.play"),
+            Text.translatable("cloudmusic.help.album.subscribe"),
+            Text.translatable("cloudmusic.help.album.unsubscribe"),
+
+            Text.translatable("cloudmusic.help.user"),
+            Text.translatable("cloudmusic.help.user.playlist"),
+            Text.translatable("cloudmusic.help.user.like"),
+
+            Text.translatable("cloudmusic.help.my"),
+            Text.translatable("cloudmusic.help.my.fm"),
+            Text.translatable("cloudmusic.help.my.like"),
+            Text.translatable("cloudmusic.help.my.playlist"),
+            Text.translatable("cloudmusic.help.my.recommend.music"),
+            Text.translatable("cloudmusic.help.my.recommend.playlist"),
+            Text.translatable("cloudmusic.help.my.sublist.album"),
+            Text.translatable("cloudmusic.help.my.sublist.artist"),
+
+            Text.translatable("cloudmusic.help.search.music"),
+            Text.translatable("cloudmusic.help.search.album"),
+            Text.translatable("cloudmusic.help.search.artist"),
+            Text.translatable("cloudmusic.help.search.playlist"),
+
+            Text.translatable("cloudmusic.help.volume"),
+            Text.translatable("cloudmusic.help.volume.volume"),
+
+            Text.translatable("cloudmusic.help.page.up"),
+            Text.translatable("cloudmusic.help.page.down"),
+            Text.translatable("cloudmusic.help.page.to"),
+
+            Text.translatable("cloudmusic.help.playing"),
+            Text.translatable("cloudmusic.help.playing.all"),
+
+            Text.translatable("cloudmusic.help.stop"),
+            Text.translatable("cloudmusic.help.continue"),
+            Text.translatable("cloudmusic.help.up"),
+            Text.translatable("cloudmusic.help.down"),
+            Text.translatable("cloudmusic.help.to"),
+            Text.translatable("cloudmusic.help.exit"),
+            Text.translatable("cloudmusic.help.reset"),
+            Text.translatable("cloudmusic.help.cloudmusic"),
+    };
+    private static final List<Text> helpsList = new ArrayList<>();
 
     public static boolean isPlayUrl(){
         return playUrl;
@@ -137,7 +204,17 @@ public class MusicCommand {
         LiteralArgumentBuilder<FabricClientCommandSource> Volume = literal("volume");
         LiteralArgumentBuilder<FabricClientCommandSource> Page = literal("page");
 
+        Collections.addAll(helpsList, helps);
         CloudMusic.executes(context -> {
+            page = new Page(helpsList) {
+                @Override
+                protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                    newPageData.put("[" +(newPageData.size() + 1) + "] " + ((Text) data).getString(), "");
+                    return newPageData;
+                }
+            };
+            page.setInfoText(Text.translatable("cloudmusic.info.page.help"));
+            page.look(context.getSource());
             return Command.SINGLE_SUCCESS;
         });
 
@@ -689,12 +766,6 @@ public class MusicCommand {
                                 source.sendFeedback(Text.translatable("cloudmusic.info.config.play.url", "§c" + playUrl));
                                 CloudMusicClient.cacheHelper.printToChatHud(source);
                             });
-                            return Command.SINGLE_SUCCESS;
-                        })
-                    )
-                    .then(
-                        // cloudmusic help
-                        literal("help").executes(context -> {
                             return Command.SINGLE_SUCCESS;
                         })
                     )

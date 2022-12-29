@@ -41,6 +41,9 @@ public class CloudMusicClient implements ClientModInitializer  {
             # 是否直接播放, 不下载缓存音乐文件
             # ps: 直接播放可以节省空间, 但有可能出现音乐无法播放完整
             play.url=false
+            
+            # 循环播放
+            play.loop=true
 
             # 缓存配置
 
