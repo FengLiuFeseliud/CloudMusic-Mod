@@ -6,21 +6,19 @@
   "name": "CloudMusic",
   "description": "在 MC 中播放网易云音乐!!!",
   "authors": [
-    "FengLiu"
+    "FengLiuFeseliud"
   ],
   "contact": {
     "homepage": "https://github.com/FengLiuFeseliud/CloudMusic-Mod",
-    "sources": "https://github.com/FengLiuFeseliud/CloudMusic-Mod"
+    "sources": "https://github.com/FengLiuFeseliud/CloudMusic-Mod",
+    "issues": "https://github.com/FengLiuFeseliud/CloudMusic-Mod/issues"
   },
 
   "license": "MIT",
   "icon": "assets/cloudmusic/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
-    "main": [
-      "fengliu.cloudmusic.CloudMusicMod"
-    ],
     "client": [ 
       "fengliu.cloudmusic.CloudMusicClient" 
     ]

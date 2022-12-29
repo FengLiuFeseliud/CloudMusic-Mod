@@ -12,11 +12,14 @@ import fengliu.cloudmusic.util.SimpleConfig;
 import fengliu.cloudmusic.util.SimpleConfig.ConfigRequest;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CloudMusicClient implements ClientModInitializer  {
 
+    public static final String MOD_ID = "cloudmusic";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static Path MC_PATH = FabricLoader.getInstance().getGameDir();
-
     public static ConfigRequest configRequest = SimpleConfig.of("cloud_music_config").provider(CloudMusicClient::provider);
     public static SimpleConfig CONFIG = configRequest.request();
     /**

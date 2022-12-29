@@ -1,6 +1,6 @@
 package fengliu.cloudmusic.client.render;
 
-import fengliu.cloudmusic.CloudMusicMod;
+import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.music163.Music;
 import fengliu.cloudmusic.util.HttpClient;
 import net.minecraft.client.MinecraftClient;
@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier;
 
 public class MusicIconTexture {
     private static final MinecraftClient client = MinecraftClient.getInstance();
-    public static Identifier MUSIC_ICON_ID = new Identifier(CloudMusicMod.MOD_ID, "music.icon");
+    public static Identifier MUSIC_ICON_ID = new Identifier(CloudMusicClient.MOD_ID, "music.icon");
     private static boolean canUseIcon = false;
 
     /**
