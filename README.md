@@ -4,6 +4,8 @@
 
 ![logo.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/src/main/resources/assets/cloudmusic/icon.png?raw=true)
 
+![run.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/run.png?raw=true)
+
 ## 模拟登录 - 设置 cookie
 
 在 [网易云音乐 WEB](https://music.163.com/) 登录后, 使用浏览器开发者复制 cookie 到最后游戏目录 `config/cloud_music_config`  配置文件
