@@ -22,7 +22,9 @@ import fengliu.cloudmusic.util.MusicPlayer;
 import fengliu.cloudmusic.util.page.Page;
 
 public class MusicCommand {
-    private static Music163 music163 = new Music163(CloudMusicClient.CONFIG.getOrDefault( "cookie", ""));
+    private static LoginMusic163 loginMusic163 = new LoginMusic163();
+    private static Music163 music163 = new Music163(CloudMusicClient.CONFIG.getOrDefault( "login.cookie", ""));
+    private static int countryCode = CloudMusicClient.CONFIG.getOrDefault("login.country.code", 86);
     private static int volumePercentage = CloudMusicClient.CONFIG.getOrDefault("volume", 80);
     private static boolean playUrl = CloudMusicClient.CONFIG.getOrDefault("play.url", false);
     private static boolean loopPlay = CloudMusicClient.CONFIG.getOrDefault("play.loop", true);
@@ -36,7 +38,6 @@ public class MusicCommand {
             Text.translatable("cloudmusic.help.music"),
             Text.translatable("cloudmusic.help.music.play"),
             Text.translatable("cloudmusic.help.music.like"),
-            Text.translatable("cloudmusic.help.music.unlike"),
             Text.translatable("cloudmusic.help.music.unlike"),
 
             Text.translatable("cloudmusic.help.playlist"),
@@ -74,6 +75,12 @@ public class MusicCommand {
             Text.translatable("cloudmusic.help.search.album"),
             Text.translatable("cloudmusic.help.search.artist"),
             Text.translatable("cloudmusic.help.search.playlist"),
+
+            Text.translatable("cloudmusic.help.login.email"),
+            Text.translatable("cloudmusic.help.login.country.code"),
+            Text.translatable("cloudmusic.help.login.captcha"),
+            Text.translatable("cloudmusic.help.login.captcha.login"),
+            Text.translatable("cloudmusic.help.login.captcha.phone"),
 
             Text.translatable("cloudmusic.help.volume"),
             Text.translatable("cloudmusic.help.volume.volume"),
@@ -156,10 +163,17 @@ public class MusicCommand {
         my = null;
 
         CloudMusicClient.resetConfig();
-        music163 = new Music163(CloudMusicClient.CONFIG.getOrDefault( "cookie", ""));
+        music163 = new Music163(CloudMusicClient.CONFIG.getOrDefault( "login.cookie", ""));
+        countryCode = CloudMusicClient.CONFIG.getOrDefault("login.country.code", 86);
         volumePercentage = CloudMusicClient.CONFIG.getOrDefault("volume", 80);
         playUrl = CloudMusicClient.CONFIG.getOrDefault("play.url", false);
         loopPlay = CloudMusicClient.CONFIG.getOrDefault("play.loop", true);
+    }
+
+    private static void resetCookie(String cookie){
+        CloudMusicClient.setConfigValue("login.cookie", cookie);
+        music163 = new Music163(cookie);
+        getMy(true);
     }
 
     private interface Job{
@@ -203,6 +217,7 @@ public class MusicCommand {
         LiteralArgumentBuilder<FabricClientCommandSource> Search = literal("search");
         LiteralArgumentBuilder<FabricClientCommandSource> Volume = literal("volume");
         LiteralArgumentBuilder<FabricClientCommandSource> Page = literal("page");
+        LiteralArgumentBuilder<FabricClientCommandSource> Login = literal("login");
 
         Collections.addAll(helpsList, helps);
         CloudMusic.executes(context -> {
@@ -696,6 +711,66 @@ public class MusicCommand {
                 return Command.SINGLE_SUCCESS;
             })
         ));
+        
+        // cloudmusic login email email password
+        CloudMusic.then(Login.then(literal("email").then(
+            argument("email", StringArgumentType.string()).then(
+                argument("password", StringArgumentType.string()).executes(contextdata -> {
+                    runCommand(contextdata, context -> {
+                        resetCookie(loginMusic163.email(StringArgumentType.getString(context, "email"), StringArgumentType.getString(context, "password")));
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.login", my.name));
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
+            ))
+        ));
+        
+        // cloudmusic login country code
+        CloudMusic.then(Login.then(literal("country").then(
+            argument("code", IntegerArgumentType.integer()).executes(contextdata -> {
+                runCommand(contextdata, context -> {
+                    countryCode = IntegerArgumentType.getInteger(context, "code");
+                    CloudMusicClient.setConfigValue("login.country.code", countryCode);
+                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.country.code", countryCode));
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
+        
+        // cloudmusic login captcha phone
+        CloudMusic.then(Login.then(literal("captcha").then(
+            argument("phone", LongArgumentType.longArg()).executes(contextdata -> {
+                runCommand(contextdata, context -> {
+                    loginMusic163.sendCaptcha(LongArgumentType.getLong(context, "phone"), countryCode);
+                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.login.sendcaptcha"));
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
+
+        // cloudmusic login captcha phone captcha
+        CloudMusic.then(Login.then(literal("captcha").then(
+            argument("phone", LongArgumentType.longArg()).then(
+                argument("captcha", IntegerArgumentType.integer()).executes(contextdata -> {
+                    runCommand(contextdata, context -> {
+                        resetCookie(loginMusic163.cellphone(LongArgumentType.getLong(context, "phone"), ""+IntegerArgumentType.getInteger(context, "captcha"), countryCode, true));
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.login", my.name));
+                    });
+                    return Command.SINGLE_SUCCESS;
+                }))
+        )));
+
+        // cloudmusic login phone phone password
+        CloudMusic.then(Login.then(literal("phone").then(
+            argument("phone", LongArgumentType.longArg()).then(
+                argument("password", StringArgumentType.string()).executes(contextdata -> {
+                    runCommand(contextdata, context -> {
+                        resetCookie(loginMusic163.cellphone(LongArgumentType.getLong(context, "phone"), StringArgumentType.getString(context, "password"), countryCode, false));
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.login", my.name));
+                    });
+                    return Command.SINGLE_SUCCESS;
+                }))
+        )));
 
         ClientCommandRegistrationCallback.EVENT.register((  dispatcher, registryAccess) -> {
             dispatcher.register(

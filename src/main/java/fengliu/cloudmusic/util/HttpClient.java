@@ -13,7 +13,9 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -113,6 +115,34 @@ public class HttpClient {
         return json;
     }
 
+    public String POST_LOGIN(String paht, Map<String, Object> data){
+        HttpResult result = this.POST(paht, data);
+        JsonObject json = result.getJson();
+        
+        int code = json.get("code").getAsInt();
+        if(code == 400){
+            throw new ActionException(Text.translatable("cloudmusic.exception.login.400"));
+        }
+
+        if(code == 501){
+            throw new ActionException(Text.translatable("cloudmusic.exception.login.501"));
+        }
+
+        if(code == 502){
+            throw new ActionException(Text.translatable("cloudmusic.exception.login.502"));
+        }
+
+        if(code == 503){
+            throw new ActionException(Text.translatable("cloudmusic.exception.login.503"));
+        }
+
+        if(code != 200){
+            throw new ActionException(Text.translatable("cloudmusic.exception.login.err.code", json.toString()));
+        }
+
+        return result.getSetCookie();
+    }
+
     private HttpURLConnection setRequestHeader(HttpURLConnection httpConnection){
         this.Header.forEach((key, value) -> {
             httpConnection.setRequestProperty(key, value);
@@ -144,10 +174,10 @@ public class HttpClient {
             int code = httpConnection.getResponseCode();
             if (code == 200) {
                 inputStream = httpConnection.getInputStream();
-                return new HttpResult(code, true, inputStream.readAllBytes());
+                return new HttpResult(code, true, inputStream.readAllBytes(), httpConnection.getHeaderFields().get("Set-Cookie"));
             }else{
                 inputStream = httpConnection.getErrorStream();
-                return new HttpResult(code, false, inputStream.readAllBytes());
+                return new HttpResult(code, false, inputStream.readAllBytes(), httpConnection.getHeaderFields().get("Set-Cookie"));
             }
         } catch (IOException exception) {
             exception.printStackTrace();
@@ -163,7 +193,7 @@ public class HttpClient {
             httpConnection.disconnect();
         }
         byte[] edata = {};
-        return new HttpResult(500, false, edata);
+        return new HttpResult(500, false, edata, null);
     }
 
     public static File download(String path, File targetFile) {
@@ -237,10 +267,12 @@ public class HttpClient {
         public final int code;
         public final boolean status;
         private final byte[] data;
+        private final List<String> cookies;
 
-        public HttpResult(int code, boolean status, byte[] data){
+        public HttpResult(int code, boolean status, byte[] data, List<String> cookies){
             this.code = code;
             this.status = status;
+            this.cookies = cookies;
 
             if(data == null){
                 byte[] edata = {};
@@ -261,6 +293,24 @@ public class HttpClient {
 
         public JsonObject getJson(){
             return JsonParser.parseString(getString()).getAsJsonObject();
+        }
+
+        public String getSetCookie(){
+            Map<String, String> cookiesMap = new HashMap<>();
+            for (String cookie : this.cookies) {
+                String[] cookiekeys = cookie.split("; ")[0].split("=");
+                if(cookiekeys.length == 1){
+                    cookiesMap.put(cookiekeys[0], "");
+                    continue;
+                }
+                cookiesMap.put(cookiekeys[0], cookiekeys[1]);
+            }
+
+            String cookieData = "";
+            for (Entry<String, String> cookiekeys: cookiesMap.entrySet()) {
+                cookieData += cookiekeys.getKey() + "=" + cookiekeys.getValue() + "; ";
+            }
+            return cookieData;
         }
     }
 }

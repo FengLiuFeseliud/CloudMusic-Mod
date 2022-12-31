@@ -42,6 +42,12 @@
     "cloudmusic.help.search.artist": "搜索歌手 /cloudmusic search artist [key]",
     "cloudmusic.help.search.playlist": "搜索歌单 /cloudmusic search playlist [key]",
 
+    "cloudmusic.help.login.email": "邮箱登录 /cloudmusic login email [邮箱] [密码]",
+    "cloudmusic.help.login.country.code": "设置手机号国家码 /cloudmusic login country [国家码]",
+    "cloudmusic.help.login.captcha": "发送手机验证码 /cloudmusic login captcha [手机号]",
+    "cloudmusic.help.login.captcha.login": "手机验证码登录 /cloudmusic login captcha [手机号] [验证码]",
+    "cloudmusic.help.login.captcha.phone": "手机密码登录 /cloudmusic login phone [手机号] [密码]",
+
     "cloudmusic.help.volume": "查看音量 /cloudmusic volume",
     "cloudmusic.help.volume.volume": "调整音量 (0-100) /cloudmusic volume [volume]",
 
@@ -111,6 +117,9 @@
     "cloudmusic.info.command.music.like": "红心 %d",
     "cloudmusic.info.command.music.unlike": "取消红心 %d",
     "cloudmusic.info.command.music.play": "播放 %d",
+    "cloudmusic.info.command.login": "成功登录至 %d",
+    "cloudmusic.info.command.login.sendcaptcha": "成功向手机号发送验证码...",
+    "cloudmusic.info.command.country.code": "设置手机号国家码为 %d...",
 
     "cloudmusic.options.play": "[播放]",
     "cloudmusic.options.play.top50": "[热门50首]",
@@ -127,5 +136,11 @@
     "cloudmusic.exception.album.id": "§c§l找不到专辑, 请检查专辑 id",
     "cloudmusic.exception.user.id": "§c§l无法获取用户, 请检查用户 id",
     "cloudmusic.exception.cookie": "§c§l无效的 cookie, 请检查 cookie 有效性 (尝试重新登录)",
-    "cloudmusic.exception.cookie.use": "§c§l现在还没有登录, 无法执行该操作, 请检查 cookie 有效性 (尝试重新登录)"
+    "cloudmusic.exception.cookie.use": "§c§l现在还没有登录, 无法执行该操作, 请检查 cookie 有效性 (尝试重新登录)",
+
+    "cloudmusic.exception.login.400": "登录失败, 手机号格式错误",
+    "cloudmusic.exception.login.501": "登录失败, 未注册",
+    "cloudmusic.exception.login.502": "登录失败, 密码错误",
+    "cloudmusic.exception.login.503": "登录失败, 验证码错误",
+    "cloudmusic.exception.login.err.code": "登录失败, 未知错误: %d"
 }

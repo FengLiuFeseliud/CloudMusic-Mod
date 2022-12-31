@@ -39,7 +39,10 @@ public class CloudMusicClient implements ClientModInitializer  {
             volume=80
 
             # cookie 用户
-            cookie=
+            login.cookie=
+
+            # 手机登录时使用手机的国家码 (默认 86 中国)
+            login.country.code=86
 
             # 是否直接播放, 不下载缓存音乐文件
             # ps: 直接播放可以节省空间, 但有可能出现音乐无法播放完整
