@@ -27,8 +27,22 @@ public class InGameHubMixin {
     
     @Inject(method = "render", at = @At("HEAD"))
     public void render(MatrixStack matrices, float tickDelta, CallbackInfo info){
+        if(MusicCommand.loadQRCode){
+            MinecraftClient client = MinecraftClient.getInstance();
+            int width = client.getWindow().getScaledWidth();
+
+            RenderSystem.setShader(GameRenderer::getPositionProgram);
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+            RenderSystem.setShaderTexture(0, MusicIconTexture.QR_CODE_ID);
+
+            MatrixStack imgMatrices =new MatrixStack();
+            imgMatrices.translate(width - 64, 64, 0);
+            imgMatrices.scale(0.50f,0.50f,0.50f);
+            DrawableHelper.drawTexture(imgMatrices, 0, 0, 0, 0, 128, 128, 128, 128);
+        }
+
         Music music = MusicCommand.playing();
-        
+
         if(music == null){
             return;
         }

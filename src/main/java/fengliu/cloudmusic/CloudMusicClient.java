@@ -40,14 +40,16 @@ public class CloudMusicClient implements ClientModInitializer  {
 
             # cookie 用户
             login.cookie=
-
             # 手机登录时使用手机的国家码 (默认 86 中国)
             login.country.code=86
+            # 二维码轮查最大次数 (默认 10 次)
+            login.qr.check.num=10
+            # 二维码轮查间隔时长 (默认 3 秒)
+            login.qr.check.time=3
 
             # 是否直接播放, 不下载缓存音乐文件
             # ps: 直接播放可以节省空间, 但有可能出现音乐无法播放完整
             play.url=false
-            
             # 循环播放
             play.loop=true
 

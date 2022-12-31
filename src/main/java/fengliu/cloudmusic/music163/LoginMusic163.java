@@ -1,10 +1,15 @@
 package fengliu.cloudmusic.music163;
 
+
 import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gson.JsonObject;
+import fengliu.cloudmusic.client.command.MusicCommand;
+import fengliu.cloudmusic.client.render.MusicIconTexture;
 import fengliu.cloudmusic.util.HttpClient;
+import net.minecraft.text.Text;
 
 public class LoginMusic163 {
     private Map<String, String> Header = new HashMap<String, String>();
@@ -108,4 +113,69 @@ public class LoginMusic163 {
         return this.api.POST_LOGIN("/api/login", data);
     }
 
+    /**
+     * 获取二维码 key
+     * @return key
+     */
+    public String qrKey(){
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("type", 1);
+
+        JsonObject json = this.api.POST_API("/api/login/qrcode/unikey", data);
+        return json.get("unikey").getAsString();
+    }
+
+    /**
+     * 查询二维码状态
+     * 状态码:801 等待扫码 802 授权中 800 二维码不存在或已过期 803 登录成功
+     * @param qrKey 二维码 key
+     * @return HttpResult
+     */
+    private HttpClient.HttpResult qrCheck(String qrKey){
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("key", qrKey);
+        data.put("type", 1);
+
+        return this.api.POST("/api/login/qrcode/client/login", data);
+    }
+
+    /**
+     * 生成二维码, 并注册材质
+     * @param qrKey 二维码 key
+     */
+    public void getQRCodeTexture(String qrKey){
+        MusicIconTexture.getQRCode("https://music.163.com/login?codekey=" + qrKey);
+    }
+
+    /**
+     *  二维码登录
+     * @param qrKey 二维码 key
+     * @return 登录成功返回 cookie
+     */
+    public String qrLogin(String qrKey) throws InterruptedException {
+        int[] checks = MusicCommand.getQrChecks();
+
+        int check = checks[0];
+        while(check > 0){
+            HttpClient.HttpResult result = qrCheck(qrKey);
+            JsonObject json = result.getJson();
+
+            int code = json.get("code").getAsInt();
+            if(code == 801 || code == 802){
+                Thread.sleep(checks[1]* 1000L);
+                check -= 1;
+                continue;
+            }
+
+            if(code == 800){
+                throw new ActionException(Text.translatable("cloudmusic.exception.login.qr.code"));
+            }
+
+            if(code == 803){
+                return result.getSetCookie();
+            }
+        }
+
+        throw new ActionException(Text.translatable("cloudmusic.exception.login.qr.code.time.out"));
+    }
 }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "cloudmusic",
-  "version": "0.1.0",
+  "version": "0.2.0",
 
   "name": "CloudMusic",
   "description": "在 MC 中播放网易云音乐!!!",

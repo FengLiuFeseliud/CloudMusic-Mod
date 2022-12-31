@@ -39,6 +39,13 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.googlecode.soundlibs/tritonus-share
 	implementation group: 'com.googlecode.soundlibs', name: 'tritonus-share', version: '0.3.7.4'
 	include group: 'com.googlecode.soundlibs', name: 'tritonus-share', version: '0.3.7.4'
+
+	// 二维码
+
+	// https://mvnrepository.com/artifact/com.google.zxing/core
+	implementation group: 'com.google.zxing', name: 'core', version: '3.5.1'
+	include group: 'com.google.zxing', name: 'core', version: '3.5.1'
+
 }
 
 processResources {

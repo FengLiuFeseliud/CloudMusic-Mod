@@ -6,7 +6,23 @@
 
 ![run.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/run.png?raw=true)
 
-## 模拟登录 - 设置 cookie
+## 登录
+
+实现了四种登录接口 验证码 手机号密码 邮箱 二维码
+
+![login_1.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/login_1.png?raw=true)
+
+![login_2.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/login_2.png?raw=true)
+
+输入邮件报错用双引号包裹即可
+
+![login_3.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/login_3.png?raw=true)
+
+二维码会在游戏中被绘制, 无需切出游戏!
+
+![login_4.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/login_4.png?raw=true)
+
+## 登录 - 设置 cookie
 
 在 [网易云音乐 WEB](https://music.163.com/) 登录后, 使用浏览器开发者复制 cookie 到最后游戏目录 `config/cloud_music_config`  配置文件
 

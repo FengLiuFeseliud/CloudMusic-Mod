@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
+
+import fengliu.cloudmusic.client.render.MusicIconTexture;
+import fengliu.cloudmusic.mixin.InGameHubMixin;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
@@ -22,9 +25,11 @@ import fengliu.cloudmusic.util.MusicPlayer;
 import fengliu.cloudmusic.util.page.Page;
 
 public class MusicCommand {
-    private static LoginMusic163 loginMusic163 = new LoginMusic163();
+    private static final LoginMusic163 loginMusic163 = new LoginMusic163();
     private static Music163 music163 = new Music163(CloudMusicClient.CONFIG.getOrDefault( "login.cookie", ""));
     private static int countryCode = CloudMusicClient.CONFIG.getOrDefault("login.country.code", 86);
+    private static int qrCheckNum = CloudMusicClient.CONFIG.getOrDefault("login.qr.check.num", 10);
+    private static int qrCheckTime = CloudMusicClient.CONFIG.getOrDefault("login.qr.check.time", 3);
     private static int volumePercentage = CloudMusicClient.CONFIG.getOrDefault("volume", 80);
     private static boolean playUrl = CloudMusicClient.CONFIG.getOrDefault("play.url", false);
     private static boolean loopPlay = CloudMusicClient.CONFIG.getOrDefault("play.loop", true);
@@ -32,6 +37,7 @@ public class MusicCommand {
     private static Page page = null;
     private static Object data = null;
     private static My my = null;
+    public static boolean loadQRCode = false;
     private static final Text[] helps = {
             Text.translatable("cloudmusic.help"),
 
@@ -81,6 +87,7 @@ public class MusicCommand {
             Text.translatable("cloudmusic.help.login.captcha"),
             Text.translatable("cloudmusic.help.login.captcha.login"),
             Text.translatable("cloudmusic.help.login.captcha.phone"),
+            Text.translatable("cloudmusic.help.login.qr"),
 
             Text.translatable("cloudmusic.help.volume"),
             Text.translatable("cloudmusic.help.volume.volume"),
@@ -109,6 +116,10 @@ public class MusicCommand {
 
     public static boolean isLoopPlay(){
         return loopPlay;
+    }
+
+    public static int[] getQrChecks(){
+        return new int[]{qrCheckNum, qrCheckTime};
     }
 
     private static My getMy(boolean reset){
@@ -165,12 +176,18 @@ public class MusicCommand {
         CloudMusicClient.resetConfig();
         music163 = new Music163(CloudMusicClient.CONFIG.getOrDefault( "login.cookie", ""));
         countryCode = CloudMusicClient.CONFIG.getOrDefault("login.country.code", 86);
+        qrCheckNum = CloudMusicClient.CONFIG.getOrDefault("login.qr.check.num", 10);
+        qrCheckTime = CloudMusicClient.CONFIG.getOrDefault("login.qr.check.time", 3);
         volumePercentage = CloudMusicClient.CONFIG.getOrDefault("volume", 80);
         playUrl = CloudMusicClient.CONFIG.getOrDefault("play.url", false);
         loopPlay = CloudMusicClient.CONFIG.getOrDefault("play.loop", true);
     }
 
     private static void resetCookie(String cookie){
+        if(cookie == null){
+            return;
+        }
+
         CloudMusicClient.setConfigValue("login.cookie", cookie);
         music163 = new Music163(cookie);
         getMy(true);
@@ -771,6 +788,26 @@ public class MusicCommand {
                     return Command.SINGLE_SUCCESS;
                 }))
         )));
+
+        // cloudmusic login qr
+        CloudMusic.then(Login.then(literal("qr").executes(contextdata -> {
+            runCommand(contextdata, context -> {
+                String qrKey = loginMusic163.qrKey();
+                loginMusic163.getQRCodeTexture(qrKey);
+                try {
+                    loadQRCode = true;
+                    resetCookie(loginMusic163.qrLogin(qrKey));
+                }catch (ActionException err){
+                    context.getSource().sendFeedback(Text.literal(err.getMessage()));
+                    return;
+                }finally {
+                    loadQRCode = false;
+                }
+
+                context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.login", my.name));
+            });
+            return Command.SINGLE_SUCCESS;
+        })));
 
         ClientCommandRegistrationCallback.EVENT.register((  dispatcher, registryAccess) -> {
             dispatcher.register(
