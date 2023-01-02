@@ -2,6 +2,8 @@
 
 #### 在 mc 中内置网易云音乐播放器
 
+#### 出现任何问题在 Issues 前请检查 mod 版本是否为最新
+
 ![logo.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/src/main/resources/assets/cloudmusic/icon.png?raw=true)
 
 ![run.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/run.png?raw=true)
