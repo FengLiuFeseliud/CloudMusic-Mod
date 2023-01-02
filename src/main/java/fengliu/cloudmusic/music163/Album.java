@@ -72,8 +72,8 @@ public class Album extends Music163Object implements MusicList, CanSubscribeObje
         }
 
         source.sendFeedback(TextClick.suggestTextMap(artistsTextData, "§f§l/"));
-        source.sendFeedback(Text.translatable("cloudmusic.info.album.id", this.id));
         source.sendFeedback(Text.translatable("cloudmusic.info.album.size", this.size));
+        source.sendFeedback(Text.translatable("cloudmusic.info.album.id", this.id));
         
         if(this.description != null){
             source.sendFeedback(Text.literal(""));

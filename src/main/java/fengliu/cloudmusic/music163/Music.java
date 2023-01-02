@@ -72,7 +72,6 @@ public class Music extends Music163Object implements PrintObject {
 
     /**
      * 红心音乐
-     * @param like
      */
     public void like(){
         Map<String, Object> data = new HashMap<>();
@@ -84,6 +83,9 @@ public class Music extends Music163Object implements PrintObject {
         this.api.POST_API("/api/radio/like", data);
     }
 
+    /**
+     * 取消红心音乐
+     */
     public void unlike(){
         Map<String, Object> data = new HashMap<>();
         data.put("alg", "itembased");
@@ -92,6 +94,19 @@ public class Music extends Music163Object implements PrintObject {
         data.put("time", 3);
 
         this.api.POST_API("/api/radio/like", data);
+    }
+
+    /**
+     * 获取歌词
+     * @return 滚动歌词对象
+     */
+    public Lyric lyric(){
+        Map<String, Object> data = new HashMap<>();
+        data.put("id", this.id);
+        data.put("lv", 0);
+        data.put("tv", 0);
+
+        return new Lyric(this.api.POST_API("/api/song/lyric", data));
     }
 
     /**

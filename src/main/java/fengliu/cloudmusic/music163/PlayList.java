@@ -112,12 +112,12 @@ public class PlayList extends Music163Object implements MusicList, CanSubscribeO
 
         source.sendFeedback(Text.literal(""));
 
-        source.sendFeedback(TextClick.suggestText("cloudmusic.info.music.platlist.creator", "§b" + this.creator.get("nickname").getAsString(), "/cloudmusic user " + this.creator.get("userId").getAsLong()));
+        source.sendFeedback(TextClick.suggestText("cloudmusic.info.playlist.creator", "§b" + this.creator.get("nickname").getAsString(), "/cloudmusic user " + this.creator.get("userId").getAsLong()));
         if(!this.tagsStr.isEmpty()){
-            source.sendFeedback(Text.translatable("cloudmusic.info.music.platlist.tags", this.tagsStr));
+            source.sendFeedback(Text.translatable("cloudmusic.info.playlist.tags", this.tagsStr));
         }
-        source.sendFeedback(Text.translatable("cloudmusic.info.music.platlist.count", this.count, this.playCount));
-        source.sendFeedback(Text.translatable("cloudmusic.info.music.platlist.id", this.id));
+        source.sendFeedback(Text.translatable("cloudmusic.info.playlist.count", this.count, this.playCount));
+        source.sendFeedback(Text.translatable("cloudmusic.info.playlist.id", this.id));
 
         if(this.description != null){
             source.sendFeedback(Text.literal(""));

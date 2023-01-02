@@ -1,9 +1,7 @@
 package fengliu.cloudmusic.client.command;
 
 import com.mojang.brigadier.Command;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.arguments.LongArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.arguments.*;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
@@ -13,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 
 import fengliu.cloudmusic.client.render.MusicIconTexture;
 import fengliu.cloudmusic.mixin.InGameHubMixin;
@@ -99,6 +98,10 @@ public class MusicCommand {
             Text.translatable("cloudmusic.help.playing"),
             Text.translatable("cloudmusic.help.playing.all"),
 
+            Text.translatable("cloudmusic.help.lyric"),
+            Text.translatable("cloudmusic.help.lyric.color"),
+            Text.translatable("cloudmusic.help.lyric.scale"),
+
             Text.translatable("cloudmusic.help.stop"),
             Text.translatable("cloudmusic.help.continue"),
             Text.translatable("cloudmusic.help.up"),
@@ -120,6 +123,10 @@ public class MusicCommand {
 
     public static int[] getQrChecks(){
         return new int[]{qrCheckNum, qrCheckTime};
+    }
+
+    public static String[] getLyric(){
+        return player.getLyric();
     }
 
     private static My getMy(boolean reset){
@@ -235,6 +242,7 @@ public class MusicCommand {
         LiteralArgumentBuilder<FabricClientCommandSource> Volume = literal("volume");
         LiteralArgumentBuilder<FabricClientCommandSource> Page = literal("page");
         LiteralArgumentBuilder<FabricClientCommandSource> Login = literal("login");
+        LiteralArgumentBuilder<FabricClientCommandSource> Lyric = literal("lyric");
 
         Collections.addAll(helpsList, helps);
         CloudMusic.executes(context -> {
@@ -669,7 +677,7 @@ public class MusicCommand {
 
         // cloudmusic volume volume
         CloudMusic.then(Volume.then(
-            argument("volume", IntegerArgumentType.integer()).executes(contextdata -> {
+            argument("volume", IntegerArgumentType.integer(0, 100)).executes(contextdata -> {
                 runCommand(contextdata, context -> {
                     volumePercentage = IntegerArgumentType.getInteger(context, "volume");
                     player.volumeSet(MusicPlayer.toVolume(volumePercentage));
@@ -808,6 +816,43 @@ public class MusicCommand {
             });
             return Command.SINGLE_SUCCESS;
         })));
+
+        // cloudmusic lyric width height scale
+        CloudMusic.then(Lyric.then(
+                argument("width", IntegerArgumentType.integer()).then(
+                        argument("height", IntegerArgumentType.integer()).then(
+                                argument("scale", FloatArgumentType.floatArg()).executes(contextdata -> {
+                                    runCommand(contextdata, context -> {
+                                        CloudMusicClient.setConfigValue("lyric.scale", FloatArgumentType.getFloat(context, "scale"));
+                                        CloudMusicClient.setConfigValue("lyric.width", IntegerArgumentType.getInteger(context, "width"));
+                                        CloudMusicClient.setConfigValue("lyric.height", IntegerArgumentType.getInteger(context, "height"));
+                                        CloudMusicClient.resetConfig();
+                                    });
+                                    return Command.SINGLE_SUCCESS;
+                                })))
+        ));
+
+        // cloudmusic lyric color
+        CloudMusic.then(Lyric.then(
+                argument("color", IntegerArgumentType.integer()).executes(contextdata -> {
+                    runCommand(contextdata, context -> {
+                        CloudMusicClient.setConfigValue("lyric.color", IntegerArgumentType.getInteger(context, "color"));
+                        CloudMusicClient.resetConfig();
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
+        ));
+
+        // cloudmusic lyric
+        CloudMusic.then(Lyric.then(
+                argument("lyric", BoolArgumentType.bool()).executes(contextdata -> {
+                    runCommand(contextdata, context -> {
+                        CloudMusicClient.setConfigValue("lyric", BoolArgumentType.getBool(context, "lyric"));
+                        CloudMusicClient.resetConfig();
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
+        ));
 
         ClientCommandRegistrationCallback.EVENT.register((  dispatcher, registryAccess) -> {
             dispatcher.register(

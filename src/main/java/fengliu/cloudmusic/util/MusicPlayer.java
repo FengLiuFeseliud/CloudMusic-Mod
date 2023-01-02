@@ -16,6 +16,7 @@ import javax.sound.sampled.SourceDataLine;
 
 import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.client.command.MusicCommand;
+import fengliu.cloudmusic.music163.Lyric;
 import fengliu.cloudmusic.music163.Music;
 import fengliu.cloudmusic.util.page.Page;
 import net.minecraft.client.MinecraftClient;
@@ -29,6 +30,7 @@ public class MusicPlayer implements Runnable {
     private final MinecraftClient client;
     protected final List<Music> playList;
     private SourceDataLine play;
+    private Lyric lyric;
     protected int playIn = 0;
     protected boolean loopPlayIn = true;
     private boolean load;
@@ -97,13 +99,14 @@ public class MusicPlayer implements Runnable {
      */
     protected void playMusic(){
         Music music = this.playList.get(this.playIn);
+        this.lyric = music.lyric();
 
         if(!MusicCommand.isPlayUrl()){
             File file = HttpClient.download(music.getPlayUrl(0), CloudMusicClient.cacheHelper.getWaitCacheFile(music.id + ".mp3"));
             CloudMusicClient.cacheHelper.addUseSize(file);
             this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.name), false);
             this.play(file);
-        }else{
+        }else {
             this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.name), false);
             this.play(music.getPlayUrl(0));
         }
@@ -129,6 +132,7 @@ public class MusicPlayer implements Runnable {
         gainControl.setValue(this.Volume);
 
         play.start();
+        this.lyric.start();
 
         int count;
         byte tempBuff[] = new byte[1024];
@@ -142,6 +146,8 @@ public class MusicPlayer implements Runnable {
             play.write(tempBuff,0,count);
 
         }
+
+        this.lyric.exit();
         play.drain();
         play.stop();
         play.close();
@@ -200,6 +206,17 @@ public class MusicPlayer implements Runnable {
     }
 
     /**
+     * 获取当前滚动到的歌词
+     * @return 歌词
+     */
+    public String[] getLyric() {
+        if(lyric == null){
+            return new String[]{};
+        }
+        return lyric.getToLyric();
+    }
+
+    /**
      * 播放下一首
      */
     public void down(){
@@ -238,6 +255,9 @@ public class MusicPlayer implements Runnable {
      * 退出播放
      */
     public void exit(){
+        this.lyric.continues();
+        this.lyric.exit();
+
         this.loopPlayIn = false;
         down();
     }
@@ -246,6 +266,7 @@ public class MusicPlayer implements Runnable {
      * 停止播放
      */
     public void stop(){
+        this.lyric.stop();
         synchronized(this){
             this.load = false;
             notifyAll();
@@ -256,6 +277,7 @@ public class MusicPlayer implements Runnable {
      * 继续播放
      */
     public void continues(){
+        this.lyric.continues();
         synchronized(this){
             this.load = true;
             notifyAll();

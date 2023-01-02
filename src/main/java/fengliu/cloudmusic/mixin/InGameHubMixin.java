@@ -1,5 +1,7 @@
 package fengliu.cloudmusic.mixin;
 
+import fengliu.cloudmusic.CloudMusicClient;
+import fengliu.cloudmusic.music163.Lyric;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -24,12 +26,12 @@ import fengliu.cloudmusic.music163.Music;
 @Mixin(InGameHud.class)
 public class InGameHubMixin {
     private Music oldMusic;
+    private final MinecraftClient client = MinecraftClient.getInstance();
     
     @Inject(method = "render", at = @At("HEAD"))
     public void render(MatrixStack matrices, float tickDelta, CallbackInfo info){
         if(MusicCommand.loadQRCode){
-            MinecraftClient client = MinecraftClient.getInstance();
-            int width = client.getWindow().getScaledWidth();
+            int width = this.client.getWindow().getScaledWidth();
 
             RenderSystem.setShader(GameRenderer::getPositionProgram);
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -47,6 +49,20 @@ public class InGameHubMixin {
             return;
         }
 
+        RenderSystem.setShader(GameRenderer::getPositionProgram);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        int width = this.client.getWindow().getScaledWidth();
+
+        if(CloudMusicClient.lyric){
+            int lyricIn = CloudMusicClient.lyricHeight;
+            for(String lyric: MusicCommand.getLyric()){
+                MatrixStack lyricMatrices =new MatrixStack();
+                lyricMatrices.scale(CloudMusicClient.lyricScale, CloudMusicClient.lyricScale, CloudMusicClient.lyricScale);
+                DrawableHelper.drawStringWithShadow(lyricMatrices, client.textRenderer, lyric, CloudMusicClient.lyricWidth, lyricIn, 0xFFFFFF);
+                lyricIn += 10;
+            }
+        }
+
         if(this.oldMusic == null){
             MusicIconTexture.getMusicIcon(music);
             this.oldMusic = music;
@@ -59,11 +75,7 @@ public class InGameHubMixin {
         if(!MusicIconTexture.canUseIcon()){
             return;
         }
-        MinecraftClient client = MinecraftClient.getInstance();
-        int width = client.getWindow().getScaledWidth();
 
-        RenderSystem.setShader(GameRenderer::getPositionProgram);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         DrawableHelper.fill(matrices, width - 175, 0, width,  38, 0xE41318 + 0x4D000000);
         RenderSystem.setShaderTexture(0, MusicIconTexture.MUSIC_ICON_ID);
 
@@ -87,4 +99,5 @@ public class InGameHubMixin {
         DrawableHelper.drawStringWithShadow(matrices, client.textRenderer, artist.length() > 16 ? artist.substring(0, 16) + "...": artist, width - 135, 24, 0x9E9E9E);
         this.oldMusic = music;
     }
+
 }

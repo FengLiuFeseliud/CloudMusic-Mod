@@ -59,6 +59,10 @@
     "cloudmusic.help.playing": "查看正在播放的音乐 /cloudmusic playing",
     "cloudmusic.help.playing.all": "查看正在播放的音乐列表 /cloudmusic playing all",
 
+    "cloudmusic.help.lyric": "是否显示歌词 /cloudmusic lyric [是/否]",
+    "cloudmusic.help.lyric.color": "调整歌词颜色 (十六进制) /cloudmusic lyric [颜色]",
+    "cloudmusic.help.lyric.scale": "调整歌词位置 /cloudmusic lyric [x] [y] [歌词缩放比例]",
+
     "cloudmusic.help.stop": "暂停播放 /cloudmusic stop",
     "cloudmusic.help.continue": "继续播放 /cloudmusic continue",
     "cloudmusic.help.up": "上一首 /cloudmusic up",
@@ -81,15 +85,19 @@
     "cloudmusic.info.music.artist": "%d",
     "cloudmusic.info.music.album": "专辑: %d",
     "cloudmusic.info.music.id": "id: %d",
-    "cloudmusic.info.music.playlist.creator": "创建者: %d",
-    "cloudmusic.info.music.playlist.tags": "标签: %d",
-    "cloudmusic.info.music.playlist.count": "单曲数: %d 播放数: %d",
-    "cloudmusic.info.music.playlist.id": "id: %d",
+
+    "cloudmusic.info.playlist.creator": "创建者: %d",
+    "cloudmusic.info.playlist.tags": "标签: %d",
+    "cloudmusic.info.playlist.count": "单曲数: %d 播放数: %d",
+    "cloudmusic.info.playlist.id": "id: %d",
+
     "cloudmusic.info.album.id": "id: %d",
     "cloudmusic.info.album.size": "单曲数: %d",
+
     "cloudmusic.info.user.level": "等级: %d",
     "cloudmusic.info.user.vip": "会员: %d",
     "cloudmusic.info.user.id": "id: %d",
+
     "cloudmusic.info.artist.music": "单曲数: %d",
     "cloudmusic.info.artist.album": "专辑数: %d",
     "cloudmusic.info.artist.id": "id: %d",

@@ -22,6 +22,11 @@ public class CloudMusicClient implements ClientModInitializer  {
     public static Path MC_PATH = FabricLoader.getInstance().getGameDir();
     public static ConfigRequest configRequest = SimpleConfig.of("cloud_music_config").provider(CloudMusicClient::provider);
     public static SimpleConfig CONFIG = configRequest.request();
+    public static boolean lyric = CONFIG.getOrDefault("lyric", true);
+    public static int lyricColor = CONFIG.getOrDefault("lyric.color", 0xFFFFFF);
+    public static float lyricScale = (float) CONFIG.getOrDefault("lyric.scale", 1.5f);
+    public static int lyricWidth = CONFIG.getOrDefault("lyric.width", 0);
+    public static int lyricHeight = CONFIG.getOrDefault("lyric.height", 0);
     /**
      * 缓存工具对象
      */
@@ -46,6 +51,17 @@ public class CloudMusicClient implements ClientModInitializer  {
             login.qr.check.num=10
             # 二维码轮查间隔时长 (默认 3 秒)
             login.qr.check.time=3
+            
+            # 是否绘制歌词
+            lyric = true
+            # 歌词颜色 (十六进制 默认 0xFFFFFF 白色)
+            lyric.color=0xFFFFFF
+            # 歌词绘制缩放比例 (默认 1.5 倍)
+            lyric.scale=1.5
+            # 歌词绘制所在宽度
+            lyric.width=0
+            # 歌词绘制所在高度
+            lyric.height=0
 
             # 是否直接播放, 不下载缓存音乐文件
             # ps: 直接播放可以节省空间, 但有可能出现音乐无法播放完整
@@ -70,6 +86,12 @@ public class CloudMusicClient implements ClientModInitializer  {
     public static void resetConfig(){
         configRequest = SimpleConfig.of("cloud_music_config").provider(CloudMusicClient::provider);
         CONFIG = configRequest.request();
+
+        lyric = CONFIG.getOrDefault("lyric", true);
+        lyricColor = CONFIG.getOrDefault("lyric.color", 0xFFFFFF);
+        lyricScale = (float) CONFIG.getOrDefault("lyric.scale", 1.5f);
+        lyricWidth = CONFIG.getOrDefault("lyric.width", 0);
+        lyricHeight = CONFIG.getOrDefault("lyric.height", 0);
         cacheHelper = new CacheHelper();
     }
 
