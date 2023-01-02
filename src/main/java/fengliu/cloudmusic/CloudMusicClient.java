@@ -22,6 +22,7 @@ public class CloudMusicClient implements ClientModInitializer  {
     public static Path MC_PATH = FabricLoader.getInstance().getGameDir();
     public static ConfigRequest configRequest = SimpleConfig.of("cloud_music_config").provider(CloudMusicClient::provider);
     public static SimpleConfig CONFIG = configRequest.request();
+    public static int maxRetry = CONFIG.getOrDefault("http.max.retry", 3);
     public static boolean lyric = CONFIG.getOrDefault("lyric", true);
     public static int lyricColor = CONFIG.getOrDefault("lyric.color", 0xFFFFFF);
     public static float lyricScale = (float) CONFIG.getOrDefault("lyric.scale", 1.5f);
@@ -62,7 +63,10 @@ public class CloudMusicClient implements ClientModInitializer  {
             lyric.width=0
             # 歌词绘制所在高度
             lyric.height=0
-
+            
+            # 请求最大重试次数
+            http.max.retry=3
+            
             # 是否直接播放, 不下载缓存音乐文件
             # ps: 直接播放可以节省空间, 但有可能出现音乐无法播放完整
             play.url=false
@@ -87,6 +91,7 @@ public class CloudMusicClient implements ClientModInitializer  {
         configRequest = SimpleConfig.of("cloud_music_config").provider(CloudMusicClient::provider);
         CONFIG = configRequest.request();
 
+        maxRetry = CONFIG.getOrDefault("http.max.retry", 3);
         lyric = CONFIG.getOrDefault("lyric", true);
         lyricColor = CONFIG.getOrDefault("lyric.color", 0xFFFFFF);
         lyricScale = (float) CONFIG.getOrDefault("lyric.scale", 1.5f);

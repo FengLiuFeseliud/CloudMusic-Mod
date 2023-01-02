@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -17,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import fengliu.cloudmusic.CloudMusicClient;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonObject;
@@ -72,7 +72,7 @@ public class HttpClient {
                 exception.printStackTrace();
             }
             return connection;
-        });
+        }, 0);
     }
 
     public HttpResult POST(String paht, @Nullable Map<String, Object> data){
@@ -85,10 +85,10 @@ public class HttpClient {
                 exception.printStackTrace();
             }
             return connection;
-        });
+        }, 0);
     }
 
-    public class ApiException extends RuntimeException{
+    public static class ApiException extends RuntimeException{
 
         public ApiException(int code, String msg){
             super("请求错误 " + code + ": " + msg);
@@ -144,9 +144,7 @@ public class HttpClient {
     }
 
     private HttpURLConnection setRequestHeader(HttpURLConnection httpConnection){
-        this.Header.forEach((key, value) -> {
-            httpConnection.setRequestProperty(key, value);
-        });
+        this.Header.forEach(httpConnection::setRequestProperty);
         return httpConnection;
     }
 
@@ -158,7 +156,7 @@ public class HttpClient {
         return toDataString[0].getBytes();
     }
 
-    private HttpResult connection(String httpUrl, @Nullable Map<String, Object> data, Connection connection){
+    private HttpResult connection(String httpUrl, @Nullable Map<String, Object> data, Connection connection, int retry){
         HttpURLConnection httpConnection = null;
         InputStream inputStream = null;
         try {
@@ -179,8 +177,11 @@ public class HttpClient {
                 inputStream = httpConnection.getErrorStream();
                 return new HttpResult(code, false, inputStream.readAllBytes(), httpConnection.getHeaderFields().get("Set-Cookie"));
             }
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        } catch (Exception err) {
+            if(retry <= CloudMusicClient.maxRetry){
+                throw new ActionException(Text.translatable("cloudmusic.exception.http", CloudMusicClient.maxRetry, err.getMessage()));
+            }
+            return this.connection(httpUrl, data, connection, ++retry);
         } finally {
             if (inputStream != null) {
                 try {
@@ -190,13 +191,16 @@ public class HttpClient {
                 }
             }
             //关闭远程连接
+            assert httpConnection != null;
             httpConnection.disconnect();
         }
-        byte[] edata = {};
-        return new HttpResult(500, false, edata, null);
     }
 
     public static File download(String path, File targetFile) {
+        return  HttpClient.download(path, targetFile, 0);
+    }
+
+    private static File download(String path, File targetFile, int retry) {
         try {
             if (!targetFile.getParentFile().exists()) {
                 targetFile.getParentFile().mkdirs();
@@ -227,15 +231,20 @@ public class HttpClient {
 
             bin.close();
             out.close();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception err) {
+            if(retry <= CloudMusicClient.maxRetry){
+                throw new ActionException(Text.translatable("cloudmusic.exception.http.download", CloudMusicClient.maxRetry, err.getMessage()));
+            }
+            return HttpClient.download(path, targetFile, ++retry);
         }
         return targetFile;
     }
 
     public static InputStream downloadStream(String path) {
+        return HttpClient.downloadStream(path, 0);
+    }
+
+    private static InputStream downloadStream(String path, int retry) {
         InputStream bin = null;
         try {
             // 统一资源
@@ -251,10 +260,11 @@ public class HttpClient {
             httpURLConnection.connect();
 
             bin = httpURLConnection.getInputStream();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception err) {
+            if(retry <= CloudMusicClient.maxRetry){
+                throw new ActionException(Text.translatable("cloudmusic.exception.http.download", CloudMusicClient.maxRetry, err.getMessage()));
+            }
+            return HttpClient.downloadStream(path, ++retry);
         }
         return bin;
     }
