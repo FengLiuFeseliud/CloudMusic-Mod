@@ -42,12 +42,16 @@ public class Lyric implements Runnable{
     public static Map<Long, String> lyricToMap(String lyric){
         Map<Long, String> lyricMap = new LinkedHashMap<>();
         for (String lyricRow : lyric.split("\n")) {
-            String[] lyricRows = lyricRow.substring(1).split("]", 2);
-            if (lyricRows.length < 2){
+            try {
+                String[] lyricRows = lyricRow.substring(1).split("]", 2);
+                if (lyricRows.length < 2){
+                    continue;
+                }
+
+                lyricMap.put(timeStrToTime(lyricRows[0]), lyricRows[1]);
+            }catch(Exception err){
                 continue;
             }
-
-            lyricMap.put(timeStrToTime(lyricRows[0]), lyricRows[1]);
         }
         return lyricMap;
     }
