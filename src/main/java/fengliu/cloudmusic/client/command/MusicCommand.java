@@ -10,11 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
-
-import fengliu.cloudmusic.client.render.MusicIconTexture;
-import fengliu.cloudmusic.mixin.InGameHubMixin;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
@@ -22,6 +17,8 @@ import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.util.MusicPlayer;
 import fengliu.cloudmusic.util.page.Page;
+
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
 
 public class MusicCommand {
     private static final LoginMusic163 loginMusic163 = new LoginMusic163();
@@ -44,6 +41,8 @@ public class MusicCommand {
             Text.translatable("cloudmusic.help.music.play"),
             Text.translatable("cloudmusic.help.music.like"),
             Text.translatable("cloudmusic.help.music.unlike"),
+            Text.translatable("cloudmusic.help.music.similar.music"),
+            Text.translatable("cloudmusic.help.music.similar.playlist"),
 
             Text.translatable("cloudmusic.help.playlist"),
             Text.translatable("cloudmusic.help.playlist.play"),
@@ -55,6 +54,7 @@ public class MusicCommand {
             Text.translatable("cloudmusic.help.artist"),
             Text.translatable("cloudmusic.help.artist.top"),
             Text.translatable("cloudmusic.help.artist.album"),
+            Text.translatable("cloudmusic.help.artist.similar"),
             Text.translatable("cloudmusic.help.artist.subscribe"),
             Text.translatable("cloudmusic.help.artist.unsubscribe"),
 
@@ -66,6 +66,8 @@ public class MusicCommand {
             Text.translatable("cloudmusic.help.user"),
             Text.translatable("cloudmusic.help.user.playlist"),
             Text.translatable("cloudmusic.help.user.like"),
+            Text.translatable("cloudmusic.help.user.record.all"),
+            Text.translatable("cloudmusic.help.user.record.week"),
 
             Text.translatable("cloudmusic.help.my"),
             Text.translatable("cloudmusic.help.my.fm"),
@@ -306,6 +308,34 @@ public class MusicCommand {
             })
         )));
 
+        LiteralArgumentBuilder<FabricClientCommandSource> Similar = literal("similar");
+
+        // cloudmusic music similar music
+        CloudMusic.then(Music.then(Similar.then(literal("music").then(
+             argument("id", LongArgumentType.longArg()).executes(contextdata -> {
+                 runCommand(contextdata, context -> {
+                     Music music = music163.music(LongArgumentType.getLong(context, "id"));
+                     page = music.similar();
+                     page.setInfoText(Text.translatable("cloudmusic.info.page.music.similar", music.name));
+                     page.look(context.getSource());
+                 });
+                 return Command.SINGLE_SUCCESS;
+             })
+        ))));
+
+        // cloudmusic music similar playlist
+        CloudMusic.then(Music.then(Similar.then(literal("playlist").then(
+                argument("id", LongArgumentType.longArg()).executes(contextdata -> {
+                    runCommand(contextdata, context -> {
+                        Music music = music163.music(LongArgumentType.getLong(context, "id"));
+                        page = music.similarPlaylist();
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.music.similar.playlist", music.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
+        ))));
+
         // cloudmusic playlist id
         CloudMusic.then(PlayList.then(
             argument("id", LongArgumentType.longArg()).executes(contextdata -> {
@@ -413,6 +443,19 @@ public class MusicCommand {
                 });
                 return Command.SINGLE_SUCCESS;
             })
+        )));
+
+        // cloudmusic artist similar id
+        CloudMusic.then(Artist.then(literal("similar").then(
+                argument("id", LongArgumentType.longArg()).executes(contextdata -> {
+                    runCommand(contextdata, context -> {
+                        Artist artist = music163.artist(LongArgumentType.getLong(context, "id"));
+                        page = artist.similar();
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.artist.similar", artist.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic artist subscribe id
@@ -533,6 +576,32 @@ public class MusicCommand {
                 });
                 return Command.SINGLE_SUCCESS;
             }))
+        ));
+
+        LiteralArgumentBuilder<FabricClientCommandSource> Record = literal("record");
+
+        // cloudmusic user record all id
+        CloudMusic.then(User.then(Record.then(literal("all").then(
+            argument("id", LongArgumentType.longArg()).executes(contextdata -> {
+                runCommand(contextdata, context -> {
+                    User user = music163.user(LongArgumentType.getLong(context, "id"));
+                    resetPlayer(user.recordAll());
+                    player.start();
+                });
+                return Command.SINGLE_SUCCESS;
+            })))
+        ));
+
+        // cloudmusic user record week id
+        CloudMusic.then(User.then(Record.then(literal("week").then(
+            argument("id", LongArgumentType.longArg()).executes(contextdata -> {
+                runCommand(contextdata, context -> {
+                    User user = music163.user(LongArgumentType.getLong(context, "id"));
+                    resetPlayer(user.recordWeek());
+                    player.start();
+                });
+                return Command.SINGLE_SUCCESS;
+            })))
         ));
         
         // cloudmusic my
@@ -896,7 +965,7 @@ public class MusicCommand {
                     .then(
                         // cloudmusic exit
                         literal("exit").executes(context -> {
-                            player.exit();
+                            resetPlayer(new ArrayList<>());
                             return Command.SINGLE_SUCCESS;
                         })
                     )

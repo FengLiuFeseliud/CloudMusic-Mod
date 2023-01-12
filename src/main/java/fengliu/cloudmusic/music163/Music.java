@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import fengliu.cloudmusic.util.page.JsonPage;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonArray;
@@ -110,6 +111,48 @@ public class Music extends Music163Object implements PrintObject {
     }
 
     /**
+     * 获取相似音乐
+     * @return 页对象
+     */
+    public JsonPage similar(){
+        Map<String, Object> data = new HashMap<>();
+        data.put("songid", this.id);
+        data.put("limit", 50);
+        data.put("offset", 0);
+
+        JsonObject json = this.api.POST_API("/api/v1/discovery/simiSong", data);
+        return new JsonPage(json.getAsJsonArray("songs")) {
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject music = (JsonObject) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + music.get("name").getAsString() + "§r - " + music.getAsJsonArray("artists").get(0).getAsJsonObject().get("name").getAsString(), "/cloudmusic music " + music.get("id").getAsLong());
+                return newPageData;
+            }
+        };
+    }
+
+    /**
+     * 获取相似歌单
+     * @return 页对象
+     */
+    public JsonPage similarPlaylist(){
+        Map<String, Object> data = new HashMap<>();
+        data.put("songid", this.id);
+        data.put("limit", 50);
+        data.put("offset", 0);
+
+        JsonObject json = this.api.POST_API("/api/discovery/simiPlaylist", data);
+        return new JsonPage(json.getAsJsonArray("playlists")) {
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject playList = (JsonObject) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
+                return newPageData;
+            }
+        };
+    }
+
+    /**
      * 获得音乐 url
      * @param br
      * @return
@@ -126,6 +169,9 @@ public class Music extends Music163Object implements PrintObject {
 
         JsonObject result = playApi.POST_API("/api/song/enhance/player/url", data);
         JsonObject music = result.get("data").getAsJsonArray().get(0).getAsJsonObject();
+        if(music.get("code").getAsInt() != 200){
+            throw new ActionException(Text.translatable("cloudmusic.exception.music.get.url", this.name));
+        }
         return music.get("url").getAsString();
     }
 
@@ -153,6 +199,8 @@ public class Music extends Music163Object implements PrintObject {
 
        Map<String, String> optionsTextData = new LinkedHashMap<>();
        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic music play " + this.id);
+       optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.similar.music").getString(), "/cloudmusic music similar music " + this.id);
+       optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.similar.playlist").getString(), "/cloudmusic music similar playlist " + this.id);
        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.like").getString(), "/cloudmusic music like " + this.id);
        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unlike").getString(), "/cloudmusic music unlike " + this.id);
        source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));

@@ -24,8 +24,6 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modCompileOnly "com.terraformersmc:modmenu:${project.mod_menu_version}"
-
 	// 以支持 mp3 播放
 
 	// https://mvnrepository.com/artifact/javazoom/jlayer

@@ -5,6 +5,8 @@
     "cloudmusic.help.music.play": "播放音乐 /cloudmusic music play [id]",
     "cloudmusic.help.music.like": "红心音乐 /cloudmusic music like [id]",
     "cloudmusic.help.music.unlike": "取消红心音乐 /cloudmusic music unlike [id]",
+    "cloudmusic.help.music.similar.music": "获取音乐相似音乐 /cloudmusic music similar music [id]",
+    "cloudmusic.help.music.similar.playlist": "获取音乐相似歌单 /cloudmusic music similar playlist [id]",
 
     "cloudmusic.help.playlist": "获取歌单 /cloudmusic playlist [id]",
     "cloudmusic.help.playlist.play": "播放歌单 /cloudmusic music playlist [id]",
@@ -16,6 +18,7 @@
     "cloudmusic.help.artist": "获取歌手 /cloudmusic artist [id]",
     "cloudmusic.help.artist.top": "播放歌手热门 50 首 /cloudmusic artist top [id]",
     "cloudmusic.help.artist.album": "查看歌手所有专辑 /cloudmusic artist album [id]",
+    "cloudmusic.help.artist.similar": "获取歌手相似歌手 /cloudmusic artist similar [id]",
     "cloudmusic.help.artist.subscribe": "收藏歌手 /cloudmusic artist subscribe [id]",
     "cloudmusic.help.artist.unsubscribe": "取消收藏歌手 /cloudmusic artist unsubscribe [id]",
 
@@ -27,6 +30,8 @@
     "cloudmusic.help.user": "获取用户 /cloudmusic user [id]",
     "cloudmusic.help.user.playlist": "获取用户歌单 /cloudmusic user playlist [id]",
     "cloudmusic.help.user.like": "获取用户喜欢的音乐 /cloudmusic user like [id]",
+    "cloudmusic.help.user.record.all": "获取用户听歌榜单(所有时间) /cloudmusic user record all [id]",
+    "cloudmusic.help.user.record.week": "获取用户听歌榜单(周) /cloudmusic user record week [id]",
 
     "cloudmusic.help.my": "获取 cookie 用户 /cloudmusic my",
     "cloudmusic.help.my.fm": "私人 fm /cloudmusic my fm",
@@ -102,7 +107,10 @@
     "cloudmusic.info.artist.album": "专辑数: %d",
     "cloudmusic.info.artist.id": "id: %d",
 
+    "cloudmusic.info.page.music.similar": "%d 的相似音乐",
+    "cloudmusic.info.page.music.similar.playlist": "%d 的相似歌单",
     "cloudmusic.info.page.artist.album": "%d 的所有专辑",
+    "cloudmusic.info.page.artist.similar": "%d 的相似歌手",
     "cloudmusic.info.page.user.playlist": "%d 的所有歌单",
     "cloudmusic.info.page.recommend.playlist": "%d 的每日推荐歌单",
     "cloudmusic.info.page.sublist.album": "%d 的所有专辑收藏",
@@ -135,8 +143,15 @@
     "cloudmusic.options.album": "[专辑]",
     "cloudmusic.options.like": "[红心]",
     "cloudmusic.options.unlike": "[取消红心]",
+    "cloudmusic.options.similar.music": "[相似音乐]",
+    "cloudmusic.options.similar.playlist": "[相似歌单]",
+    "cloudmusic.options.similar.artist": "[相似歌手]",
     "cloudmusic.options.subscribe": "[收藏]",
     "cloudmusic.options.unsubscribe": "[取消收藏]",
+    "cloudmusic.options.user.like": "[喜欢的音乐]",
+    "cloudmusic.options.user.playlist": "[用户歌单]",
+    "cloudmusic.options.record.all": "[听歌榜单(所有时间)]",
+    "cloudmusic.options.record.week": "[听歌榜单(周)]",
     "cloudmusic.options.page.prev": "[上一页]",
     "cloudmusic.options.page.next": "[下一页]",
     "cloudmusic.options.page.to": "[跳转至...]",
@@ -154,6 +169,7 @@
     "cloudmusic.exception.login.err.code": "登录失败, 未知错误: %d",
     "cloudmusic.exception.login.qr.code": "二维码过期...",
     "cloudmusic.exception.login.qr.code.time.out": "等待扫码超时...",
+    "cloudmusic.exception.music.get.url": "歌曲 %s 暂无音源跳过播放...",
     "cloudmusic.exception.http": "网络请求重试超出最大次数 %d 次, 错误: %s",
     "cloudmusic.exception.http.download": "下载文件重试超出最大次数 %d 次, 错误: %s"
 }

@@ -16,6 +16,7 @@ import javax.sound.sampled.SourceDataLine;
 
 import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.client.command.MusicCommand;
+import fengliu.cloudmusic.music163.ActionException;
 import fengliu.cloudmusic.music163.Lyric;
 import fengliu.cloudmusic.music163.Music;
 import fengliu.cloudmusic.util.page.Page;
@@ -99,16 +100,27 @@ public class MusicPlayer implements Runnable {
      */
     protected void playMusic(){
         Music music = this.playList.get(this.playIn);
+
+        String musicUrl;
+        try {
+            musicUrl = music.getPlayUrl(999000);
+        }catch(ActionException err){
+            MinecraftClient client = MinecraftClient.getInstance();
+            if(client.player != null){
+                client.player.sendMessage(Text.literal(err.getMessage()));
+            }
+            return;
+        }
         this.lyric = music.lyric();
 
         if(!MusicCommand.isPlayUrl()){
-            File file = HttpClient.download(music.getPlayUrl(0), CloudMusicClient.cacheHelper.getWaitCacheFile(music.id + ".mp3"));
+            File file = HttpClient.download(musicUrl, CloudMusicClient.cacheHelper.getWaitCacheFile(music.id + ".mp3"));
             CloudMusicClient.cacheHelper.addUseSize(file);
             this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.name), false);
             this.play(file);
         }else {
             this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.name), false);
-            this.play(music.getPlayUrl(0));
+            this.play(musicUrl);
         }
     }
 

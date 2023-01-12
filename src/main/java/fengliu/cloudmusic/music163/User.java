@@ -1,10 +1,9 @@
 package fengliu.cloudmusic.music163;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import fengliu.cloudmusic.util.TextClick;
+import fengliu.cloudmusic.util.page.JsonPage;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonArray;
@@ -101,12 +100,40 @@ public class User implements MusicList {
 
             @Override
             protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
-                JsonObject playList = ((JsonElement) data).getAsJsonObject(); 
+                JsonObject playList = (JsonObject) data;
                 newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
                 return newPageData;
             }
             
         };
+    }
+
+    public List<Music> recordAll(){
+        Map<String, Object> postData = new HashMap<String, Object>();
+        postData.put("uid", this.id);
+        postData.put("type", 0);
+
+        JsonObject data = this.api.POST_API("/api/v1/play/record", postData);
+
+        List<Music> musics = new ArrayList<>();
+        data.getAsJsonArray("allData").forEach(musicData -> {
+            musics.add(new Music(this.api, ((JsonObject) musicData).getAsJsonObject("song"), null));
+        });
+        return musics;
+    }
+
+    public List<Music> recordWeek(){
+        Map<String, Object> postData = new HashMap<String, Object>();
+        postData.put("uid", this.id);
+        postData.put("type", 1);
+
+        JsonObject data = this.api.POST_API("/api/v1/play/record", postData);
+
+        List<Music> musics = new ArrayList<>();
+        data.getAsJsonArray("weekData").forEach(musicData -> {
+            musics.add(new Music(this.api, ((JsonObject) musicData).getAsJsonObject("song"), null));
+        });
+        return musics;
     }
 
     /**
@@ -129,6 +156,13 @@ public class User implements MusicList {
         
         source.sendFeedback(Text.literal(""));
         source.sendFeedback(Text.literal("§7" + this.signature));
+
+        Map<String, String> optionsTextData = new LinkedHashMap<>();
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.user.like").getString(), "/cloudmusic user like " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.user.playlist").getString(), "/cloudmusic user playlist " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.record.all").getString(), "/cloudmusic user record all " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.record.week").getString(), "/cloudmusic user record week " + this.id);
+        source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
 
     @Override
