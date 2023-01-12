@@ -91,8 +91,8 @@ public class MusicCommand {
             Text.translatable("cloudmusic.help.volume"),
             Text.translatable("cloudmusic.help.volume.volume"),
 
-            Text.translatable("cloudmusic.help.page.up"),
-            Text.translatable("cloudmusic.help.page.down"),
+            Text.translatable("cloudmusic.help.page.prev"),
+            Text.translatable("cloudmusic.help.page.next"),
             Text.translatable("cloudmusic.help.page.to"),
 
             Text.translatable("cloudmusic.help.playing"),
@@ -104,8 +104,8 @@ public class MusicCommand {
 
             Text.translatable("cloudmusic.help.stop"),
             Text.translatable("cloudmusic.help.continue"),
-            Text.translatable("cloudmusic.help.up"),
-            Text.translatable("cloudmusic.help.down"),
+            Text.translatable("cloudmusic.help.prev"),
+            Text.translatable("cloudmusic.help.next"),
             Text.translatable("cloudmusic.help.to"),
             Text.translatable("cloudmusic.help.exit"),
             Text.translatable("cloudmusic.help.reset"),
@@ -687,8 +687,8 @@ public class MusicCommand {
             }))
         );
         
-        // cloudmusic page up
-        CloudMusic.then(Page.then(literal("up").executes(context -> {
+        // cloudmusic page prev
+        CloudMusic.then(Page.then(literal("prev").executes(context -> {
             if(page == null){
                 return Command.SINGLE_SUCCESS;
             }
@@ -696,8 +696,8 @@ public class MusicCommand {
             return Command.SINGLE_SUCCESS;
         })));
 
-        // cloudmusic page down
-        CloudMusic.then(Page.then(literal("down").executes(contextdata -> {
+        // cloudmusic page next
+        CloudMusic.then(Page.then(literal("next").executes(contextdata -> {
             if(page == null){
                 return Command.SINGLE_SUCCESS;
             }
@@ -872,15 +872,15 @@ public class MusicCommand {
                         })
                     )
                     .then(
-                        // cloudmusic up
-                        literal("up").executes(context -> {
+                        // cloudmusic prev
+                        literal("prev").executes(context -> {
                             player.up();
                             return Command.SINGLE_SUCCESS;
                         })
                     )
                     .then(
-                        // cloudmusic down
-                        literal("down").executes(context -> {
+                        // cloudmusic next
+                        literal("next").executes(context -> {
                             player.down();
                             return Command.SINGLE_SUCCESS;
                         })

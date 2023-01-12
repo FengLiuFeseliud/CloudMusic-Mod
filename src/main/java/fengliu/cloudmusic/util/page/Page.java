@@ -50,8 +50,8 @@ public abstract class Page {
         }
 
         Map<String, String> optionsTextData = new LinkedHashMap<>();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.up").getString(), "/cloudmusic page up");
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.down").getString(), "/cloudmusic page down");
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.prev").getString(), "/cloudmusic page prev");
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.next").getString(), "/cloudmusic page next");
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.to").getString(), "/cloudmusic page to ");
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
@@ -141,9 +141,8 @@ public abstract class Page {
         this.look(source);
     }
 
-    public Page setInfoText(Text info){
+    public void setInfoText(Text info){
         this.infoText = info;
-        return this;
     }
 
 }
