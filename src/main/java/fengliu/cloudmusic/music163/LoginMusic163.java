@@ -6,8 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.JsonObject;
-import fengliu.cloudmusic.client.command.MusicCommand;
-import fengliu.cloudmusic.client.render.MusicIconTexture;
+import fengliu.cloudmusic.command.MusicCommand;
+import fengliu.cloudmusic.config.Configs;
+import fengliu.cloudmusic.render.MusicIconTexture;
 import fengliu.cloudmusic.util.HttpClient;
 import net.minecraft.text.Text;
 
@@ -153,17 +154,17 @@ public class LoginMusic163 {
      * @return 登录成功返回 cookie
      */
     public String qrLogin(String qrKey) throws InterruptedException {
-        int[] checks = MusicCommand.getQrChecks();
+        int qrCheckTime = Configs.LOGIN.QR_CHECK_TIME.getIntegerValue();
+        int qrCheckNum = Configs.LOGIN.QR_CHECK_NUM.getIntegerValue();
 
-        int check = checks[0];
-        while(check > 0){
+        while(qrCheckNum > 0){
             HttpClient.HttpResult result = qrCheck(qrKey);
             JsonObject json = result.getJson();
 
             int code = json.get("code").getAsInt();
             if(code == 801 || code == 802){
-                Thread.sleep(checks[1]* 1000L);
-                check -= 1;
+                Thread.sleep(qrCheckTime* 1000L);
+                qrCheckNum -= 1;
                 continue;
             }
 

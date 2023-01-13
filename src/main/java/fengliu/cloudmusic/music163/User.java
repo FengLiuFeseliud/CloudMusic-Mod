@@ -79,19 +79,23 @@ public class User implements MusicList {
         return playLists;
     }
 
-    /**
-     * 用户歌单
-     * @return 页对象
-     */
-    public ApiPage playListsPage(){
+    protected Object[] getPlayListPageData(){
         Map<String, Object> postData = new HashMap<String, Object>();
         postData.put("uid", this.id);
         postData.put("limit", 24);
         postData.put("offset", 0);
         postData.put("includeVideo", true);
 
-        JsonObject data = this.api.POST_API("/api/user/playlist", postData);
-        return new ApiPage(data.getAsJsonArray("playlist"), this.playlistCount, "/api/user/playlist", this.api, postData) {
+       return new Object[]{this.api.POST_API("/api/user/playlist", postData), postData};
+    }
+
+    /**
+     * 用户歌单
+     * @return 页对象
+     */
+    public ApiPage playListsPage(){
+        Object[] data = this.getPlayListPageData();
+        return new ApiPage(((JsonObject) data[0]).getAsJsonArray("playlist"), this.playlistCount, "/api/user/playlist", this.api, (Map<String, Object>) data[1]) {
 
             @Override
             protected JsonArray getNewPageDataJsonArray(JsonObject result) {

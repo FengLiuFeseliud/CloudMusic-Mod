@@ -71,21 +71,21 @@ public class PlayList extends Music163Object implements MusicList, CanSubscribeO
         
     }
 
-    public void add(long id){
+    public void add(long musicId){
         Map<String, Object> data = new HashMap<>();
         data.put("op", "add");
         data.put("pid", this.id);
-        data.put("trackIds", "[\"" + this.id + "\"]");
+        data.put("trackIds", "[" + musicId + "]");
         data.put("imme", "true");
 
         this.api.POST_API("/api/playlist/manipulate/tracks", data);
     }
 
-    public void del(long id){
+    public void del(long musicId){
         Map<String, Object> data = new HashMap<>();
         data.put("op", "del");
         data.put("pid", this.id);
-        data.put("trackIds", "[\"" + this.id + "\"]");
+        data.put("trackIds", "[" + musicId + "]");
         data.put("imme", "true");
 
         this.api.POST_API("/api/playlist/manipulate/tracks", data);

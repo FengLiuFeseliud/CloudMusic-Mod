@@ -21,6 +21,9 @@
   "entrypoints": {
     "client": [ 
       "fengliu.cloudmusic.CloudMusicClient" 
+    ],
+    "modmenu": [
+      "fengliu.cloudmusic.compat.ModMenu"
     ]
   },
   "mixins": [

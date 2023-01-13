@@ -1,7 +1,7 @@
 package fengliu.cloudmusic.mixin;
 
 import fengliu.cloudmusic.CloudMusicClient;
-import fengliu.cloudmusic.music163.Lyric;
+import fengliu.cloudmusic.config.Configs;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -18,8 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.google.gson.JsonElement;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import fengliu.cloudmusic.client.command.MusicCommand;
-import fengliu.cloudmusic.client.render.MusicIconTexture;
+import fengliu.cloudmusic.command.MusicCommand;
+import fengliu.cloudmusic.render.MusicIconTexture;
 import fengliu.cloudmusic.music163.Music;
 
 @Environment(EnvType.CLIENT)
@@ -53,13 +53,23 @@ public class InGameHubMixin {
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         int width = this.client.getWindow().getScaledWidth();
 
-        if(CloudMusicClient.lyric){
-            int lyricIn = CloudMusicClient.lyricHeight;
+        if(Configs.GUI.LYRIC.getBooleanValue()){
+            float lyricScale = (float) Configs.GUI.LYRIC_SCALE.getDoubleValue();
+            int lyricHeight = Configs.GUI.LYRIC_HEIGHT.getIntegerValue();
+            int lyricWidth = Configs.GUI.LYRIC_WIDTH.getIntegerValue();
+
+            int lyriccolor;
+            try{
+                lyriccolor = Integer.parseInt(Configs.GUI.LYRIC_COLOR.getStringValue(), 16);
+            }catch(Exception err){
+                lyriccolor = 0xFFFFFF;
+            }
+
             for(String lyric: MusicCommand.getLyric()){
                 MatrixStack lyricMatrices =new MatrixStack();
-                lyricMatrices.scale(CloudMusicClient.lyricScale, CloudMusicClient.lyricScale, CloudMusicClient.lyricScale);
-                DrawableHelper.drawStringWithShadow(lyricMatrices, client.textRenderer, lyric, CloudMusicClient.lyricWidth, lyricIn, 0xFFFFFF);
-                lyricIn += 10;
+                lyricMatrices.scale(lyricScale, lyricScale, lyricScale);
+                DrawableHelper.drawStringWithShadow(lyricMatrices, client.textRenderer, lyric, lyricWidth, lyricHeight, lyriccolor);
+                lyricHeight += 10;
             }
         }
 
@@ -91,12 +101,12 @@ public class InGameHubMixin {
             DrawableHelper.drawStringWithShadow(matrices, client.textRenderer, album.length() > 16 ? album.substring(0, 16) + "...": album, width - 135, 14, 0x9E9E9E);
         }
 
-        String artist = "";
+        StringBuilder artist = new StringBuilder();
         for (JsonElement artistData : music.artists.asList()) {
-            artist += artistData.getAsJsonObject().get("name").getAsString() + "/";
+            artist.append(artistData.getAsJsonObject().get("name").getAsString()).append("/");
         }
-        artist = artist.substring(0, artist.length() - 1);
-        DrawableHelper.drawStringWithShadow(matrices, client.textRenderer, artist.length() > 16 ? artist.substring(0, 16) + "...": artist, width - 135, 24, 0x9E9E9E);
+        artist = new StringBuilder(artist.substring(0, artist.length() - 1));
+        DrawableHelper.drawStringWithShadow(matrices, client.textRenderer, artist.length() > 16 ? artist.substring(0, 16) + "...": artist.toString(), width - 135, 24, 0x9E9E9E);
         this.oldMusic = music;
     }
 

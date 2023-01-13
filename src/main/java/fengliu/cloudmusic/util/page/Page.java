@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.Map;
 
 import fengliu.cloudmusic.CloudMusicClient;
+import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.util.TextClick;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
@@ -16,7 +17,7 @@ import net.minecraft.text.Text;
  * 页对象, 处理翻页
  */
 public abstract class Page {
-    protected final int limit = CloudMusicClient.CONFIG.getOrDefault("page.limit", 8);
+    protected final int limit = Configs.GUI.PAGE_LIMIT.getIntegerValue();
     protected final List<List<?>> data;
     protected final int pageCount;
     protected int pageIn;

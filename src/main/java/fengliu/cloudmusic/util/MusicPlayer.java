@@ -15,7 +15,8 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
 import fengliu.cloudmusic.CloudMusicClient;
-import fengliu.cloudmusic.client.command.MusicCommand;
+import fengliu.cloudmusic.command.MusicCommand;
+import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.music163.ActionException;
 import fengliu.cloudmusic.music163.Lyric;
 import fengliu.cloudmusic.music163.Music;
@@ -27,7 +28,7 @@ import net.minecraft.text.Text;
  * 音乐播放对象
  */
 public class MusicPlayer implements Runnable {
-    private int volumePercentage = CloudMusicClient.CONFIG.getOrDefault("volume", 80);
+    private int volumePercentage = Configs.PLAY.VOLUME.getIntegerValue();
     private final MinecraftClient client;
     protected final List<Music> playList;
     private SourceDataLine play;
@@ -78,7 +79,7 @@ public class MusicPlayer implements Runnable {
                     break;
                 }
 
-                if(this.playIn == this.playList.size() - 1 && !MusicCommand.isLoopPlay()){
+                if(this.playIn == this.playList.size() - 1 && !Configs.PLAY.PLAY_LOOP.getBooleanValue()){
                     this.loopPlayIn = false;
                 }
             }
@@ -113,7 +114,7 @@ public class MusicPlayer implements Runnable {
         }
         this.lyric = music.lyric();
 
-        if(!MusicCommand.isPlayUrl()){
+        if(!Configs.PLAY.PLAY_URL.getBooleanValue()){
             File file = HttpClient.download(musicUrl, CloudMusicClient.cacheHelper.getWaitCacheFile(music.id + ".mp3"));
             CloudMusicClient.cacheHelper.addUseSize(file);
             this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.name), false);

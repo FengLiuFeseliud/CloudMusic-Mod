@@ -54,6 +54,25 @@ public class My extends User {
         };
     }
 
+    public ApiPage playListSetMusic(long musicId, String op){
+        Object[] data = this.getPlayListPageData();
+        return new ApiPage(((JsonObject) data[0]).getAsJsonArray("playlist"), this.playlistCount, "/api/user/playlist", this.api, (Map<String, Object>) data[1]) {
+
+            @Override
+            protected JsonArray getNewPageDataJsonArray(JsonObject result) {
+                return result.getAsJsonArray("playlist");
+            }
+
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject playList = (JsonObject) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + op + " " + playList.get("id").getAsLong() + " " + musicId);
+                return newPageData;
+            }
+
+        };
+    }
+
     /**
      * cookie 用户收藏的专辑
      * @return 页对象

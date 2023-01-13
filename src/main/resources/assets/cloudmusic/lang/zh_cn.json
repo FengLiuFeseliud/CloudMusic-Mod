@@ -74,16 +74,8 @@
     "cloudmusic.help.next": "下一首 /cloudmusic next",
     "cloudmusic.help.to": "播放跳转至 /cloudmusic to [musicIndex]",
     "cloudmusic.help.exit": "退出播放 (无法继续播放) /cloudmusic exit",
-    "cloudmusic.help.reset": "重载配置 /cloudmusic reset",
     "cloudmusic.help.cloudmusic": "显示本帮助 /cloudmusic",
 
-    "cloudmusic.info.config.reset": "§c§l重载配置时会重载缓存目录, 请耐心等待 !",
-    "cloudmusic.info.config.complete": "§c§l重载完成 !!! 以下为新配置",
-    "cloudmusic.info.config.cookie": "Cookie 用户: %d",
-    "cloudmusic.info.config.play.url": "是否直接播放, 不下载缓存音乐文件?: %d",
-    "cloudmusic.info.config.volume": "当前音量 (增益值 -80 至 6 的百分比): %d",
-    "cloudmusic.info.config.cache": "缓存使用: %d §r最大缓存: %d §r超出时清除空间: %d",
-    "cloudmusic.info.config.cache.path": "缓存路径: %d",
     "cloudmusic.info.not.cookie": "§c§l无效的 Cookie, 请设置 Cookie 后重试",
     "cloudmusic.info.page.count": "§c§l===========%d页§c§l===========",
     "cloudmusic.info.volume": "当前音量: %d",
@@ -117,8 +109,12 @@
     "cloudmusic.info.page.sublist.artist": "%d 的所有歌手收藏",
     "cloudmusic.info.page.search": "%d 的搜索结果",
     "cloudmusic.info.page.playing.all": "播放列表",
+    "cloudmusic.info.page.user.playlist.add": "向 %d 用户歌单添加歌曲",
+    "cloudmusic.info.page.user.playlist.del": "向 %d 用户歌单删除歌曲",
     "cloudmusic.info.page.help": "CloudMusic 帮助",
 
+    "cloudmusic.info.command.playlist.add": "向 %d 歌单添加歌曲 musicId: %d",
+    "cloudmusic.info.command.playlist.del": "向 %d 歌单删除歌曲 musicId: %d",
     "cloudmusic.info.command.recommend.music": "播放每日推荐音乐",
     "cloudmusic.info.command.fm": "进入私人 fm 模式播放",
     "cloudmusic.info.command.like": "播放 %d 喜欢的音乐",
@@ -143,6 +139,8 @@
     "cloudmusic.options.album": "[专辑]",
     "cloudmusic.options.like": "[红心]",
     "cloudmusic.options.unlike": "[取消红心]",
+    "cloudmusic.options.playlist.add": "[向歌单添加歌曲]",
+    "cloudmusic.options.playlist.del": "[向歌单删除歌曲]",
     "cloudmusic.options.similar.music": "[相似音乐]",
     "cloudmusic.options.similar.playlist": "[相似歌单]",
     "cloudmusic.options.similar.artist": "[相似歌手]",
@@ -171,5 +169,66 @@
     "cloudmusic.exception.login.qr.code.time.out": "等待扫码超时...",
     "cloudmusic.exception.music.get.url": "歌曲 %s 暂无音源跳过播放...",
     "cloudmusic.exception.http": "网络请求重试超出最大次数 %d 次, 错误: %s",
-    "cloudmusic.exception.http.download": "下载文件重试超出最大次数 %d 次, 错误: %s"
+    "cloudmusic.exception.http.download": "下载文件重试超出最大次数 %d 次, 错误: %s",
+
+    "cloudmusic.gui.configs.title": "CloudMusic 云音乐 By FengLiuFeseliud",
+    "cloudmusic.gui.tab.all": "全部",
+    "cloudmusic.gui.tab.play": "播放",
+    "cloudmusic.gui.tab.gui": "界面",
+    "cloudmusic.gui.tab.login": "登录",
+    "cloudmusic.gui.tab.http": "网络",
+
+    "cloudmusic.config.volume": "音量",
+    "cloudmusic.config.volume.comment": "增益值 -80 至 6 的百分比",
+
+    "cloudmusic.config.play.url": "直接播放",
+    "cloudmusic.config.play.url.comment": "直接播放, 不下载缓存音乐文件 (直接播放可以节省空间, 但有可能出现音乐无法播放完整)",
+
+    "cloudmusic.config.play.loop": "循环播放",
+    "cloudmusic.config.play.loop.comment": "循环播放播放列表",
+
+    "cloudmusic.config.cache.path": "缓存路径",
+    "cloudmusic.config.cache.path.comment": "音乐缓存路径 (默认游戏目录下的 cloud_music_cache)",
+
+    "cloudmusic.config.cache.max.mb": "最大缓存",
+    "cloudmusic.config.cache.max.mb.comment": "最大缓存, 单位 mb",
+
+    "cloudmusic.config.cache.delete.mb": "超出缓存清理空间",
+    "cloudmusic.config.cache.delete.mb.comment": "超出缓存时清理多少空间, 单位 mb",
+
+    "cloudmusic.config.lyric": "绘制歌词",
+    "cloudmusic.config.lyric.comment": "是否在游戏内绘制歌词",
+
+    "cloudmusic.config.page.limit": "页条目数",
+    "cloudmusic.config.page.limit.comment": "一页最大条目数 (默认 8 条)",
+
+    "cloudmusic.config.lyric.color": "歌词颜色",
+    "cloudmusic.config.lyric.color.comment": "歌词颜色, 十六进制 (默认 FFFFFF 白色)",
+
+    "cloudmusic.config.lyric.scale": "歌词缩放比例",
+    "cloudmusic.config.lyric.scale.comment": "歌词绘制缩放比例 (默认 1.5 倍)",
+
+    "cloudmusic.config.lyric.width": "歌词x轴",
+    "cloudmusic.config.lyric.width.comment": "歌词绘制所在x轴",
+
+    "cloudmusic.config.lyric.height": "歌词y轴",
+    "cloudmusic.config.lyric.height.comment": "歌词绘制所在y轴",
+
+    "cloudmusic.config.login.cookie": "用户密钥",
+    "cloudmusic.config.login.cookie.comment": "网易云用户 cookie 值",
+
+    "cloudmusic.config.login.country.code": "手机国家码",
+    "cloudmusic.config.login.country.code.comment": "手机登录时使用手机的国家码 (默认 86 中国)",
+
+    "cloudmusic.config.login.qr.check.num": "二维码轮查次数",
+    "cloudmusic.config.login.qr.check.num.comment": "二维码轮查最大次数 (默认 10 次)",
+
+    "cloudmusic.config.login.qr.check.time": "二维码轮查间隔",
+    "cloudmusic.config.login.qr.check.time.comment": "二维码轮查间隔时长, 单位秒 (默认 3 秒)",
+
+    "cloudmusic.config.http.max.retry": "请求重试次数",
+    "cloudmusic.config.http.max.retry.comment": "请求最大重试次数 (默认 0 次)",
+
+    "cloudmusic.config.http.time.out": "请求超时",
+    "cloudmusic.config.http.time.out.comment": "请求超时时间, 单位秒 (默认 30 秒)"
 }

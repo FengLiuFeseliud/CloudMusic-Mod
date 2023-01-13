@@ -10,6 +10,7 @@ import java.util.List;
 import java.io.File;
 
 import fengliu.cloudmusic.CloudMusicClient;
+import fengliu.cloudmusic.config.Configs;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
@@ -62,9 +63,9 @@ public class CacheHelper {
      * 缓存工具对象, 仅在创建时遍历一次缓存目录
      */
     public CacheHelper(){
-        this.cachePath = Paths.get(CloudMusicClient.CONFIG.getOrDefault("cache.path", Paths.get(CloudMusicClient.MC_PATH.toString(), "cloud_music_cache").toAbsolutePath().toString()));
-        this.maxMb = (int) CloudMusicClient.CONFIG.getOrDefault("cache.maxmb", 512);
-        this.deleteMb = (int) CloudMusicClient.CONFIG.getOrDefault("cache.deletemb", 128);
+        this.cachePath = Paths.get(Configs.PLAY.CACHE_PATH.getStringValue());
+        this.maxMb = Configs.PLAY.CACHE_MAX_MB.getIntegerValue();
+        this.deleteMb = Configs.PLAY.CACHE_DELETE_MB.getIntegerValue();
         this.loadCachePath();
     } 
     

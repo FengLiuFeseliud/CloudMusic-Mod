@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import fengliu.cloudmusic.CloudMusicClient;
+import fengliu.cloudmusic.config.Configs;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonObject;
@@ -28,7 +28,6 @@ import net.minecraft.text.Text;
 public class HttpClient {
     private final String MainPath;
     private Map<String, String> Header;
-    private int timeout = 6000;
 
     public HttpClient(String path){
         this.MainPath = path;
@@ -38,11 +37,6 @@ public class HttpClient {
     public HttpClient(String path, Map<String, String> header){
         this.MainPath = path;
         this.Header = header;
-    }
-
-    public HttpClient setTimeOut(int timeout){
-        this.timeout = timeout;
-        return this;
     }
 
     public void setCookies(String cookies){
@@ -166,7 +160,7 @@ public class HttpClient {
                 httpConnection.getOutputStream().write(this.setData(data));
             }
             //设置连接超时时间
-            httpConnection.setReadTimeout(timeout);
+            httpConnection.setReadTimeout(Configs.HTTP.TIME_OUT.getIntegerValue() * 1000);
             httpConnection.connect();
             //获取响应数据
             int code = httpConnection.getResponseCode();
@@ -178,8 +172,8 @@ public class HttpClient {
                 return new HttpResult(code, false, inputStream.readAllBytes(), httpConnection.getHeaderFields().get("Set-Cookie"));
             }
         } catch (Exception err) {
-            if(retry <= CloudMusicClient.maxRetry){
-                throw new ActionException(Text.translatable("cloudmusic.exception.http", CloudMusicClient.maxRetry, err.getMessage()));
+            if(retry <= Configs.HTTP.MAX_RETRY.getIntegerValue()){
+                throw new ActionException(Text.translatable("cloudmusic.exception.http", Configs.HTTP.MAX_RETRY.getIntegerValue(), err.getMessage()));
             }
             return this.connection(httpUrl, data, connection, ++retry);
         } finally {
@@ -217,6 +211,7 @@ public class HttpClient {
             httpURLConnection.setRequestMethod("GET");
             // 设置字符编码
             httpURLConnection.setRequestProperty("Charset", "UTF-8");
+            httpURLConnection.setReadTimeout(Configs.HTTP.TIME_OUT.getIntegerValue() * 1000);
             // 打开到此 URL 引用的资源的通信链接
             httpURLConnection.connect();
 
@@ -232,8 +227,8 @@ public class HttpClient {
             bin.close();
             out.close();
         } catch (Exception err) {
-            if(retry <= CloudMusicClient.maxRetry){
-                throw new ActionException(Text.translatable("cloudmusic.exception.http.download", CloudMusicClient.maxRetry, err.getMessage()));
+            if(retry <= Configs.HTTP.MAX_RETRY.getIntegerValue()){
+                throw new ActionException(Text.translatable("cloudmusic.exception.http.download", Configs.HTTP.MAX_RETRY.getIntegerValue(), err.getMessage()));
             }
             return HttpClient.download(path, targetFile, ++retry);
         }
@@ -256,13 +251,14 @@ public class HttpClient {
             httpURLConnection.setRequestMethod("GET");
             // 设置字符编码
             httpURLConnection.setRequestProperty("Charset", "UTF-8");
+            httpURLConnection.setReadTimeout(Configs.HTTP.TIME_OUT.getIntegerValue() * 1000);
             // 打开到此 URL 引用的资源的通信链接
             httpURLConnection.connect();
 
             bin = httpURLConnection.getInputStream();
         } catch (Exception err) {
-            if(retry <= CloudMusicClient.maxRetry){
-                throw new ActionException(Text.translatable("cloudmusic.exception.http.download", CloudMusicClient.maxRetry, err.getMessage()));
+            if(retry <= Configs.HTTP.MAX_RETRY.getIntegerValue()){
+                throw new ActionException(Text.translatable("cloudmusic.exception.http.download", Configs.HTTP.MAX_RETRY.getIntegerValue(), err.getMessage()));
             }
             return HttpClient.downloadStream(path, ++retry);
         }

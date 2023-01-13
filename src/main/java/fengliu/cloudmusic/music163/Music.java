@@ -204,6 +204,11 @@ public class Music extends Music163Object implements PrintObject {
        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.like").getString(), "/cloudmusic music like " + this.id);
        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unlike").getString(), "/cloudmusic music unlike " + this.id);
        source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
+
+        optionsTextData.clear();
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.playlist.add").getString(), "/cloudmusic my playlist add " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.playlist.del").getString(), "/cloudmusic my playlist del " + this.id);
+        source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
     
 }

@@ -1,4 +1,4 @@
-package fengliu.cloudmusic.client.render;
+package fengliu.cloudmusic.render;
 
 import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.music163.Music;
