@@ -20,16 +20,13 @@ import java.io.File;
 
 public class Configs implements IConfigHandler {
     public static Configs INSTANCE = new Configs();
-    private static String ts(String key){
-        return Text.translatable(key).getString();
-    }
     private static final String CONFIG_FILE_NAME = CloudMusicClient.MOD_ID + ".json";
 
     public static class ALL {
-        public static final ConfigInteger VOLUME = new ConfigInteger(ts("cloudmusic.config.volume"), 80, 0, 100, "cloudmusic.config.volume.comment");
-        public static final ConfigBoolean PLAY_URL = new ConfigBoolean(ts("cloudmusic.config.play.url"), false, ts("cloudmusic.config.play.url.comment"));
-        public static final ConfigBoolean PLAY_LOOP = new ConfigBoolean(ts("cloudmusic.config.play.loop"), true, ts("cloudmusic.config.play.loop.comment"));
-        public static final ConfigString CACHE_PATH = new ConfigString(ts("cloudmusic.config.cache.path"), (new File(FileUtils.getMinecraftDirectory(), "cloud_music_cache")).getAbsolutePath(), ts("cloudmusic.config.cache.path.comment"));
+        public static final ConfigInteger VOLUME = new ConfigInteger("cloudmusic.config.volume", 80, 0, 100, "cloudmusic.config.volume.comment");
+        public static final ConfigBoolean PLAY_URL = new ConfigBoolean("cloudmusic.config.play.url", false, "cloudmusic.config.play.url.comment");
+        public static final ConfigBoolean PLAY_LOOP = new ConfigBoolean("cloudmusic.config.play.loop", true, "cloudmusic.config.play.loop.comment");
+        public static final ConfigString CACHE_PATH = new ConfigString("cloudmusic.config.cache.path", (new File(FileUtils.getMinecraftDirectory(), "cloud_music_cache")).getAbsolutePath(), "cloudmusic.config.cache.path.comment");
         public static final ConfigInteger CACHE_MAX_MB = new ConfigInteger("cloudmusic.config.cache.max.mb", 512, 512, 8000, "cloudmusic.config.cache.max.mb.comment");
         public static final ConfigInteger CACHE_DELETE_MB = new ConfigInteger("cloudmusic.config.cache.delete.mb", 126, 126, 8000, "cloudmusic.config.cache.delete.mb.comment");
         public static final ConfigInteger PAGE_LIMIT = new ConfigInteger("cloudmusic.config.page.limit", 8, 5, 16, "cloudmusic.config.page.limit.comment");
