@@ -15,11 +15,13 @@ import java.util.List;
 public class ConfigGui extends GuiConfigsBase {
 
     public enum ConfigGuiTab {
-        ALL         ("cloudmusic.gui.tab.all"),
-        PLAY         ("cloudmusic.gui.tab.play"),
-        GUI         ("cloudmusic.gui.tab.gui"),
-        LOGIN         ("cloudmusic.gui.tab.login"),
-        HTTP         ("cloudmusic.gui.tab.http");
+        ALL("cloudmusic.gui.tab.all"),
+        PLAY("cloudmusic.gui.tab.play"),
+        GUI("cloudmusic.gui.tab.gui"),
+        LOGIN("cloudmusic.gui.tab.login"),
+        HTTP("cloudmusic.gui.tab.http"),
+        HOTKEY("cloudmusic.gui.tab.hotkey");
+
         private final String translationKey;
 
         private ConfigGuiTab(String translationKey){
@@ -67,6 +69,10 @@ public class ConfigGui extends GuiConfigsBase {
         this.parentScreen = screen;
     }
 
+    public ConfigGui(){
+        super(10, 50, CloudMusicClient.MOD_ID, null, "cloudmusic.gui.configs.title");
+    }
+
     @Override
     public void initGui() {
         super.initGui();
@@ -85,17 +91,19 @@ public class ConfigGui extends GuiConfigsBase {
         List<? extends IConfigBase> configs;
         ConfigGuiTab tab = TabManager.getConfigGuiTab();
 
-        if(tab == ConfigGuiTab.ALL){
+        if (tab == ConfigGuiTab.ALL) {
             configs = Configs.ALL.OPTIONS;
-        }else if(tab == ConfigGuiTab.PLAY){
+        } else if (tab == ConfigGuiTab.PLAY){
             configs = Configs.PLAY.OPTIONS;
-        }else if(tab == ConfigGuiTab.GUI){
+        } else if (tab == ConfigGuiTab.GUI){
             configs = Configs.GUI.OPTIONS;
-        }else if(tab == ConfigGuiTab.LOGIN){
+        } else if (tab == ConfigGuiTab.LOGIN){
             configs = Configs.LOGIN.OPTIONS;
-        }else if(tab == ConfigGuiTab.HTTP){
+        } else if (tab == ConfigGuiTab.HTTP){
             configs = Configs.HTTP.OPTIONS;
-        }else{
+        } else if (tab == ConfigGuiTab.HOTKEY){
+            configs = Configs.HOTKEY.HOTKEY_LIST;
+        } else {
             return Collections.emptyList();
         }
 

@@ -177,6 +177,7 @@
     "cloudmusic.gui.tab.gui": "界面",
     "cloudmusic.gui.tab.login": "登录",
     "cloudmusic.gui.tab.http": "网络",
+    "cloudmusic.gui.tab.hotkey": "热键",
 
     "cloudmusic.config.volume": "音量",
     "cloudmusic.config.volume.comment": "增益值 -80 至 6 的百分比",
@@ -230,5 +231,35 @@
     "cloudmusic.config.http.max.retry.comment": "请求最大重试次数 (默认 0 次)",
 
     "cloudmusic.config.http.time.out": "请求超时",
-    "cloudmusic.config.http.time.out.comment": "请求超时时间, 单位秒 (默认 30 秒)"
+    "cloudmusic.config.http.time.out.comment": "请求超时时间, 单位秒 (默认 30 秒)",
+
+    "cloudmusic.config.hotkey.open.config.gui": "打开配置菜单",
+    "cloudmusic.config.hotkey.open.config.gui.comment": "打开该菜单",
+
+    "cloudmusic.config.hotkey.switch.play.music": "暂停播放 / 继续播放",
+    "cloudmusic.config.hotkey.switch.play.music.comment": "暂停播放或者继续播放当前歌曲",
+
+    "cloudmusic.config.hotkey.play.music": "继续播放",
+    "cloudmusic.config.hotkey.play.music.comment": "继续播放当前歌曲",
+
+    "cloudmusic.config.hotkey.next.music": "下一首",
+    "cloudmusic.config.hotkey.next.music.comment": "播放下一首歌曲",
+
+    "cloudmusic.config.hotkey.prev.music": "上一首",
+    "cloudmusic.config.hotkey.prev.music.comment": "播放上一首歌曲",
+
+    "cloudmusic.config.hotkey.stop.music": "暂停播放",
+    "cloudmusic.config.hotkey.stop.music.comment": "暂停播放当前歌曲",
+
+    "cloudmusic.config.hotkey.exit.play": "退出播放",
+    "cloudmusic.config.hotkey.exit.play.comment": "无法继续播放",
+
+    "cloudmusic.config.hotkey.like.music": "红心歌曲",
+    "cloudmusic.config.hotkey.like.music.comment": "红心当前播放歌曲",
+
+    "cloudmusic.config.hotkey.playlist.add.music": "歌单添加歌曲",
+    "cloudmusic.config.hotkey.playlist.add.music.comment": "歌单添加当前播放歌曲",
+
+    "cloudmusic.config.hotkey.playlist.del.music": "歌单删除音乐",
+    "cloudmusic.config.hotkey.playlist.del.music.comment": "歌单删除当前播放歌曲"
 }

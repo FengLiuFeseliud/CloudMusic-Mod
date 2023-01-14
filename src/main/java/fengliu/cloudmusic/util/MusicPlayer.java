@@ -15,7 +15,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
 import fengliu.cloudmusic.CloudMusicClient;
-import fengliu.cloudmusic.command.MusicCommand;
 import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.music163.ActionException;
 import fengliu.cloudmusic.music163.Lyric;
@@ -65,6 +64,10 @@ public class MusicPlayer implements Runnable {
         this.playList = playList;
 
         this.volumeSet(toVolume(this.volumePercentage));
+    }
+
+    public boolean isPlaying(){
+        return this.loopPlayIn && this.load;
     }
 
     @Override
@@ -232,7 +235,7 @@ public class MusicPlayer implements Runnable {
     /**
      * 播放下一首
      */
-    public void down(){
+    public void next(){
         this.play.stop();
         this.play.close();
     }
@@ -240,13 +243,13 @@ public class MusicPlayer implements Runnable {
     /**
      * 播放上一首
      */
-    public void up(){
+    public void prev(){
         this.playIn -= 2;
         if(this.playIn < -1){
             this.playIn = -1;
         }
 
-        down();
+        next();
     }
 
     public void to(int in){
@@ -261,7 +264,7 @@ public class MusicPlayer implements Runnable {
         }
 
         this.playIn = in - 1;
-        down();
+        next();
     }
 
     /**
@@ -272,7 +275,7 @@ public class MusicPlayer implements Runnable {
         this.lyric.exit();
 
         this.loopPlayIn = false;
-        down();
+        next();
     }
 
     /**
@@ -301,7 +304,7 @@ public class MusicPlayer implements Runnable {
      * 正在播放 
      * @return 音乐对象
      */
-    public Music playing(){
+    public Music playingMusic(){
         if(this.playList.isEmpty()){
             return null;
         }

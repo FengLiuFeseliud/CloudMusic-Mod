@@ -109,11 +109,15 @@ public class MusicCommand {
     };
     private static final List<Text> helpsList = new ArrayList<>();
 
-    public static String[] getLyric(){
-        return player.getLyric();
+    public static MusicPlayer getPlayer(){
+        return player;
     }
 
-    private static My getMy(boolean reset){
+    public static void setPage(Page Page){
+        page = Page;
+    }
+
+    public static My getMy(boolean reset){
         if(my == null || reset){
             my = music163.my();
         }
@@ -193,10 +197,6 @@ public class MusicCommand {
         commandThread.setDaemon(true);
         commandThread.setName("CloudMusic Thread");
         commandThread.start();
-    }
-
-    public static Music playing(){
-        return player.playing();
     }
 
     public static void registerAll(){
@@ -794,7 +794,7 @@ public class MusicCommand {
         
         // cloudmusic playing
         CloudMusic.then(Playing.executes(context -> {
-            player.playing().printToChatHud(context.getSource());
+            player.playingMusic().printToChatHud(context.getSource());
             return Command.SINGLE_SUCCESS;
         }));
 
@@ -945,14 +945,14 @@ public class MusicCommand {
                     .then(
                         // cloudmusic prev
                         literal("prev").executes(context -> {
-                            player.up();
+                            player.prev();
                             return Command.SINGLE_SUCCESS;
                         })
                     )
                     .then(
                         // cloudmusic next
                         literal("next").executes(context -> {
-                            player.down();
+                            player.next();
                             return Command.SINGLE_SUCCESS;
                         })
                     )

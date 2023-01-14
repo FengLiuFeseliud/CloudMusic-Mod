@@ -12,11 +12,12 @@ import fi.dy.masa.malilib.config.options.ConfigBoolean;
 import fi.dy.masa.malilib.config.options.ConfigDouble;
 import fi.dy.masa.malilib.config.options.ConfigInteger;
 import fi.dy.masa.malilib.config.options.ConfigString;
+import fi.dy.masa.malilib.config.options.ConfigHotkey;
 import fi.dy.masa.malilib.util.FileUtils;
 import fi.dy.masa.malilib.util.JsonUtils;
-import net.minecraft.text.Text;
 
 import java.io.File;
+import java.util.List;
 
 public class Configs implements IConfigHandler {
     public static Configs INSTANCE = new Configs();
@@ -41,6 +42,16 @@ public class Configs implements IConfigHandler {
         public static final ConfigInteger QR_CHECK_TIME = new ConfigInteger("cloudmusic.config.login.qr.check.time", 3, 1, 60, "cloudmusic.config.login.qr.check.time.comment");
         public static final ConfigInteger MAX_RETRY = new ConfigInteger("cloudmusic.config.http.max.retry", 3, 0, 10, "cloudmusic.config.http.max.retry.comment");
         public static final ConfigInteger TIME_OUT = new ConfigInteger("cloudmusic.config.http.time.out", 30, 0, 180, "cloudmusic.config.http.time.out.comment");
+        public static final ConfigHotkey OPEN_CONFIG_GUI = new ConfigHotkey("cloudmusic.config.hotkey.open.config.gui", "LEFT_CONTROL,C,M", "cloudmusic.config.hotkey.open.config.gui.comment");
+        public static final ConfigHotkey SWITCH_PLAY_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.switch.play.music", "", "cloudmusic.config.hotkey.switch.play.music.comment");
+        public static final ConfigHotkey PLAY_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.play.music", "", "cloudmusic.config.hotkey.play.music.comment");
+        public static final ConfigHotkey NEXT_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.next.music", "", "cloudmusic.config.hotkey.next.music.comment");
+        public static final ConfigHotkey PREV_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.prev.music", "", "cloudmusic.config.hotkey.prev.music.comment");
+        public static final ConfigHotkey STOP_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.stop.music", "", "cloudmusic.config.hotkey.stop.music.comment");
+        public static final ConfigHotkey EXIT_PLAY = new ConfigHotkey("cloudmusic.config.hotkey.exit.play", "", "cloudmusic.config.hotkey.exit.play.comment");
+        public static final ConfigHotkey LIKE_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.like.music", "", "cloudmusic.config.hotkey.like.music.comment");
+        public static final ConfigHotkey PLAYLIST_ADD_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.playlist.add.music", "", "cloudmusic.config.hotkey.playlist.add.music.comment");
+        public static final ConfigHotkey PLAYLIST_DEL_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.playlist.del.music", "", "cloudmusic.config.hotkey.playlist.del.music.comment");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
             VOLUME,
@@ -60,7 +71,17 @@ public class Configs implements IConfigHandler {
             QR_CHECK_NUM,
             QR_CHECK_TIME,
             MAX_RETRY,
-            TIME_OUT
+            TIME_OUT,
+            OPEN_CONFIG_GUI,
+            SWITCH_PLAY_MUSIC,
+            PLAY_MUSIC,
+            NEXT_MUSIC,
+            PREV_MUSIC,
+            STOP_MUSIC,
+            EXIT_PLAY,
+            LIKE_MUSIC,
+            PLAYLIST_ADD_MUSIC,
+            PLAYLIST_DEL_MUSIC
         );
     }
 
@@ -121,6 +142,32 @@ public class Configs implements IConfigHandler {
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
             MAX_RETRY,
             TIME_OUT
+        );
+    }
+
+    public static class HOTKEY {
+        public static final ConfigHotkey OPEN_CONFIG_GUI = ALL.OPEN_CONFIG_GUI;
+        public static final ConfigHotkey SWITCH_PLAY_MUSIC = ALL.SWITCH_PLAY_MUSIC;
+        public static final ConfigHotkey PLAY_MUSIC = ALL.PLAY_MUSIC;
+        public static final ConfigHotkey NEXT_MUSIC = ALL.NEXT_MUSIC;
+        public static final ConfigHotkey PREV_MUSIC = ALL.PREV_MUSIC;
+        public static final ConfigHotkey STOP_MUSIC = ALL.STOP_MUSIC;
+        public static final ConfigHotkey EXIT_PLAY = ALL.EXIT_PLAY;
+        public static final ConfigHotkey LIKE_MUSIC = ALL.LIKE_MUSIC;
+        public static final ConfigHotkey PLAYLIST_ADD_MUSIC = ALL.PLAYLIST_ADD_MUSIC;
+        public static final ConfigHotkey PLAYLIST_DEL_MUSIC = ALL.PLAYLIST_DEL_MUSIC;
+
+        public static final List<ConfigHotkey> HOTKEY_LIST = ImmutableList.of(
+            OPEN_CONFIG_GUI,
+            SWITCH_PLAY_MUSIC,
+            PLAY_MUSIC,
+            NEXT_MUSIC,
+            PREV_MUSIC,
+            STOP_MUSIC,
+            EXIT_PLAY,
+            LIKE_MUSIC,
+            PLAYLIST_ADD_MUSIC,
+            PLAYLIST_DEL_MUSIC
         );
     }
 

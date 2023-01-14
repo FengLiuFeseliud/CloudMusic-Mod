@@ -11,6 +11,7 @@ import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.util.TextClick;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
 /**
@@ -57,6 +58,29 @@ public abstract class Page {
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
 
+    protected void printToChatHud(Map<String, String> pageData) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.player == null){
+            return;
+        }
+
+        client.player.sendMessage(Text.literal(""));
+        if(this.infoText != null){
+            client.player.sendMessage(this.infoText);
+        }
+        client.player.sendMessage(Text.translatable("cloudmusic.info.page.count", this.pageIn + 1 + "§c§l/§r" + this.pageCount));
+
+        for(Entry<String, String> data: pageData.entrySet()){
+            client.player.sendMessage(TextClick.suggestText(data.getKey(), data.getValue()));
+        }
+
+        Map<String, String> optionsTextData = new LinkedHashMap<>();
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.prev").getString(), "/cloudmusic page prev");
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.next").getString(), "/cloudmusic page next");
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.to").getString(), "/cloudmusic page to ");
+        client.player.sendMessage(TextClick.suggestTextMap(optionsTextData, " "));
+    }
+
     protected List<List<?>> splitData(List<?> data) {
         List<List<?>> splitData = new ArrayList<>();
         for(int index = 0; index <= this.pageCount - 1; index ++){
@@ -92,6 +116,11 @@ public abstract class Page {
     public void look(FabricClientCommandSource source){
         Map<String, String> pageData = this.setPageData(this.data.get(this.pageIn));
         this.printToChatHud(source, pageData);
+    }
+
+    public void look(){
+        Map<String, String> pageData = this.setPageData(this.data.get(this.pageIn));
+        this.printToChatHud(pageData);
     }
     
     /**

@@ -43,7 +43,7 @@ public class InGameHubMixin {
             DrawableHelper.drawTexture(imgMatrices, 0, 0, 0, 0, 128, 128, 128, 128);
         }
 
-        Music music = MusicCommand.playing();
+        Music music = MusicCommand.getPlayer().playingMusic();
 
         if(music == null){
             return;
@@ -65,7 +65,7 @@ public class InGameHubMixin {
                 lyriccolor = 0xFFFFFF;
             }
 
-            for(String lyric: MusicCommand.getLyric()){
+            for(String lyric: MusicCommand.getPlayer().getLyric()){
                 MatrixStack lyricMatrices =new MatrixStack();
                 lyricMatrices.scale(lyricScale, lyricScale, lyricScale);
                 DrawableHelper.drawStringWithShadow(lyricMatrices, client.textRenderer, lyric, lyricWidth, lyricHeight, lyriccolor);
