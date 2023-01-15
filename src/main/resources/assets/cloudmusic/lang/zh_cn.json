@@ -35,6 +35,8 @@
     "cloudmusic.help.my.fm": "私人 fm /cloudmusic my fm",
     "cloudmusic.help.my.like": "我喜欢的音乐 /cloudmusic my like",
     "cloudmusic.help.my.playlist": "获取我的歌单 /cloudmusic my playlist",
+    "cloudmusic.help.my.playlist.add": "向我的歌单添加歌曲 /cloudmusic my playlist add [musicId]",
+    "cloudmusic.help.my.playlist.del": "向我的歌单删除歌曲 /cloudmusic my playlist del [musicId]",
     "cloudmusic.help.my.recommend.music": "每日推荐音乐 /cloudmusic my recommend music",
     "cloudmusic.help.my.recommend.playlist": "每日推荐歌单 /cloudmusic my recommend playlist",
     "cloudmusic.help.my.sublist.album": "我收藏的专辑 /cloudmusic my sublist album",
