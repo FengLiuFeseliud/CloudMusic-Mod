@@ -95,10 +95,6 @@ public class MusicCommand {
             Text.translatable("cloudmusic.help.playing"),
             Text.translatable("cloudmusic.help.playing.all"),
 
-            Text.translatable("cloudmusic.help.lyric"),
-            Text.translatable("cloudmusic.help.lyric.color"),
-            Text.translatable("cloudmusic.help.lyric.scale"),
-
             Text.translatable("cloudmusic.help.stop"),
             Text.translatable("cloudmusic.help.continue"),
             Text.translatable("cloudmusic.help.prev"),
@@ -887,43 +883,6 @@ public class MusicCommand {
             });
             return Command.SINGLE_SUCCESS;
         })));
-
-        // cloudmusic lyric width height scale
-        CloudMusic.then(Lyric.then(
-            argument("width", IntegerArgumentType.integer()).then(
-                argument("height", IntegerArgumentType.integer()).then(
-                    argument("scale", FloatArgumentType.floatArg()).executes(contextdata -> {
-                        runCommand(contextdata, context -> {
-                            Configs.GUI.LYRIC_SCALE.setDoubleValue(FloatArgumentType.getFloat(context, "scale"));
-                            Configs.GUI.LYRIC_WIDTH.setIntegerValue(IntegerArgumentType.getInteger(context, "width"));
-                            Configs.GUI.LYRIC_HEIGHT.setIntegerValue(IntegerArgumentType.getInteger(context, "height"));
-                            Configs.INSTANCE.save();
-                        });
-                        return Command.SINGLE_SUCCESS;
-                    })))
-        ));
-
-        // cloudmusic lyric color
-        CloudMusic.then(Lyric.then(
-            argument("color", StringArgumentType.string())).executes(contextdata -> {
-                runCommand(contextdata, context -> {
-                    Configs.GUI.LYRIC_COLOR.setValueFromString(StringArgumentType.getString(context, "color"));
-                    Configs.INSTANCE.save();
-                });
-                return Command.SINGLE_SUCCESS;
-            })
-        );
-
-        // cloudmusic lyric
-        CloudMusic.then(Lyric.then(
-                argument("lyric", BoolArgumentType.bool()).executes(contextdata -> {
-                    runCommand(contextdata, context -> {
-                        Configs.GUI.LYRIC.setBooleanValue(BoolArgumentType.getBool(context, "lyric"));
-                        Configs.INSTANCE.save();
-                    });
-                    return Command.SINGLE_SUCCESS;
-                })
-        ));
 
         ClientCommandRegistrationCallback.EVENT.register((  dispatcher, registryAccess) -> {
             dispatcher.register(

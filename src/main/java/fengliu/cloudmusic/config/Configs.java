@@ -31,11 +31,17 @@ public class Configs implements IConfigHandler {
         public static final ConfigInteger CACHE_MAX_MB = new ConfigInteger("cloudmusic.config.cache.max.mb", 512, 512, 8000, "cloudmusic.config.cache.max.mb.comment");
         public static final ConfigInteger CACHE_DELETE_MB = new ConfigInteger("cloudmusic.config.cache.delete.mb", 126, 126, 8000, "cloudmusic.config.cache.delete.mb.comment");
         public static final ConfigInteger PAGE_LIMIT = new ConfigInteger("cloudmusic.config.page.limit", 8, 5, 16, "cloudmusic.config.page.limit.comment");
+        public static final ConfigBoolean MUSIC_INFO = new ConfigBoolean("cloudmusic.config.music.info", true, "cloudmusic.config.music.info.comment");
+        public static final ConfigInteger MUSIC_INFO_X = new ConfigInteger("cloudmusic.config.music.info.x", 0, 0, 4000, "cloudmusic.config.music.info.x.comment");
+        public static final ConfigInteger MUSIC_INFO_Y = new ConfigInteger("cloudmusic.config.music.info.y", 30, 0, 3000, "cloudmusic.config.music.info.y.comment");
+        public static final ConfigString MUSIC_INFO_COLOR= new ConfigString("cloudmusic.config.music.info.color", "4DE41318", "cloudmusic.config.music.info.color.comment");
+        public static final ConfigString MUSIC_INFO_TITLE_FONT_COLOR= new ConfigString("cloudmusic.config.music.info.title.font.color", "FFFFFF", "cloudmusic.config.music.info.title.font.color.comment");
+        public static final ConfigString MUSIC_INFO_FONT_COLOR= new ConfigString("cloudmusic.config.music.info.font.color", "9E9E9E", "cloudmusic.config.music.info.font.color.comment");
         public static final ConfigBoolean LYRIC = new ConfigBoolean("cloudmusic.config.lyric", true, "cloudmusic.config.lyric.comment");
         public static final ConfigString LYRIC_COLOR = new ConfigString("cloudmusic.config.lyric.color", "FFFFFF", "cloudmusic.config.lyric.color.comment");
         public static final ConfigDouble LYRIC_SCALE = new ConfigDouble("cloudmusic.config.lyric.scale", 1.5, "cloudmusic.config.lyric.scale.comment");
-        public static final ConfigInteger LYRIC_WIDTH = new ConfigInteger("cloudmusic.config.lyric.width", 0, 0, 4000, "cloudmusic.config.lyric.width.comment");
-        public static final ConfigInteger LYRIC_HEIGHT = new ConfigInteger("cloudmusic.config.lyric.height", 0, 0, 3000, "cloudmusic.config.lyric.height.comment");
+        public static final ConfigInteger LYRIC_X = new ConfigInteger("cloudmusic.config.lyric.x", 0, 0, 4000, "cloudmusic.config.lyric.x.comment");
+        public static final ConfigInteger LYRIC_Y = new ConfigInteger("cloudmusic.config.lyric.y", 0, 0, 3000, "cloudmusic.config.lyric.y.comment");
         public static final ConfigString COOKIE = new ConfigString("cloudmusic.config.login.cookie", "", "cloudmusic.config.login.cookie.comment");
         public static final ConfigInteger COUNTRY_CODE = new ConfigInteger("cloudmusic.config.login.country.code", 86, "cloudmusic.config.login.country.code.comment");
         public static final ConfigInteger QR_CHECK_NUM = new ConfigInteger("cloudmusic.config.login.qr.check.num", 10, 1, 60, "cloudmusic.config.login.qr.check.num.comment");
@@ -61,11 +67,17 @@ public class Configs implements IConfigHandler {
             CACHE_MAX_MB,
             CACHE_DELETE_MB,
             PAGE_LIMIT,
+            MUSIC_INFO,
+            MUSIC_INFO_X,
+            MUSIC_INFO_Y,
+            MUSIC_INFO_COLOR,
+            MUSIC_INFO_TITLE_FONT_COLOR,
+            MUSIC_INFO_FONT_COLOR,
             LYRIC,
             LYRIC_COLOR,
             LYRIC_SCALE,
-            LYRIC_WIDTH,
-            LYRIC_HEIGHT,
+            LYRIC_X,
+            LYRIC_Y,
             COOKIE,
             COUNTRY_CODE,
             QR_CHECK_NUM,
@@ -105,19 +117,31 @@ public class Configs implements IConfigHandler {
 
     public static class GUI {
         public static final ConfigInteger PAGE_LIMIT = ALL.PAGE_LIMIT;
+        public static final ConfigBoolean MUSIC_INFO = ALL.MUSIC_INFO;
+        public static final ConfigInteger MUSIC_INFO_X = ALL.MUSIC_INFO_X;
+        public static final ConfigInteger MUSIC_INFO_Y = ALL.MUSIC_INFO_Y;
+        public static final ConfigString MUSIC_INFO_COLOR = ALL.MUSIC_INFO_COLOR;
+        public static final ConfigString MUSIC_INFO_TITLE_FONT_COLOR = ALL.MUSIC_INFO_TITLE_FONT_COLOR;
+        public static final ConfigString MUSIC_INFO_FONT_COLOR = ALL.MUSIC_INFO_FONT_COLOR;
         public static final ConfigBoolean LYRIC = ALL.LYRIC;
         public static final ConfigString LYRIC_COLOR = ALL.LYRIC_COLOR;
         public static final ConfigDouble LYRIC_SCALE = ALL.LYRIC_SCALE;
-        public static final ConfigInteger LYRIC_WIDTH = ALL.LYRIC_WIDTH;
-        public static final ConfigInteger LYRIC_HEIGHT = ALL.LYRIC_HEIGHT;
+        public static final ConfigInteger LYRIC_X = ALL.LYRIC_X;
+        public static final ConfigInteger LYRIC_Y = ALL.LYRIC_Y;
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
             PAGE_LIMIT,
+            MUSIC_INFO,
+            MUSIC_INFO_X,
+            MUSIC_INFO_Y,
+            MUSIC_INFO_COLOR,
+            MUSIC_INFO_TITLE_FONT_COLOR,
+            MUSIC_INFO_FONT_COLOR,
             LYRIC,
             LYRIC_COLOR,
             LYRIC_SCALE,
-            LYRIC_WIDTH,
-            LYRIC_HEIGHT
+            LYRIC_X,
+            LYRIC_Y
         );
     }
 

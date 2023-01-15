@@ -38,7 +38,7 @@ public class InGameHubMixin {
             RenderSystem.setShaderTexture(0, MusicIconTexture.QR_CODE_ID);
 
             MatrixStack imgMatrices =new MatrixStack();
-            imgMatrices.translate(width - 64, 64, 0);
+            imgMatrices.translate(width - 64, 74, 0);
             imgMatrices.scale(0.50f,0.50f,0.50f);
             DrawableHelper.drawTexture(imgMatrices, 0, 0, 0, 0, 128, 128, 128, 128);
         }
@@ -55,8 +55,8 @@ public class InGameHubMixin {
 
         if(Configs.GUI.LYRIC.getBooleanValue()){
             float lyricScale = (float) Configs.GUI.LYRIC_SCALE.getDoubleValue();
-            int lyricHeight = Configs.GUI.LYRIC_HEIGHT.getIntegerValue();
-            int lyricWidth = Configs.GUI.LYRIC_WIDTH.getIntegerValue();
+            int lyricY= Configs.GUI.LYRIC_Y.getIntegerValue();
+            int lyricX = Configs.GUI.LYRIC_X.getIntegerValue();
 
             int lyriccolor;
             try{
@@ -68,8 +68,8 @@ public class InGameHubMixin {
             for(String lyric: MusicCommand.getPlayer().getLyric()){
                 MatrixStack lyricMatrices =new MatrixStack();
                 lyricMatrices.scale(lyricScale, lyricScale, lyricScale);
-                DrawableHelper.drawStringWithShadow(lyricMatrices, client.textRenderer, lyric, lyricWidth, lyricHeight, lyriccolor);
-                lyricHeight += 10;
+                client.textRenderer.draw(lyricMatrices, lyric, lyricX, lyricY, lyriccolor);
+                lyricY += 10;
             }
         }
 
@@ -82,23 +82,47 @@ public class InGameHubMixin {
             MusicIconTexture.getMusicIcon(music);
         }
 
-        if(!MusicIconTexture.canUseIcon()){
+        if(!MusicIconTexture.canUseIcon() || !Configs.GUI.MUSIC_INFO.getBooleanValue()){
             return;
         }
 
-        DrawableHelper.fill(matrices, width - 175, 0, width,  38, 0xE41318 + 0x4D000000);
+        int y = Configs.GUI.MUSIC_INFO_Y.getIntegerValue();
+        int x = Configs.GUI.MUSIC_INFO_X.getIntegerValue();
+
+        int musicColor;
+        try{
+            musicColor = Integer.parseInt(Configs.GUI.MUSIC_INFO_COLOR.getStringValue(), 16);
+        }catch(Exception err){
+            musicColor = 0x4DE41318;
+        }
+
+        int musicTitleColor;
+        try{
+            musicTitleColor = Integer.parseInt(Configs.GUI.MUSIC_INFO_TITLE_FONT_COLOR.getStringValue(), 16);
+        }catch(Exception err){
+            musicTitleColor = 0x9E9E9E;
+        }
+
+        int musicFontColor;
+        try{
+            musicFontColor = Integer.parseInt(Configs.GUI.MUSIC_INFO_FONT_COLOR.getStringValue(), 16);
+        }catch(Exception err){
+            musicFontColor = 0x9E9E9E;
+        }
+
+        DrawableHelper.fill(matrices, width - 175 - x, y, width - x,  38 + y, musicColor);
         RenderSystem.setShaderTexture(0, MusicIconTexture.MUSIC_ICON_ID);
 
         MatrixStack imgMatrices =new MatrixStack();
-        imgMatrices.translate(width - 172, 2.5f, 0);
+        imgMatrices.translate(width - 172 - x, 2.5f + y, 0);
         imgMatrices.scale(0.25f,0.25f,0.25f);
         DrawableHelper.drawTexture(imgMatrices, 0, 0, 0, 0, 128, 128, 128, 128);
-        DrawableHelper.drawStringWithShadow(matrices, client.textRenderer, music.name.length() > 16 ? music.name.substring(0, 16) + "...": music.name, width - 135, 4, 0xFFFFFF);
+        client.textRenderer.draw(matrices, music.name.length() > 16 ? music.name.substring(0, 16) + "...": music.name, width - 135 - x, 4 + y, musicTitleColor);
         if(!music.aliasName.isEmpty()){
-            DrawableHelper.drawStringWithShadow(matrices, client.textRenderer, music.aliasName.length() > 16 ? music.aliasName.substring(0, 16) + "...": music.aliasName, width - 135, 14, 0x9E9E9E);
+            client.textRenderer.draw(matrices, music.aliasName.length() > 16 ? music.aliasName.substring(0, 16) + "...": music.aliasName, width - 135 - x, 14 + y, musicFontColor);
         }else{
             String album = music.album.get("name").getAsString();
-            DrawableHelper.drawStringWithShadow(matrices, client.textRenderer, album.length() > 16 ? album.substring(0, 16) + "...": album, width - 135, 14, 0x9E9E9E);
+            client.textRenderer.draw(matrices, album.length() > 16 ? album.substring(0, 16) + "...": album, width - 135 - x, 14 + y, musicFontColor);
         }
 
         StringBuilder artist = new StringBuilder();
@@ -106,7 +130,7 @@ public class InGameHubMixin {
             artist.append(artistData.getAsJsonObject().get("name").getAsString()).append("/");
         }
         artist = new StringBuilder(artist.substring(0, artist.length() - 1));
-        DrawableHelper.drawStringWithShadow(matrices, client.textRenderer, artist.length() > 16 ? artist.substring(0, 16) + "...": artist.toString(), width - 135, 24, 0x9E9E9E);
+        client.textRenderer.draw(matrices, artist.length() > 16 ? artist.substring(0, 16) + "...": artist.toString(), width - 135 - x, 24 + y, musicFontColor);
         this.oldMusic = music;
     }
 

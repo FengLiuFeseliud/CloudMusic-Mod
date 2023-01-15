@@ -64,10 +64,6 @@
     "cloudmusic.help.playing": "查看正在播放的音乐 /cloudmusic playing",
     "cloudmusic.help.playing.all": "查看正在播放的音乐列表 /cloudmusic playing all",
 
-    "cloudmusic.help.lyric": "是否显示歌词 /cloudmusic lyric [是/否]",
-    "cloudmusic.help.lyric.color": "调整歌词颜色 (十六进制) /cloudmusic lyric [颜色]",
-    "cloudmusic.help.lyric.scale": "调整歌词位置 /cloudmusic lyric [x] [y] [歌词缩放比例]",
-
     "cloudmusic.help.stop": "暂停播放 /cloudmusic stop",
     "cloudmusic.help.continue": "继续播放 /cloudmusic continue",
     "cloudmusic.help.prev": "上一首 /cloudmusic prev",
@@ -179,87 +175,105 @@
     "cloudmusic.gui.tab.http": "网络",
     "cloudmusic.gui.tab.hotkey": "热键",
 
-    "cloudmusic.config.volume": "音量",
+    "cloudmusic.config.volume": "音量 | volume",
     "cloudmusic.config.volume.comment": "增益值 -80 至 6 的百分比",
 
-    "cloudmusic.config.play.url": "直接播放",
+    "cloudmusic.config.play.url": "直接播放 | play.url",
     "cloudmusic.config.play.url.comment": "直接播放, 不下载缓存音乐文件 (直接播放可以节省空间, 但有可能出现音乐无法播放完整)",
 
-    "cloudmusic.config.play.loop": "循环播放",
+    "cloudmusic.config.play.loop": "循环播放 | play.loop",
     "cloudmusic.config.play.loop.comment": "循环播放播放列表",
 
-    "cloudmusic.config.cache.path": "缓存路径",
+    "cloudmusic.config.cache.path": "缓存路径 | cache.path",
     "cloudmusic.config.cache.path.comment": "音乐缓存路径 (默认游戏目录下的 cloud_music_cache)",
 
-    "cloudmusic.config.cache.max.mb": "最大缓存",
+    "cloudmusic.config.cache.max.mb": "最大缓存 | cache.max.mb",
     "cloudmusic.config.cache.max.mb.comment": "最大缓存, 单位 mb",
 
-    "cloudmusic.config.cache.delete.mb": "超出缓存清理空间",
+    "cloudmusic.config.cache.delete.mb": "缓存清理空间 | cache.delete.mb",
     "cloudmusic.config.cache.delete.mb.comment": "超出缓存时清理多少空间, 单位 mb",
 
-    "cloudmusic.config.lyric": "绘制歌词",
-    "cloudmusic.config.lyric.comment": "是否在游戏内绘制歌词",
-
-    "cloudmusic.config.page.limit": "页条目数",
+    "cloudmusic.config.page.limit": "页条目数 | page.limit",
     "cloudmusic.config.page.limit.comment": "一页最大条目数 (默认 8 条)",
 
-    "cloudmusic.config.lyric.color": "歌词颜色",
+    "cloudmusic.config.music.info": "绘制歌曲信息 | music.info",
+    "cloudmusic.config.music.info.comment": "是否在游戏内绘制歌曲信息",
+
+    "cloudmusic.config.music.info.x": "歌曲信息x轴 | music.info.x",
+    "cloudmusic.config.music.info.x.comment": "歌曲信息绘制所在x轴",
+
+    "cloudmusic.config.music.info.y": "歌曲信息y轴 | music.info.y",
+    "cloudmusic.config.music.info.y.comment": "歌曲信息绘制所在y轴",
+
+    "cloudmusic.config.music.info.color": "歌曲信息背景颜色 | music.info.color",
+    "cloudmusic.config.music.info.color.comment": "歌曲信息背景颜色, 十六进制 (默认 4DE41318 半透明红色)",
+
+    "cloudmusic.config.music.info.title.font.color": "歌曲歌名颜色 | music.info.title.font.color",
+    "cloudmusic.config.music.info.title.font.color.comment": "歌曲歌名颜色, 十六进制 (默认 FFFFFF 白色)",
+
+    "cloudmusic.config.music.info.font.color": "歌曲副标题颜色 | music.info.font.color",
+    "cloudmusic.config.music.info.font.color.comment": "歌曲副标题颜色, 十六进制 (默认 9E9E9E 灰色)",
+
+    "cloudmusic.config.lyric": "绘制歌词 | lyric",
+    "cloudmusic.config.lyric.comment": "是否在游戏内绘制歌词",
+
+    "cloudmusic.config.lyric.color": "歌词颜色 | lyric.color",
     "cloudmusic.config.lyric.color.comment": "歌词颜色, 十六进制 (默认 FFFFFF 白色)",
 
-    "cloudmusic.config.lyric.scale": "歌词缩放比例",
+    "cloudmusic.config.lyric.scale": "歌词缩放比例 | lyric.scale",
     "cloudmusic.config.lyric.scale.comment": "歌词绘制缩放比例 (默认 1.5 倍)",
 
-    "cloudmusic.config.lyric.width": "歌词x轴",
-    "cloudmusic.config.lyric.width.comment": "歌词绘制所在x轴",
+    "cloudmusic.config.lyric.x": "歌词x轴 | lyric.x",
+    "cloudmusic.config.lyric.x.comment": "歌词绘制所在x轴",
 
-    "cloudmusic.config.lyric.height": "歌词y轴",
-    "cloudmusic.config.lyric.height.comment": "歌词绘制所在y轴",
+    "cloudmusic.config.lyric.y": "歌词y轴 | lyric.y",
+    "cloudmusic.config.lyric.y.comment": "歌词绘制所在y轴",
 
-    "cloudmusic.config.login.cookie": "用户密钥",
+    "cloudmusic.config.login.cookie": "用户密钥 | cookie",
     "cloudmusic.config.login.cookie.comment": "网易云用户 cookie 值",
 
-    "cloudmusic.config.login.country.code": "手机国家码",
+    "cloudmusic.config.login.country.code": "手机国家码 | country.code",
     "cloudmusic.config.login.country.code.comment": "手机登录时使用手机的国家码 (默认 86 中国)",
 
-    "cloudmusic.config.login.qr.check.num": "二维码轮查次数",
+    "cloudmusic.config.login.qr.check.num": "二维码轮查次数 | qr.check.num",
     "cloudmusic.config.login.qr.check.num.comment": "二维码轮查最大次数 (默认 10 次)",
 
-    "cloudmusic.config.login.qr.check.time": "二维码轮查间隔",
+    "cloudmusic.config.login.qr.check.time": "二维码轮查间隔 | qr.check.time",
     "cloudmusic.config.login.qr.check.time.comment": "二维码轮查间隔时长, 单位秒 (默认 3 秒)",
 
-    "cloudmusic.config.http.max.retry": "请求重试次数",
+    "cloudmusic.config.http.max.retry": "请求重试次数 | max.retry",
     "cloudmusic.config.http.max.retry.comment": "请求最大重试次数 (默认 0 次)",
 
-    "cloudmusic.config.http.time.out": "请求超时",
+    "cloudmusic.config.http.time.out": "请求超时 | time.out",
     "cloudmusic.config.http.time.out.comment": "请求超时时间, 单位秒 (默认 30 秒)",
 
-    "cloudmusic.config.hotkey.open.config.gui": "打开配置菜单",
+    "cloudmusic.config.hotkey.open.config.gui": "打开配置菜单 | open.config.gui",
     "cloudmusic.config.hotkey.open.config.gui.comment": "打开该菜单",
 
-    "cloudmusic.config.hotkey.switch.play.music": "暂停播放 / 继续播放",
+    "cloudmusic.config.hotkey.switch.play.music": "暂停播放 / 继续播放 | switch.play.music",
     "cloudmusic.config.hotkey.switch.play.music.comment": "暂停播放或者继续播放当前歌曲",
 
-    "cloudmusic.config.hotkey.play.music": "继续播放",
+    "cloudmusic.config.hotkey.play.music": "继续播放 | play.music",
     "cloudmusic.config.hotkey.play.music.comment": "继续播放当前歌曲",
 
-    "cloudmusic.config.hotkey.next.music": "下一首",
+    "cloudmusic.config.hotkey.next.music": "下一首 | next.music",
     "cloudmusic.config.hotkey.next.music.comment": "播放下一首歌曲",
 
-    "cloudmusic.config.hotkey.prev.music": "上一首",
+    "cloudmusic.config.hotkey.prev.music": "上一首 | prev.music",
     "cloudmusic.config.hotkey.prev.music.comment": "播放上一首歌曲",
 
-    "cloudmusic.config.hotkey.stop.music": "暂停播放",
+    "cloudmusic.config.hotkey.stop.music": "暂停播放 | stop.music",
     "cloudmusic.config.hotkey.stop.music.comment": "暂停播放当前歌曲",
 
-    "cloudmusic.config.hotkey.exit.play": "退出播放",
+    "cloudmusic.config.hotkey.exit.play": "退出播放 | exit.play",
     "cloudmusic.config.hotkey.exit.play.comment": "无法继续播放",
 
-    "cloudmusic.config.hotkey.like.music": "红心歌曲",
+    "cloudmusic.config.hotkey.like.music": "红心歌曲 | like.music",
     "cloudmusic.config.hotkey.like.music.comment": "红心当前播放歌曲",
 
-    "cloudmusic.config.hotkey.playlist.add.music": "歌单添加歌曲",
+    "cloudmusic.config.hotkey.playlist.add.music": "歌单添加歌曲 | playlist.add.music",
     "cloudmusic.config.hotkey.playlist.add.music.comment": "歌单添加当前播放歌曲",
 
-    "cloudmusic.config.hotkey.playlist.del.music": "歌单删除音乐",
+    "cloudmusic.config.hotkey.playlist.del.music": "歌单删除音乐 | playlist.del.music",
     "cloudmusic.config.hotkey.playlist.del.music.comment": "歌单删除当前播放歌曲"
 }
