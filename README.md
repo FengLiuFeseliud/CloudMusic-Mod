@@ -32,9 +32,9 @@
 
 高自定义, 多热键
 
-[con1.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/con1.png?raw=true)
+![con1.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/con1.png?raw=true)
 
-[con2.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/con2.png?raw=true)
+![con2.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/con2.png?raw=true)
 
 ## 指令
 
