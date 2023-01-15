@@ -2,6 +2,8 @@
 
 #### 在 mc 中内置网易云音乐播放器
 
+#### 前置: MaliLib, Fabric API
+
 #### 出现任何问题在 Issues 前请检查 mod 版本是否为最新
 
 ![logo.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/src/main/resources/assets/cloudmusic/icon.png?raw=true)
@@ -24,11 +26,15 @@
 
 ![login_4.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/login_4.png?raw=true)
 
-## 登录 - 设置 cookie
+## 配置 / 热键
 
-在 [网易云音乐 WEB](https://music.163.com/) 登录后, 使用浏览器开发者复制 cookie 到最后游戏目录 `config/cloud_music_config`  配置文件
+使用 MaliLib (masa 全家桶前置, masa 全家桶大伙肯定至少用一个罢)
 
-![cookie.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/cookie.png?raw=true)
+高自定义, 多热键
+
+[con1.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/con1.png?raw=true)
+
+[con2.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/con2.png?raw=true)
 
 ## 指令
 
@@ -47,3 +53,5 @@
 ![6.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/6.png?raw=true)
 
 ![7.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/7.png?raw=true)
+
+![8.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/8.png?raw=true)

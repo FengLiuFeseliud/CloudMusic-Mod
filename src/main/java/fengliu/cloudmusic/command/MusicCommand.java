@@ -30,8 +30,6 @@ public class MusicCommand {
     private static My my = null;
     public static boolean loadQRCode = false;
     private static final Text[] helps = {
-            Text.translatable("cloudmusic.help"),
-
             Text.translatable("cloudmusic.help.music"),
             Text.translatable("cloudmusic.help.music.play"),
             Text.translatable("cloudmusic.help.music.like"),

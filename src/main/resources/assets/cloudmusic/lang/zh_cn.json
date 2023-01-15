@@ -1,6 +1,4 @@
 {
-    "cloudmusic.help": "配置文件在游戏目录 config/cloud_music_config",
-
     "cloudmusic.help.music": "获取音乐 /cloudmusic music [id]",
     "cloudmusic.help.music.play": "播放音乐 /cloudmusic music play [id]",
     "cloudmusic.help.music.like": "红心音乐 /cloudmusic music like [id]",
