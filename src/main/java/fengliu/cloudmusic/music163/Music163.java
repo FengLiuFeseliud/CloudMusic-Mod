@@ -41,9 +41,9 @@ public class Music163 {
     }
 
     /**
-     * 获取音乐
-     * @param id 音乐 id
-     * @return 音乐对象
+     * 获取歌曲
+     * @param id 歌曲 id
+     * @return 歌曲对象
      */
     public Music music(long id){
         Map<String, Object> data = new HashMap<String, Object>();

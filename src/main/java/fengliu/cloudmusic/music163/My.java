@@ -23,7 +23,7 @@ public class My extends User {
     
     /**
      * 日推歌
-     * @return 音乐列表
+     * @return 歌曲列表
      */
     public List<Music> recommend_songs(){
         JsonObject data = this.api.POST_API("/api/v3/discovery/recommend/songs", null);
@@ -130,7 +130,7 @@ public class My extends User {
 
     /**
      * 获取 fm 曲目
-     * @return 音乐列表
+     * @return 歌曲列表
      */
     public List<Music> fm (){
         JsonObject json = this.api.POST_API("/api/v1/radio/get", null);

@@ -53,6 +53,8 @@ public class HotkeysCallback implements IHotkeyCallback {
         Configs.HOTKEY.PREV_MUSIC.getKeybind().setCallback(hotkeysCallback);
         Configs.HOTKEY.STOP_MUSIC.getKeybind().setCallback(hotkeysCallback);
         Configs.HOTKEY.EXIT_PLAY.getKeybind().setCallback(hotkeysCallback);
+        Configs.HOTKEY.DELETE_PLAY_MUSIC.getKeybind().setCallback(hotkeysCallback);
+        Configs.HOTKEY.TRASH_ADD_PLAY_MUSIC.getKeybind().setCallback(hotkeysCallback);
         Configs.HOTKEY.LIKE_MUSIC.getKeybind().setCallback(hotkeysCallback);
         Configs.HOTKEY.PLAYLIST_ADD_MUSIC.getKeybind().setCallback(hotkeysCallback);
         Configs.HOTKEY.PLAYLIST_DEL_MUSIC.getKeybind().setCallback(hotkeysCallback);
@@ -104,6 +106,28 @@ public class HotkeysCallback implements IHotkeyCallback {
         if (key == Configs.HOTKEY.EXIT_PLAY.getKeybind() && action == KeyAction.PRESS){
             MusicCommand.getPlayer().exit();
             return true;
+        }
+
+        if (key == Configs.HOTKEY.DELETE_PLAY_MUSIC.getKeybind() && action == KeyAction.PRESS){
+            MusicCommand.getPlayer().deletePlayingMusic();
+            return true;
+        }
+
+        if (key == Configs.HOTKEY.TRASH_ADD_PLAY_MUSIC.getKeybind() && action == KeyAction.PRESS){
+            MusicPlayer player = MusicCommand.getPlayer();
+            Music music = player.playingMusic();
+            if (music == null){
+                return true;
+            }
+
+            player.deletePlayingMusic();
+            this.runHotKey(mc -> {
+                music.addTrashCan();
+
+                if (mc.player != null){
+                    mc.player.sendMessage(Text.translatable("cloudmusic.info.command.trash", music.name));
+                }
+            });
         }
 
         if (key == Configs.HOTKEY.LIKE_MUSIC.getKeybind() && action == KeyAction.PRESS){

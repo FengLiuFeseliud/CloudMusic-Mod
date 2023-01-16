@@ -1,17 +1,17 @@
 {
-    "cloudmusic.help.music": "获取音乐 /cloudmusic music [id]",
-    "cloudmusic.help.music.play": "播放音乐 /cloudmusic music play [id]",
-    "cloudmusic.help.music.like": "红心音乐 /cloudmusic music like [id]",
-    "cloudmusic.help.music.unlike": "取消红心音乐 /cloudmusic music unlike [id]",
-    "cloudmusic.help.music.similar.music": "获取音乐相似音乐 /cloudmusic music similar music [id]",
-    "cloudmusic.help.music.similar.playlist": "获取音乐相似歌单 /cloudmusic music similar playlist [id]",
+    "cloudmusic.help.music": "获取歌曲 /cloudmusic music [id]",
+    "cloudmusic.help.music.play": "播放歌曲 /cloudmusic music play [id]",
+    "cloudmusic.help.music.like": "红心歌曲 /cloudmusic music like [id]",
+    "cloudmusic.help.music.unlike": "取消红心歌曲 /cloudmusic music unlike [id]",
+    "cloudmusic.help.music.similar.music": "获取歌曲相似歌曲 /cloudmusic music similar music [id]",
+    "cloudmusic.help.music.similar.playlist": "获取歌曲相似歌单 /cloudmusic music similar playlist [id]",
 
     "cloudmusic.help.playlist": "获取歌单 /cloudmusic playlist [id]",
     "cloudmusic.help.playlist.play": "播放歌单 /cloudmusic music playlist [id]",
     "cloudmusic.help.playlist.subscribe": "收藏歌单 /cloudmusic playlist subscribe [id]",
     "cloudmusic.help.playlist.unsubscribe": "取消收藏歌单 /cloudmusic playlist unsubscribe [id]",
-    "cloudmusic.help.playlist.add": "歌单添加音乐 /cloudmusic playlist add [id] [音乐 id]",
-    "cloudmusic.help.playlist.del": "歌单删除音乐 /cloudmusic playlist del [id] [音乐 id]",
+    "cloudmusic.help.playlist.add": "歌单添加歌曲 /cloudmusic playlist add [id] [歌曲 id]",
+    "cloudmusic.help.playlist.del": "歌单删除歌曲 /cloudmusic playlist del [id] [歌曲 id]",
 
     "cloudmusic.help.artist": "获取歌手 /cloudmusic artist [id]",
     "cloudmusic.help.artist.top": "播放歌手热门 50 首 /cloudmusic artist top [id]",
@@ -27,22 +27,22 @@
 
     "cloudmusic.help.user": "获取用户 /cloudmusic user [id]",
     "cloudmusic.help.user.playlist": "获取用户歌单 /cloudmusic user playlist [id]",
-    "cloudmusic.help.user.like": "获取用户喜欢的音乐 /cloudmusic user like [id]",
+    "cloudmusic.help.user.like": "获取用户喜欢的歌曲 /cloudmusic user like [id]",
     "cloudmusic.help.user.record.all": "获取用户听歌榜单(所有时间) /cloudmusic user record all [id]",
     "cloudmusic.help.user.record.week": "获取用户听歌榜单(周) /cloudmusic user record week [id]",
 
     "cloudmusic.help.my": "获取 cookie 用户 /cloudmusic my",
     "cloudmusic.help.my.fm": "私人 fm /cloudmusic my fm",
-    "cloudmusic.help.my.like": "我喜欢的音乐 /cloudmusic my like",
+    "cloudmusic.help.my.like": "我喜欢的歌曲 /cloudmusic my like",
     "cloudmusic.help.my.playlist": "获取我的歌单 /cloudmusic my playlist",
     "cloudmusic.help.my.playlist.add": "向我的歌单添加歌曲 /cloudmusic my playlist add [musicId]",
     "cloudmusic.help.my.playlist.del": "向我的歌单删除歌曲 /cloudmusic my playlist del [musicId]",
-    "cloudmusic.help.my.recommend.music": "每日推荐音乐 /cloudmusic my recommend music",
+    "cloudmusic.help.my.recommend.music": "每日推荐歌曲 /cloudmusic my recommend music",
     "cloudmusic.help.my.recommend.playlist": "每日推荐歌单 /cloudmusic my recommend playlist",
     "cloudmusic.help.my.sublist.album": "我收藏的专辑 /cloudmusic my sublist album",
     "cloudmusic.help.my.sublist.artist": "我收藏的歌手 /cloudmusic my sublist artist",
 
-    "cloudmusic.help.search.music": "搜索音乐 /cloudmusic search music [key]",
+    "cloudmusic.help.search.music": "搜索歌曲 /cloudmusic search music [key]",
     "cloudmusic.help.search.album": "搜索专辑 /cloudmusic search album [key]",
     "cloudmusic.help.search.artist": "搜索歌手 /cloudmusic search artist [key]",
     "cloudmusic.help.search.playlist": "搜索歌单 /cloudmusic search playlist [key]",
@@ -61,14 +61,16 @@
     "cloudmusic.help.page.next": "下一页 /cloudmusic page next",
     "cloudmusic.help.page.to": "跳转至 /cloudmusic page to [page]",
 
-    "cloudmusic.help.playing": "查看正在播放的音乐 /cloudmusic playing",
-    "cloudmusic.help.playing.all": "查看正在播放的音乐列表 /cloudmusic playing all",
+    "cloudmusic.help.playing": "查看正在播放的歌曲 /cloudmusic playing",
+    "cloudmusic.help.playing.all": "查看正在播放的歌曲列表 /cloudmusic playing all",
 
     "cloudmusic.help.stop": "暂停播放 /cloudmusic stop",
     "cloudmusic.help.continue": "继续播放 /cloudmusic continue",
     "cloudmusic.help.prev": "上一首 /cloudmusic prev",
     "cloudmusic.help.next": "下一首 /cloudmusic next",
     "cloudmusic.help.to": "播放跳转至 /cloudmusic to [musicIndex]",
+    "cloudmusic.help.del": "从播放列表中删除当前播放歌曲 /cloudmusic del",
+    "cloudmusic.help.trash": "从播放列表中删除当前播放歌曲, 并将歌曲扔进垃圾桶 /cloudmusic trash",
     "cloudmusic.help.exit": "退出播放 (无法继续播放) /cloudmusic exit",
     "cloudmusic.help.cloudmusic": "显示本帮助 /cloudmusic",
 
@@ -95,7 +97,7 @@
     "cloudmusic.info.artist.album": "专辑数: %d",
     "cloudmusic.info.artist.id": "id: %d",
 
-    "cloudmusic.info.page.music.similar": "%d 的相似音乐",
+    "cloudmusic.info.page.music.similar": "%d 的相似歌曲",
     "cloudmusic.info.page.music.similar.playlist": "%d 的相似歌单",
     "cloudmusic.info.page.artist.album": "%d 的所有专辑",
     "cloudmusic.info.page.artist.similar": "%d 的相似歌手",
@@ -111,9 +113,9 @@
 
     "cloudmusic.info.command.playlist.add": "向 %d 歌单添加歌曲 musicId: %d",
     "cloudmusic.info.command.playlist.del": "向 %d 歌单删除歌曲 musicId: %d",
-    "cloudmusic.info.command.recommend.music": "播放每日推荐音乐",
+    "cloudmusic.info.command.recommend.music": "播放每日推荐歌曲",
     "cloudmusic.info.command.fm": "进入私人 fm 模式播放",
-    "cloudmusic.info.command.like": "播放 %d 喜欢的音乐",
+    "cloudmusic.info.command.like": "播放 %d 喜欢的歌曲",
     "cloudmusic.info.command.album.subscribe": "收藏专辑 %d",
     "cloudmusic.info.command.album.unsubscribe": "取消收藏专辑 %d",
     "cloudmusic.info.command.album.play": "播放 %d 专辑",
@@ -126,6 +128,7 @@
     "cloudmusic.info.command.music.like": "红心 %d",
     "cloudmusic.info.command.music.unlike": "取消红心 %d",
     "cloudmusic.info.command.music.play": "播放 %d",
+    "cloudmusic.info.command.trash": "将 %d 扔进垃圾桶",
     "cloudmusic.info.command.login": "成功登录至 %d",
     "cloudmusic.info.command.login.sendcaptcha": "成功向手机号发送验证码...",
     "cloudmusic.info.command.country.code": "设置手机号国家码为 %d...",
@@ -137,12 +140,12 @@
     "cloudmusic.options.unlike": "[取消红心]",
     "cloudmusic.options.playlist.add": "[向歌单添加歌曲]",
     "cloudmusic.options.playlist.del": "[向歌单删除歌曲]",
-    "cloudmusic.options.similar.music": "[相似音乐]",
+    "cloudmusic.options.similar.music": "[相似歌曲]",
     "cloudmusic.options.similar.playlist": "[相似歌单]",
     "cloudmusic.options.similar.artist": "[相似歌手]",
     "cloudmusic.options.subscribe": "[收藏]",
     "cloudmusic.options.unsubscribe": "[取消收藏]",
-    "cloudmusic.options.user.like": "[喜欢的音乐]",
+    "cloudmusic.options.user.like": "[喜欢的歌曲]",
     "cloudmusic.options.user.playlist": "[用户歌单]",
     "cloudmusic.options.record.all": "[听歌榜单(所有时间)]",
     "cloudmusic.options.record.week": "[听歌榜单(周)]",
@@ -150,7 +153,7 @@
     "cloudmusic.options.page.next": "[下一页]",
     "cloudmusic.options.page.to": "[跳转至...]",
 
-    "cloudmusic.exception.music.id": "§c§l找不到音乐, 请检查音乐 id",
+    "cloudmusic.exception.music.id": "§c§l找不到歌曲, 请检查歌曲 id",
     "cloudmusic.exception.album.id": "§c§l找不到专辑, 请检查专辑 id",
     "cloudmusic.exception.user.id": "§c§l无法获取用户, 请检查用户 id",
     "cloudmusic.exception.cookie": "§c§l无效的 cookie, 请检查 cookie 有效性 (尝试重新登录)",
@@ -167,7 +170,7 @@
     "cloudmusic.exception.http": "网络请求重试超出最大次数 %d 次, 错误: %s",
     "cloudmusic.exception.http.download": "下载文件重试超出最大次数 %d 次, 错误: %s",
 
-    "cloudmusic.gui.configs.title": "CloudMusic 云音乐 By FengLiuFeseliud",
+    "cloudmusic.gui.configs.title": "CloudMusic 云歌曲 By FengLiuFeseliud",
     "cloudmusic.gui.tab.all": "全部",
     "cloudmusic.gui.tab.play": "播放",
     "cloudmusic.gui.tab.gui": "界面",
@@ -179,13 +182,13 @@
     "cloudmusic.config.volume.comment": "增益值 -80 至 6 的百分比",
 
     "cloudmusic.config.play.url": "直接播放 | play.url",
-    "cloudmusic.config.play.url.comment": "直接播放, 不下载缓存音乐文件 (直接播放可以节省空间, 但有可能出现音乐无法播放完整)",
+    "cloudmusic.config.play.url.comment": "直接播放, 不下载缓存歌曲文件 (直接播放可以节省空间, 但有可能出现歌曲无法播放完整)",
 
     "cloudmusic.config.play.loop": "循环播放 | play.loop",
     "cloudmusic.config.play.loop.comment": "循环播放播放列表",
 
     "cloudmusic.config.cache.path": "缓存路径 | cache.path",
-    "cloudmusic.config.cache.path.comment": "音乐缓存路径 (默认游戏目录下的 cloud_music_cache)",
+    "cloudmusic.config.cache.path.comment": "歌曲缓存路径 (默认游戏目录下的 cloud_music_cache)",
 
     "cloudmusic.config.cache.max.mb": "最大缓存 | cache.max.mb",
     "cloudmusic.config.cache.max.mb.comment": "最大缓存, 单位 mb",
@@ -268,12 +271,18 @@
     "cloudmusic.config.hotkey.exit.play": "退出播放 | exit.play",
     "cloudmusic.config.hotkey.exit.play.comment": "无法继续播放",
 
+    "cloudmusic.config.hotkey.delete.play.music": "从播放列表中删除歌曲 | delete.play.music",
+    "cloudmusic.config.hotkey.delete.play.music.comment": "从播放列表中删除当前播放歌曲",
+
+    "cloudmusic.config.hotkey.trash.add.play.music": "将歌曲扔进垃圾桶 | trash.add.play.music",
+    "cloudmusic.config.hotkey.trash.add.play.music.comment": "从播放列表中删除当前播放歌曲, 并将歌曲扔进垃圾桶",
+
     "cloudmusic.config.hotkey.like.music": "红心歌曲 | like.music",
     "cloudmusic.config.hotkey.like.music.comment": "红心当前播放歌曲",
 
     "cloudmusic.config.hotkey.playlist.add.music": "歌单添加歌曲 | playlist.add.music",
     "cloudmusic.config.hotkey.playlist.add.music.comment": "歌单添加当前播放歌曲",
 
-    "cloudmusic.config.hotkey.playlist.del.music": "歌单删除音乐 | playlist.del.music",
+    "cloudmusic.config.hotkey.playlist.del.music": "歌单删除歌曲 | playlist.del.music",
     "cloudmusic.config.hotkey.playlist.del.music.comment": "歌单删除当前播放歌曲"
 }

@@ -55,6 +55,8 @@ public class Configs implements IConfigHandler {
         public static final ConfigHotkey PREV_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.prev.music", "", "cloudmusic.config.hotkey.prev.music.comment");
         public static final ConfigHotkey STOP_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.stop.music", "", "cloudmusic.config.hotkey.stop.music.comment");
         public static final ConfigHotkey EXIT_PLAY = new ConfigHotkey("cloudmusic.config.hotkey.exit.play", "", "cloudmusic.config.hotkey.exit.play.comment");
+        public static final ConfigHotkey DELETE_PLAY_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.delete.play.music", "", "cloudmusic.config.hotkey.delete.play.music.comment");
+        public static final ConfigHotkey TRASH_ADD_PLAY_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.trash.add.play.music", "", "cloudmusic.config.hotkey.trash.add.play.music.comment");
         public static final ConfigHotkey LIKE_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.like.music", "", "cloudmusic.config.hotkey.like.music.comment");
         public static final ConfigHotkey PLAYLIST_ADD_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.playlist.add.music", "", "cloudmusic.config.hotkey.playlist.add.music.comment");
         public static final ConfigHotkey PLAYLIST_DEL_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.playlist.del.music", "", "cloudmusic.config.hotkey.playlist.del.music.comment");
@@ -91,6 +93,8 @@ public class Configs implements IConfigHandler {
             PREV_MUSIC,
             STOP_MUSIC,
             EXIT_PLAY,
+            DELETE_PLAY_MUSIC,
+            TRASH_ADD_PLAY_MUSIC,
             LIKE_MUSIC,
             PLAYLIST_ADD_MUSIC,
             PLAYLIST_DEL_MUSIC
@@ -177,6 +181,8 @@ public class Configs implements IConfigHandler {
         public static final ConfigHotkey PREV_MUSIC = ALL.PREV_MUSIC;
         public static final ConfigHotkey STOP_MUSIC = ALL.STOP_MUSIC;
         public static final ConfigHotkey EXIT_PLAY = ALL.EXIT_PLAY;
+        public static final ConfigHotkey DELETE_PLAY_MUSIC = ALL.DELETE_PLAY_MUSIC;
+        public static final ConfigHotkey TRASH_ADD_PLAY_MUSIC = ALL.TRASH_ADD_PLAY_MUSIC;
         public static final ConfigHotkey LIKE_MUSIC = ALL.LIKE_MUSIC;
         public static final ConfigHotkey PLAYLIST_ADD_MUSIC = ALL.PLAYLIST_ADD_MUSIC;
         public static final ConfigHotkey PLAYLIST_DEL_MUSIC = ALL.PLAYLIST_DEL_MUSIC;
@@ -189,6 +195,8 @@ public class Configs implements IConfigHandler {
             PREV_MUSIC,
             STOP_MUSIC,
             EXIT_PLAY,
+            DELETE_PLAY_MUSIC,
+            TRASH_ADD_PLAY_MUSIC,
             LIKE_MUSIC,
             PLAYLIST_ADD_MUSIC,
             PLAYLIST_DEL_MUSIC

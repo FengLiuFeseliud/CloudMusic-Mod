@@ -20,7 +20,7 @@ public class MusicIconTexture {
 
     /**
      * 获取封面并注册材质
-     * @param music 音乐
+     * @param music 歌曲
      */
     public static void getMusicIcon(Music music){
         Thread commandThread = new Thread(){

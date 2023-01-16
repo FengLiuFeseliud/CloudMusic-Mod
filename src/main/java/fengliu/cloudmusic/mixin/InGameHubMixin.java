@@ -25,7 +25,6 @@ import fengliu.cloudmusic.music163.Music;
 @Environment(EnvType.CLIENT)
 @Mixin(InGameHud.class)
 public class InGameHubMixin {
-    private Music oldMusic;
     private final MinecraftClient client = MinecraftClient.getInstance();
     
     @Inject(method = "render", at = @At("HEAD"))
@@ -55,7 +54,7 @@ public class InGameHubMixin {
 
         if(Configs.GUI.LYRIC.getBooleanValue()){
             float lyricScale = (float) Configs.GUI.LYRIC_SCALE.getDoubleValue();
-            int lyricY= Configs.GUI.LYRIC_Y.getIntegerValue();
+            int lyricY = Configs.GUI.LYRIC_Y.getIntegerValue();
             int lyricX = Configs.GUI.LYRIC_X.getIntegerValue();
 
             int lyriccolor;
@@ -73,16 +72,7 @@ public class InGameHubMixin {
             }
         }
 
-        if(this.oldMusic == null){
-            MusicIconTexture.getMusicIcon(music);
-            this.oldMusic = music;
-        }
-
-        if(!music.picUrl.equals(oldMusic.picUrl)){
-            MusicIconTexture.getMusicIcon(music);
-        }
-
-        if(!MusicIconTexture.canUseIcon() || !Configs.GUI.MUSIC_INFO.getBooleanValue()){
+        if(!Configs.GUI.MUSIC_INFO.getBooleanValue()){
             return;
         }
 
@@ -131,7 +121,6 @@ public class InGameHubMixin {
         }
         artist = new StringBuilder(artist.substring(0, artist.length() - 1));
         client.textRenderer.draw(matrices, artist.length() > 16 ? artist.substring(0, 16) + "...": artist.toString(), width - 135 - x, 24 + y, musicFontColor);
-        this.oldMusic = music;
     }
 
 }

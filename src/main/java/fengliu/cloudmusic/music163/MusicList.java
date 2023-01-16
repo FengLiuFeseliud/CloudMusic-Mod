@@ -5,8 +5,8 @@ import java.util.List;
 public interface MusicList extends PrintObject {
     
     /**
-     * 获取对象音乐列表
-     * @return 音乐列表
+     * 获取对象歌曲列表
+     * @return 歌曲列表
      */
     List<Music> getMusics();
 }

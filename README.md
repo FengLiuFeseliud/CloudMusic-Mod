@@ -1,6 +1,6 @@
 # CloudMusic-Mod [Fabric]
 
-#### 在 mc 中内置网易云音乐播放器
+#### 在 mc 中内置网易云歌曲播放器
 
 #### 前置: MaliLib, Fabric API
 

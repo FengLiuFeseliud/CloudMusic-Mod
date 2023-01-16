@@ -39,7 +39,7 @@ public class Artist extends Music163Object implements PrintObject, CanSubscribeO
 
     /**
      * 热门 50 首
-     * @return 音乐列表
+     * @return 歌曲列表
      */
     public List<Music> topSong(){
         Map<String, Object> data = new LinkedHashMap<String, Object>();

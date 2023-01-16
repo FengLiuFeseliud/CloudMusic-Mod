@@ -19,20 +19,22 @@ import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.music163.ActionException;
 import fengliu.cloudmusic.music163.Lyric;
 import fengliu.cloudmusic.music163.Music;
+import fengliu.cloudmusic.render.MusicIconTexture;
 import fengliu.cloudmusic.util.page.Page;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
 /**
- * 音乐播放对象
+ * 歌曲播放对象
  */
 public class MusicPlayer implements Runnable {
     private int volumePercentage = Configs.PLAY.VOLUME.getIntegerValue();
-    private final MinecraftClient client;
+    private final MinecraftClient client = MinecraftClient.getInstance();
     protected final List<Music> playList;
     private SourceDataLine play;
     private Lyric lyric;
     protected int playIn = 0;
+    protected int playListSize = 0;
     protected boolean loopPlayIn = true;
     private boolean load;
     private int Volume;
@@ -55,12 +57,11 @@ public class MusicPlayer implements Runnable {
     }
 
     /**
-     * 音乐播放对象
-     * @param playList 音乐列表
-     * @param loopPlay 
+     * 歌曲播放对象
+     * @param playList 歌曲列表
      */
     public MusicPlayer(List<Music> playList){
-        this.client = MinecraftClient.getInstance();
+        this.playListSize = playList.size();
         this.playList = playList;
 
         this.volumeSet(toVolume(this.volumePercentage));
@@ -72,17 +73,15 @@ public class MusicPlayer implements Runnable {
 
     @Override
     public void run() {
-        int size = this.playList.size();
-
         while(this.loopPlayIn){
-            for (this.playIn = 0; playIn < size; this.playIn++) {
+            for (this.playIn = 0; playIn < this.playListSize; this.playIn++) {
                 playMusic();
 
                 if(!this.loopPlayIn){
                     break;
                 }
 
-                if(this.playIn == this.playList.size() - 1 && !Configs.PLAY.PLAY_LOOP.getBooleanValue()){
+                if(this.playIn == this.playListSize - 1 && !Configs.PLAY.PLAY_LOOP.getBooleanValue()){
                     this.loopPlayIn = false;
                 }
             }
@@ -90,7 +89,7 @@ public class MusicPlayer implements Runnable {
     }
 
     /**
-     * 启动音乐播放
+     * 启动歌曲播放
      */
     public void start(){
         Thread thread = new Thread(this);
@@ -100,7 +99,7 @@ public class MusicPlayer implements Runnable {
     }
 
     /**
-     * 播放音乐
+     * 播放歌曲
      */
     protected void playMusic(){
         Music music = this.playList.get(this.playIn);
@@ -115,6 +114,7 @@ public class MusicPlayer implements Runnable {
             }
             return;
         }
+        MusicIconTexture.getMusicIcon(music);
         this.lyric = music.lyric();
 
         if(!Configs.PLAY.PLAY_URL.getBooleanValue()){
@@ -129,7 +129,7 @@ public class MusicPlayer implements Runnable {
     }
 
     /**
-     * 播放音乐
+     * 播放歌曲
      */
     private void play(AudioInputStream audioInputStream) throws IOException, InterruptedException, LineUnavailableException{
         AudioFormat audioFormat = audioInputStream.getFormat();
@@ -170,8 +170,8 @@ public class MusicPlayer implements Runnable {
     }
 
     /**
-     * 通过 URL 播放音乐
-     * @param url 音乐 url
+     * 通过 URL 播放歌曲
+     * @param url 歌曲 url
      */
     public void play(String url){
         try {
@@ -182,7 +182,7 @@ public class MusicPlayer implements Runnable {
     }
 
     /**
-     * 通过文件对象播放音乐
+     * 通过文件对象播放歌曲
      * @param file 文件对象
      */
     public void play(File file){
@@ -301,8 +301,26 @@ public class MusicPlayer implements Runnable {
     }
 
     /**
+     * 从播放列表中删除当前播放歌曲
+     */
+    public void deletePlayingMusic(){
+        if (this.playListSize == 0) {
+            if (this.playList.isEmpty()) {
+                return;
+            }
+
+            this.playListSize = this.playList.size();
+        }
+
+        this.playList.remove(this.playingMusic());
+        this.playListSize -= 1;
+        this.playIn -= 1;
+        this.next();
+    }
+
+    /**
      * 正在播放 
-     * @return 音乐对象
+     * @return 歌曲对象
      */
     public Music playingMusic(){
         if(this.playList.isEmpty()){

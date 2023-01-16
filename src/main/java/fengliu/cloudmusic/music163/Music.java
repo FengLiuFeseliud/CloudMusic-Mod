@@ -1,5 +1,6 @@
 package fengliu.cloudmusic.music163;
 
+import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,7 +73,7 @@ public class Music extends Music163Object implements PrintObject {
     }
 
     /**
-     * 红心音乐
+     * 红心歌曲
      */
     public void like(){
         Map<String, Object> data = new HashMap<>();
@@ -85,7 +86,7 @@ public class Music extends Music163Object implements PrintObject {
     }
 
     /**
-     * 取消红心音乐
+     * 取消红心歌曲
      */
     public void unlike(){
         Map<String, Object> data = new HashMap<>();
@@ -95,6 +96,13 @@ public class Music extends Music163Object implements PrintObject {
         data.put("time", 3);
 
         this.api.POST_API("/api/radio/like", data);
+    }
+
+    /**
+     * 将歌曲扔进垃圾桶 (优化推荐)
+     */
+    public void addTrashCan(){
+        this.api.POST_API("/api/radio/trash/add?alg=RT&songId=" + this.id + "&time=25", null);
     }
 
     /**
@@ -111,7 +119,7 @@ public class Music extends Music163Object implements PrintObject {
     }
 
     /**
-     * 获取相似音乐
+     * 获取相似歌曲
      * @return 页对象
      */
     public Page similar(){
@@ -153,7 +161,7 @@ public class Music extends Music163Object implements PrintObject {
     }
 
     /**
-     * 获得音乐 url
+     * 获得歌曲 url
      * @param br
      * @return
      */

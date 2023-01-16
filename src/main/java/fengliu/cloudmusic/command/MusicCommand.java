@@ -100,6 +100,8 @@ public class MusicCommand {
         Text.translatable("cloudmusic.help.prev"),
         Text.translatable("cloudmusic.help.next"),
         Text.translatable("cloudmusic.help.to"),
+        Text.translatable("cloudmusic.help.del"),
+        Text.translatable("cloudmusic.help.trash"),
         Text.translatable("cloudmusic.help.exit"),
         Text.translatable("cloudmusic.help.cloudmusic"),
     };
@@ -122,8 +124,8 @@ public class MusicCommand {
     }
     
     /**
-     * 重置音乐播放器
-     * @param musics 音乐列表
+     * 重置歌曲播放器
+     * @param musics 歌曲列表
      */
     private static void resetPlayer(List<Music> musics){
         try {
@@ -135,7 +137,7 @@ public class MusicCommand {
     }
 
     /**
-     * 重置音乐播放器
+     * 重置歌曲播放器
      * @param newPlayer 播放器
      */
     private static void resetPlayer(MusicPlayer newPlayer){
@@ -148,8 +150,8 @@ public class MusicCommand {
     }
 
     /**
-     * 重置音乐播放器
-     * @param music 音乐
+     * 重置歌曲播放器
+     * @param music 歌曲
      */
     private static void resetPlayer(Music music){
         List<Music> musics = new ArrayList<>();
@@ -923,6 +925,29 @@ public class MusicCommand {
                                 return Command.SINGLE_SUCCESS;
                             })
                     ))
+                    .then(
+                        // cloudmusic del
+                        literal("del").executes(context -> {
+                            player.deletePlayingMusic();
+                            return Command.SINGLE_SUCCESS;
+                        })
+                    )
+                    .then(
+                        // cloudmusic trash
+                        literal("trash").executes(contextdata -> {
+                            Music music = player.playingMusic();
+                            if (music == null){
+                                return Command.SINGLE_SUCCESS;
+                            }
+
+                            player.deletePlayingMusic();
+                            runCommand(contextdata, context -> {
+                                music.addTrashCan();
+                                context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.trash", music.name));
+                            });
+                            return Command.SINGLE_SUCCESS;
+                        })
+                    )
                     .then(
                         // cloudmusic exit
                         literal("exit").executes(context -> {

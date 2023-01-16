@@ -139,7 +139,7 @@ public class User implements MusicList {
     }
 
     /**
-     * 用户喜欢音乐歌单
+     * 用户喜欢歌曲歌单
      * @return 歌单
      */
     public PlayList likeMusicPlayList(){
