@@ -758,7 +758,7 @@ public class MusicCommand {
             if(page == null){
                 return Command.SINGLE_SUCCESS;
             }
-            page.up(context.getSource());
+            page.prev(context.getSource());
             return Command.SINGLE_SUCCESS;
         })));
 
@@ -769,7 +769,7 @@ public class MusicCommand {
             }
 
             runCommand(contextdata, context -> {
-                page.down(context.getSource());
+                page.next(context.getSource());
             });
             return Command.SINGLE_SUCCESS;
         })));

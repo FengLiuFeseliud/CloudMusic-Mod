@@ -8,12 +8,11 @@ import java.util.Map;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonElement;
 
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.TextClick;
 import fengliu.cloudmusic.util.page.ApiPage;
-import fengliu.cloudmusic.util.page.JsonPage;
+import fengliu.cloudmusic.util.page.Page;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
@@ -83,12 +82,12 @@ public class Artist extends Music163Object implements PrintObject, CanSubscribeO
         };
     }
 
-    public JsonPage similar(){
+    public Page similar(){
         Map<String, Object> data = new HashMap<>();
         data.put("artistid", this.id);
 
         JsonObject json = this.api.POST_API("/api/discovery/simiArtist", data);
-        return new JsonPage(json.getAsJsonArray("artists")) {
+        return new Page(json.getAsJsonArray("artists")) {
             @Override
             protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
                 JsonObject artist = (JsonObject) data;

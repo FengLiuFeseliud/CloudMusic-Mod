@@ -11,7 +11,7 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 /**
  * 动态页对象, 翻页超出数据时自动请求 Api
  */
-public abstract class ApiPage extends JsonPage {
+public abstract class ApiPage extends Page {
     private final String path;
     private final HttpClient api;
     private final Map<String, Object> postData;
@@ -72,12 +72,12 @@ public abstract class ApiPage extends JsonPage {
     }
 
     @Override
-    public void down(FabricClientCommandSource source) {
+    public void next(FabricClientCommandSource source) {
         if(this.pageIn + 1 >= this.canUsePageCount && this.canUsePageCount != this.pageCount){
             this.addCanUsePage(this.getNewPageData());
         }
 
-        super.down(source);
+        super.next(source);
     } 
     
 }

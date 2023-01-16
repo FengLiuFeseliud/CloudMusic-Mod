@@ -7,11 +7,10 @@ import java.util.Map;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonElement;
 
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.page.ApiPage;
-import fengliu.cloudmusic.util.page.JsonPage;
+import fengliu.cloudmusic.util.page.Page;
 
 /**
  * cookie 用户对象
@@ -40,9 +39,9 @@ public class My extends User {
      * 日推歌单 
      * @return 页对象
      */
-    public JsonPage recommend_resource(){
+    public Page recommend_resource(){
         JsonObject data = this.api.POST_API("/api/v1/discovery/recommend/resource", null);
-        return new JsonPage(data.get("recommend").getAsJsonArray()) {
+        return new Page(data.get("recommend").getAsJsonArray()) {
 
             @Override
             protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {

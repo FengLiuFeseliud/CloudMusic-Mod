@@ -7,6 +7,8 @@ import java.util.Map.Entry;
 
 import java.util.Map;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.util.TextClick;
@@ -109,6 +111,14 @@ public abstract class Page {
         this.data = this.splitData(data);
     }
 
+    public Page(JsonArray data) {
+        this(data.asList());
+    }
+
+    public Page(JsonArray data, int dataCount) {
+        this(data.asList(), dataCount);
+    }
+
     /**
      * 查看当前页
      * @param source Fabric 命令源
@@ -127,7 +137,7 @@ public abstract class Page {
      * 查看上一页
      * @param source Fabric 命令源
      */
-    public void up(FabricClientCommandSource source){
+    public void prev(FabricClientCommandSource source){
         if(this.pageIn <= 0){
             return;
         }
@@ -140,7 +150,7 @@ public abstract class Page {
      * 查看下一页
      * @param source Fabric 命令源
      */
-    public void down(FabricClientCommandSource source){
+    public void next(FabricClientCommandSource source){
         if(this.pageIn >= this.pageCount - 1){
             return;
         }

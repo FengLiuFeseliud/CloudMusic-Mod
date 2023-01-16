@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import fengliu.cloudmusic.util.page.JsonPage;
+import fengliu.cloudmusic.util.page.Page;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonArray;
@@ -114,14 +114,14 @@ public class Music extends Music163Object implements PrintObject {
      * 获取相似音乐
      * @return 页对象
      */
-    public JsonPage similar(){
+    public Page similar(){
         Map<String, Object> data = new HashMap<>();
         data.put("songid", this.id);
         data.put("limit", 50);
         data.put("offset", 0);
 
         JsonObject json = this.api.POST_API("/api/v1/discovery/simiSong", data);
-        return new JsonPage(json.getAsJsonArray("songs")) {
+        return new Page(json.getAsJsonArray("songs")) {
             @Override
             protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
                 JsonObject music = (JsonObject) data;
@@ -135,14 +135,14 @@ public class Music extends Music163Object implements PrintObject {
      * 获取相似歌单
      * @return 页对象
      */
-    public JsonPage similarPlaylist(){
+    public Page similarPlaylist(){
         Map<String, Object> data = new HashMap<>();
         data.put("songid", this.id);
         data.put("limit", 50);
         data.put("offset", 0);
 
         JsonObject json = this.api.POST_API("/api/discovery/simiPlaylist", data);
-        return new JsonPage(json.getAsJsonArray("playlists")) {
+        return new Page(json.getAsJsonArray("playlists")) {
             @Override
             protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
                 JsonObject playList = (JsonObject) data;
