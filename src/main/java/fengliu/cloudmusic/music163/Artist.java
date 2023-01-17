@@ -75,7 +75,7 @@ public class Artist extends Music163Object implements PrintObject, CanSubscribeO
             @Override
             protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
                 JsonObject album = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + album.get("name").getAsString() + "§r - id: " + album.get("id").getAsLong(), "/cloudmusic album " + album.get("id").getAsLong());
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + album.get("name").getAsString() + "§r§7 - "+ album.getAsJsonObject("artist").get("name").getAsString() +" - id: " + album.get("id").getAsLong(), "/cloudmusic album " + album.get("id").getAsLong());
                 return newPageData;
             }
             
@@ -91,7 +91,7 @@ public class Artist extends Music163Object implements PrintObject, CanSubscribeO
             @Override
             protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
                 JsonObject artist = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + artist.get("name").getAsString() + "§r - id: " + artist.get("id").getAsLong(), "/cloudmusic artist " + artist.get("id").getAsLong());
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + artist.get("name").getAsString() + "§r§7 - id: " + artist.get("id").getAsLong(), "/cloudmusic artist " + artist.get("id").getAsLong());
                 return newPageData;
             }
         };

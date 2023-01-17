@@ -340,7 +340,7 @@ public class MusicPlayer implements Runnable {
             @Override
             protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
                 Music music = (Music) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + music.name + "§r - " + music.artists.get(0).getAsJsonObject().get("name").getAsString(), "/cloudmusic to " + (this.limit * this.pageIn + newPageData.size() + 1));
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + music.name + "§r§7 - "+ Music.getArtistsName(music.artists), "/cloudmusic to " + (this.limit * this.pageIn + newPageData.size() + 1));
                 return newPageData;
             }
             

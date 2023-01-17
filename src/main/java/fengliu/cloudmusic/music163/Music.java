@@ -1,6 +1,5 @@
 package fengliu.cloudmusic.music163;
 
-import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +24,14 @@ public class Music extends Music163Object implements PrintObject {
     public final JsonObject album;
     public final long duration;
     public final String picUrl;
+
+    public static String getArtistsName(JsonArray artists) {
+        StringBuilder artistsName = new StringBuilder();
+        for (JsonElement artistData : artists) {
+            artistsName.append(((JsonObject) artistData).get("name").getAsString()).append("/");
+        }
+        return artistsName.substring(0, artistsName.length() - 1);
+    }
 
     /**
      * 专辑歌曲没有 picUrl, 通过 cover 传入封面 picUrl
@@ -133,7 +140,7 @@ public class Music extends Music163Object implements PrintObject {
             @Override
             protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
                 JsonObject music = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + music.get("name").getAsString() + "§r - " + music.getAsJsonArray("artists").get(0).getAsJsonObject().get("name").getAsString(), "/cloudmusic music " + music.get("id").getAsLong());
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + music.get("name").getAsString() + "§r§7  - " + Music.getArtistsName(music.getAsJsonArray("artists")) + " - id: " + music.get("id").getAsLong(), "/cloudmusic music " + music.get("id").getAsLong());
                 return newPageData;
             }
         };
@@ -154,7 +161,7 @@ public class Music extends Music163Object implements PrintObject {
             @Override
             protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
                 JsonObject playList = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r§7 - "+ playList.getAsJsonObject("creator").get("nickname").getAsString() +" - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
                 return newPageData;
             }
         };
@@ -165,7 +172,7 @@ public class Music extends Music163Object implements PrintObject {
      * @param br
      * @return
      */
-    public String getPlayUrl(@Nullable int br){
+    public String getPlayUrl(int br){
         if(br == 0){
             br = 999000;
         }
@@ -187,7 +194,7 @@ public class Music extends Music163Object implements PrintObject {
     public void printToChatHud(FabricClientCommandSource source) {
        source.sendFeedback(Text.literal(""));
 
-       if(this.aliasName == ""){
+       if(this.aliasName.equals("")){
             source.sendFeedback(Text.literal(this.name));
        }else{
             source.sendFeedback(Text.literal(this.name + " §7(" + this.aliasName + ")"));
