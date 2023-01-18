@@ -16,7 +16,7 @@ import net.minecraft.text.Text;
 /**
  * 用户对象
  */
-public class User implements MusicList {
+public class User extends Music163Obj implements IPrint {
     protected final HttpClient api;
     public final long id;
     public final String name;
@@ -30,6 +30,7 @@ public class User implements MusicList {
     private long likePlayListId = 0;
 
     public User(HttpClient api, JsonObject data) {
+        super(api, data);
         this.api = api;
         JsonObject profile = data.getAsJsonObject("profile");
 
@@ -110,28 +111,52 @@ public class User implements MusicList {
         };
     }
 
-    public List<Music> recordAll(){
+    /**
+     * 用户创建的电台
+     * @return 页对象
+     */
+    public ApiPage djRadio(){
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("userId", this.id);
+
+        JsonObject json = this.api.POST_API("/api/djradio/get/byuser", data);
+        return new ApiPage(json.getAsJsonArray("djRadios"), json.get("count").getAsInt(), "/api/user/playlist", this.api, data) {
+            @Override
+            protected JsonArray getNewPageDataJsonArray(JsonObject result) {
+                return result.getAsJsonArray("djRadios");
+            }
+
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject djRadios = (JsonObject) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + djRadios.get("name").getAsString() + "§r§7 - "+ djRadios.getAsJsonObject("dj").get("nickname").getAsString() +" - id: " + djRadios.get("id").getAsLong(), "/cloudmusic dj " + djRadios.get("id").getAsLong());
+                return newPageData;
+            }
+        };
+    }
+
+    public List<IMusic> recordAll(){
         Map<String, Object> postData = new HashMap<String, Object>();
         postData.put("uid", this.id);
         postData.put("type", 0);
 
         JsonObject data = this.api.POST_API("/api/v1/play/record", postData);
 
-        List<Music> musics = new ArrayList<>();
+        List<IMusic> musics = new ArrayList<>();
         data.getAsJsonArray("allData").forEach(musicData -> {
             musics.add(new Music(this.api, ((JsonObject) musicData).getAsJsonObject("song"), null));
         });
         return musics;
     }
 
-    public List<Music> recordWeek(){
+    public List<IMusic> recordWeek(){
         Map<String, Object> postData = new HashMap<String, Object>();
         postData.put("uid", this.id);
         postData.put("type", 1);
 
         JsonObject data = this.api.POST_API("/api/v1/play/record", postData);
 
-        List<Music> musics = new ArrayList<>();
+        List<IMusic> musics = new ArrayList<>();
         data.getAsJsonArray("weekData").forEach(musicData -> {
             musics.add(new Music(this.api, ((JsonObject) musicData).getAsJsonObject("song"), null));
         });
@@ -162,15 +187,13 @@ public class User implements MusicList {
         Map<String, String> optionsTextData = new LinkedHashMap<>();
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.user.like").getString(), "/cloudmusic user like " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.user.playlist").getString(), "/cloudmusic user playlist " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.user.dj").getString(), "/cloudmusic user dj " + this.id);
+        source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
+
+        optionsTextData.clear();
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.record.all").getString(), "/cloudmusic user record all " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.record.week").getString(), "/cloudmusic user record week " + this.id);
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
-    }
-
-    @Override
-    public List<Music> getMusics() {
-        // TODO Auto-generated method stub
-        return null;
     }
     
 }

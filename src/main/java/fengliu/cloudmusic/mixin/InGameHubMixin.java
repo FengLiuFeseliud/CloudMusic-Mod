@@ -2,6 +2,8 @@ package fengliu.cloudmusic.mixin;
 
 import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.config.Configs;
+import fengliu.cloudmusic.music163.DjMusic;
+import fengliu.cloudmusic.music163.IMusic;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -42,9 +44,9 @@ public class InGameHubMixin {
             DrawableHelper.drawTexture(imgMatrices, 0, 0, 0, 0, 128, 128, 128, 128);
         }
 
-        Music music = MusicCommand.getPlayer().playingMusic();
+        IMusic playingMusic = MusicCommand.getPlayer().playingMusic();
 
-        if(music == null){
+        if(playingMusic == null){
             return;
         }
 
@@ -107,7 +109,12 @@ public class InGameHubMixin {
         imgMatrices.translate(width - 172 - x, 2.5f + y, 0);
         imgMatrices.scale(0.25f,0.25f,0.25f);
         DrawableHelper.drawTexture(imgMatrices, 0, 0, 0, 0, 128, 128, 128, 128);
-        client.textRenderer.draw(matrices, music.name.length() > 16 ? music.name.substring(0, 16) + "...": music.name, width - 135 - x, 4 + y, musicTitleColor);
+        client.textRenderer.draw(matrices, playingMusic.getName().length() > 16 ? playingMusic.getName().substring(0, 16) + "...": playingMusic.getName(), width - 135 - x, 4 + y, musicTitleColor);
+        if (playingMusic instanceof DjMusic){
+            return;
+        }
+
+        Music music = (Music) playingMusic;
         if(!music.aliasName.isEmpty()){
             client.textRenderer.draw(matrices, music.aliasName.length() > 16 ? music.aliasName.substring(0, 16) + "...": music.aliasName, width - 135 - x, 14 + y, musicFontColor);
         }else{

@@ -1,6 +1,6 @@
 package fengliu.cloudmusic.music163;
 
-public interface CanSubscribeObject {
+public interface ICanSubscribe {
 
     /**
      * 收藏

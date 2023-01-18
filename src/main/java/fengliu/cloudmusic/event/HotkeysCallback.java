@@ -5,6 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import fengliu.cloudmusic.command.MusicCommand;
 import fengliu.cloudmusic.config.ConfigGui;
 import fengliu.cloudmusic.config.Configs;
+import fengliu.cloudmusic.music163.IMusic;
 import fengliu.cloudmusic.music163.Music;
 import fengliu.cloudmusic.util.MusicPlayer;
 import fengliu.cloudmusic.util.page.Page;
@@ -115,45 +116,45 @@ public class HotkeysCallback implements IHotkeyCallback {
 
         if (key == Configs.HOTKEY.TRASH_ADD_PLAY_MUSIC.getKeybind() && action == KeyAction.PRESS){
             MusicPlayer player = MusicCommand.getPlayer();
-            Music music = player.playingMusic();
-            if (music == null){
+            IMusic music = player.playingMusic();
+            if (!(music instanceof Music)){
                 return true;
             }
 
             player.deletePlayingMusic();
             this.runHotKey(mc -> {
-                music.addTrashCan();
+                ((Music) music).addTrashCan();
 
                 if (mc.player != null){
-                    mc.player.sendMessage(Text.translatable("cloudmusic.info.command.trash", music.name));
+                    mc.player.sendMessage(Text.translatable("cloudmusic.info.command.trash", music.getName()));
                 }
             });
         }
 
         if (key == Configs.HOTKEY.LIKE_MUSIC.getKeybind() && action == KeyAction.PRESS){
-            Music music = MusicCommand.getPlayer().playingMusic();
-            if (music == null){
+            IMusic music = MusicCommand.getPlayer().playingMusic();
+            if (!(music instanceof Music)){
                 return true;
             }
 
             this.runHotKey(mc -> {
-                music.like();
+                ((Music) music).like();
 
                 if (mc.player != null){
-                    mc.player.sendMessage(Text.translatable("cloudmusic.info.command.music.like", music.name));
+                    mc.player.sendMessage(Text.translatable("cloudmusic.info.command.music.like", music.getName()));
                 }
             });
             return true;
         }
 
         if (key == Configs.HOTKEY.PLAYLIST_ADD_MUSIC.getKeybind() && action == KeyAction.PRESS){
-            Music music = MusicCommand.getPlayer().playingMusic();
-            if (music == null){
+            IMusic music = MusicCommand.getPlayer().playingMusic();
+            if (!(music instanceof Music)){
                 return true;
             }
 
             this.runHotKey(mc -> {
-                Page page = MusicCommand.getMy(false).playListSetMusic(music.id, "add");
+                Page page = MusicCommand.getMy(false).playListSetMusic(music.getId(), "add");
                 page.setInfoText(Text.translatable("cloudmusic.info.page.user.playlist.add", MusicCommand.getMy(false).name));
                 MusicCommand.setPage(page);
                 page.look();
@@ -162,13 +163,13 @@ public class HotkeysCallback implements IHotkeyCallback {
         }
 
         if (key == Configs.HOTKEY.PLAYLIST_DEL_MUSIC.getKeybind() && action == KeyAction.PRESS){
-            Music music = MusicCommand.getPlayer().playingMusic();
-            if (music == null){
+            IMusic music = MusicCommand.getPlayer().playingMusic();
+            if (!(music instanceof Music)){
                 return true;
             }
 
             this.runHotKey(mc -> {
-                Page page = MusicCommand.getMy(false).playListSetMusic(music.id, "del");
+                Page page = MusicCommand.getMy(false).playListSetMusic(music.getId(), "del");
                 page.setInfoText(Text.translatable("cloudmusic.info.page.user.playlist.del", MusicCommand.getMy(false).name));
                 MusicCommand.setPage(page);
                 page.look();

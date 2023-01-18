@@ -16,9 +16,7 @@ import javax.sound.sampled.SourceDataLine;
 
 import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.config.Configs;
-import fengliu.cloudmusic.music163.ActionException;
-import fengliu.cloudmusic.music163.Lyric;
-import fengliu.cloudmusic.music163.Music;
+import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.render.MusicIconTexture;
 import fengliu.cloudmusic.util.page.Page;
 import net.minecraft.client.MinecraftClient;
@@ -30,7 +28,7 @@ import net.minecraft.text.Text;
 public class MusicPlayer implements Runnable {
     private int volumePercentage = Configs.PLAY.VOLUME.getIntegerValue();
     private final MinecraftClient client = MinecraftClient.getInstance();
-    protected final List<Music> playList;
+    protected final List<IMusic> playList;
     private SourceDataLine play;
     private Lyric lyric;
     protected int playIn = 0;
@@ -60,7 +58,7 @@ public class MusicPlayer implements Runnable {
      * 歌曲播放对象
      * @param playList 歌曲列表
      */
-    public MusicPlayer(List<Music> playList){
+    public MusicPlayer(List<IMusic> playList){
         this.playListSize = playList.size();
         this.playList = playList;
 
@@ -102,7 +100,7 @@ public class MusicPlayer implements Runnable {
      * 播放歌曲
      */
     protected void playMusic(){
-        Music music = this.playList.get(this.playIn);
+        IMusic music = this.playList.get(this.playIn);
 
         String musicUrl;
         try {
@@ -115,15 +113,19 @@ public class MusicPlayer implements Runnable {
             return;
         }
         MusicIconTexture.getMusicIcon(music);
-        this.lyric = music.lyric();
+        if (music instanceof Music){
+            this.lyric = ((Music) music).lyric();
+        } else {
+            this.lyric = null;
+        }
 
         if(!Configs.PLAY.PLAY_URL.getBooleanValue()){
-            File file = HttpClient.download(musicUrl, CloudMusicClient.cacheHelper.getWaitCacheFile(music.id + ".mp3"));
+            File file = HttpClient.download(musicUrl, CloudMusicClient.cacheHelper.getWaitCacheFile(music.getId() + ".mp3"));
             CloudMusicClient.cacheHelper.addUseSize(file);
-            this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.name), false);
+            this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.getName()), false);
             this.play(file);
         }else {
-            this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.name), false);
+            this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.getName()), false);
             this.play(musicUrl);
         }
     }
@@ -148,7 +150,9 @@ public class MusicPlayer implements Runnable {
         gainControl.setValue(this.Volume);
 
         play.start();
-        this.lyric.start();
+        if (lyric != null){
+            this.lyric.start();
+        }
 
         int count;
         byte tempBuff[] = new byte[1024];
@@ -163,10 +167,9 @@ public class MusicPlayer implements Runnable {
 
         }
 
-        this.lyric.exit();
-        play.drain();
-        play.stop();
-        play.close();
+        if (lyric != null){
+            this.lyric.exit();
+        }
     }
 
     /**
@@ -271,8 +274,10 @@ public class MusicPlayer implements Runnable {
      * 退出播放
      */
     public void exit(){
-        this.lyric.continues();
-        this.lyric.exit();
+        if (this.lyric != null){
+            this.lyric.continues();
+            this.lyric.exit();
+        }
 
         this.loopPlayIn = false;
         next();
@@ -282,7 +287,10 @@ public class MusicPlayer implements Runnable {
      * 停止播放
      */
     public void stop(){
-        this.lyric.stop();
+        if (this.lyric != null){
+            this.lyric.stop();
+        }
+
         synchronized(this){
             this.load = false;
             notifyAll();
@@ -293,7 +301,10 @@ public class MusicPlayer implements Runnable {
      * 继续播放
      */
     public void continues(){
-        this.lyric.continues();
+        if (this.lyric != null){
+            this.lyric.continues();
+        }
+
         synchronized(this){
             this.load = true;
             notifyAll();
@@ -322,7 +333,7 @@ public class MusicPlayer implements Runnable {
      * 正在播放 
      * @return 歌曲对象
      */
-    public Music playingMusic(){
+    public IMusic playingMusic(){
         if(this.playList.isEmpty()){
             return null;
         }
@@ -339,8 +350,13 @@ public class MusicPlayer implements Runnable {
 
             @Override
             protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
-                Music music = (Music) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + music.name + "§r§7 - "+ Music.getArtistsName(music.artists), "/cloudmusic to " + (this.limit * this.pageIn + newPageData.size() + 1));
+                if (data instanceof Music music){
+                    newPageData.put("[" +(newPageData.size() + 1) + "] §b" + music.name + "§r§7 - "+ Music.getArtistsName(music.artists), "/cloudmusic to " + (this.limit * this.pageIn + newPageData.size() + 1));
+                }
+
+                if (data instanceof DjMusic music){
+                    newPageData.put("[" +(newPageData.size() + 1) + "] §b" + music.name + "§r§7 - "+ music.dj.get("nickname").getAsString(), "/cloudmusic to " + (this.limit * this.pageIn + newPageData.size() + 1));
+                }
                 return newPageData;
             }
             

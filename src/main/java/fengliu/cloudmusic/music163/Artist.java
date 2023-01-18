@@ -16,7 +16,7 @@ import fengliu.cloudmusic.util.page.Page;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
-public class Artist extends Music163Object implements PrintObject, CanSubscribeObject {
+public class Artist extends Music163Obj implements IPrint, ICanSubscribe {
     public final long id;
     public final String name;
     public final String briefDesc;
@@ -41,12 +41,12 @@ public class Artist extends Music163Object implements PrintObject, CanSubscribeO
      * 热门 50 首
      * @return 歌曲列表
      */
-    public List<Music> topSong(){
+    public List<IMusic> topSong(){
         Map<String, Object> data = new LinkedHashMap<String, Object>();
         data.put("id", this.id);
 
         JsonObject json = this.api.POST_API("/api/artist/top/song", data);
-        List<Music> musics = new ArrayList<>();
+        List<IMusic> musics = new ArrayList<>();
         json.get("songs").getAsJsonArray().forEach(music -> {
             musics.add(new Music(this.api, music.getAsJsonObject(), null));
         });

@@ -27,6 +27,7 @@ public class Configs implements IConfigHandler {
         public static final ConfigInteger VOLUME = new ConfigInteger("cloudmusic.config.volume", 80, 0, 100, "cloudmusic.config.volume.comment");
         public static final ConfigBoolean PLAY_URL = new ConfigBoolean("cloudmusic.config.play.url", false, "cloudmusic.config.play.url.comment");
         public static final ConfigBoolean PLAY_LOOP = new ConfigBoolean("cloudmusic.config.play.loop", true, "cloudmusic.config.play.loop.comment");
+        public static final ConfigBoolean DJRADIO_PLAY_ASC = new ConfigBoolean("cloudmusic.config.dj.radio.play.asc", false, "cloudmusic.config.dj.radio.play.asc.comment");
         public static final ConfigString CACHE_PATH = new ConfigString("cloudmusic.config.cache.path", (new File(FileUtils.getMinecraftDirectory(), "cloud_music_cache")).getAbsolutePath(), "cloudmusic.config.cache.path.comment");
         public static final ConfigInteger CACHE_MAX_MB = new ConfigInteger("cloudmusic.config.cache.max.mb", 512, 512, 8000, "cloudmusic.config.cache.max.mb.comment");
         public static final ConfigInteger CACHE_DELETE_MB = new ConfigInteger("cloudmusic.config.cache.delete.mb", 126, 126, 8000, "cloudmusic.config.cache.delete.mb.comment");
@@ -65,6 +66,7 @@ public class Configs implements IConfigHandler {
             VOLUME,
             PLAY_URL,
             PLAY_LOOP,
+            DJRADIO_PLAY_ASC,
             CACHE_PATH,
             CACHE_MAX_MB,
             CACHE_DELETE_MB,
@@ -105,6 +107,7 @@ public class Configs implements IConfigHandler {
         public static final ConfigInteger VOLUME = ALL.VOLUME;
         public static final ConfigBoolean PLAY_URL = ALL.PLAY_URL;
         public static final ConfigBoolean PLAY_LOOP = ALL.PLAY_LOOP;
+        public static final ConfigBoolean DJRADIO_PLAY_ASC = ALL.DJRADIO_PLAY_ASC;
         public static final ConfigString CACHE_PATH = ALL.CACHE_PATH;
         public static final ConfigInteger CACHE_MAX_MB = ALL.CACHE_MAX_MB;
         public static final ConfigInteger CACHE_DELETE_MB = ALL.CACHE_DELETE_MB;
@@ -113,6 +116,7 @@ public class Configs implements IConfigHandler {
             VOLUME,
             PLAY_URL,
             PLAY_LOOP,
+            DJRADIO_PLAY_ASC,
             CACHE_PATH,
             CACHE_MAX_MB,
             CACHE_DELETE_MB

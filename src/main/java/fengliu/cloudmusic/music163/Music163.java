@@ -98,6 +98,25 @@ public class Music163 {
     }
 
     /**
+     * 获取电台
+     * @param id 电台 id
+     * @return 电台对象
+     */
+    public DjRadio djRadio(long id){
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("id", id);
+
+        return new DjRadio(this.api, this.api.POST_API("/api/djradio/v2/get", data).getAsJsonObject("data"));
+    }
+
+    public DjMusic djMusic(long id){
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("id", id);
+
+        return new DjMusic(this.api, this.api.POST_API("", data));
+    }
+
+    /**
      * 获取用户
      * @param id 用户 id
      * @return 用户对象
@@ -238,6 +257,29 @@ public class Music163 {
             }
             
         }; 
+    }
+
+    /**
+     * 搜索电台
+     * @param key 搜索内容
+     * @return 页对象
+     */
+    public  ApiPage searchDjRadio(String key){
+        Map<String, Object> data = this.searchData(key, 1009);
+        JsonObject json = this.api.POST_API("/api/cloudsearch/pc", data);
+        return new ApiPage(json.getAsJsonObject("result").getAsJsonArray("djRadios"), json.getAsJsonObject("result").get("djRadiosCount").getAsInt(), "/api/cloudsearch/pc", this.api, data) {
+            @Override
+            protected JsonArray getNewPageDataJsonArray(JsonObject result) {
+                return result.getAsJsonObject("result").getAsJsonArray("djRadios");
+            }
+
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject djRadios = (JsonObject) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + djRadios.get("name").getAsString() + "§r§7 - " + djRadios.getAsJsonObject("dj").get("nickname").getAsString() + " - id: " + djRadios.get("id").getAsLong(), "/cloudmusic dj " + djRadios.get("id").getAsLong());
+                return newPageData;
+            }
+        };
     }
 
 }

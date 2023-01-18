@@ -17,7 +17,7 @@ import net.minecraft.text.Text;
 /**
  * 歌单对象
  */
-public class PlayList extends Music163Object implements MusicList, CanSubscribeObject {
+public class PlayList extends Music163Obj implements IMusicList, ICanSubscribe {
     public final long id;
     public final String name;
     public final String cover;
@@ -28,7 +28,7 @@ public class PlayList extends Music163Object implements MusicList, CanSubscribeO
     public final JsonArray tags;
     public final String tagsStr;
     private final JsonArray tracks;
-    private List<Music> musics;
+    private List<IMusic> musics;
 
     public PlayList(HttpClient api, JsonObject data) {
         super(api, data);
@@ -92,7 +92,7 @@ public class PlayList extends Music163Object implements MusicList, CanSubscribeO
     }
 
     @Override
-    public List<Music> getMusics(){
+    public List<IMusic> getMusics(){
         if(this.musics != null){
             return this.musics;
         }

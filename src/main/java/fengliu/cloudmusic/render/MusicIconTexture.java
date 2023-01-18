@@ -1,6 +1,7 @@
 package fengliu.cloudmusic.render;
 
 import fengliu.cloudmusic.CloudMusicClient;
+import fengliu.cloudmusic.music163.IMusic;
 import fengliu.cloudmusic.music163.Music;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.QRCode;
@@ -22,13 +23,13 @@ public class MusicIconTexture {
      * 获取封面并注册材质
      * @param music 歌曲
      */
-    public static void getMusicIcon(Music music){
+    public static void getMusicIcon(IMusic music){
         Thread commandThread = new Thread(){
             @Override
             public void run() {
                 NativeImage img;
                 try {
-                    img = NativeImage.read(HttpClient.downloadStream(music.picUrl + "?param=128y128"));
+                    img = NativeImage.read(HttpClient.downloadStream(music.getPicUrl() + "?param=128y128"));
                 } catch (Exception err) {
                     err.printStackTrace();
                     return;

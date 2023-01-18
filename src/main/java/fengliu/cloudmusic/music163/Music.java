@@ -16,7 +16,7 @@ import fengliu.cloudmusic.util.TextClick;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
-public class Music extends Music163Object implements PrintObject {
+public class Music extends Music163Obj implements IMusic {
     public final long id;
     public final String name;
     public final String aliasName;
@@ -165,6 +165,21 @@ public class Music extends Music163Object implements PrintObject {
                 return newPageData;
             }
         };
+    }
+
+    @Override
+    public long getId() {
+        return this.id;
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public String getPicUrl() {
+        return this.picUrl;
     }
 
     /**

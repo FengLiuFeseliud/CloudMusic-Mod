@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 
 import fengliu.cloudmusic.util.HttpClient;
 
-public class Music163Object {
+public class Music163Obj {
     protected final HttpClient api;
     
     /**
@@ -12,7 +12,7 @@ public class Music163Object {
      * @param api HttpClient api
      * @param data 对象数据
      */
-    public Music163Object(HttpClient api, JsonObject data){
+    public Music163Obj(HttpClient api, JsonObject data){
         this.api = api;
     }
 }

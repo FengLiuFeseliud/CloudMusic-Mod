@@ -2,7 +2,7 @@ package fengliu.cloudmusic.music163;
 
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
-public interface PrintObject {
+public interface IPrint {
 
     /**
      * 向游戏聊天框发送信息

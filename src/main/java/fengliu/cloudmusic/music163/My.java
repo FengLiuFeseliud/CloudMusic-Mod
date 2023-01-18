@@ -25,10 +25,10 @@ public class My extends User {
      * 日推歌
      * @return 歌曲列表
      */
-    public List<Music> recommend_songs(){
+    public List<IMusic> recommendSongs(){
         JsonObject data = this.api.POST_API("/api/v3/discovery/recommend/songs", null);
 
-        List<Music> musics = new ArrayList<>();
+        List<IMusic> musics = new ArrayList<>();
         data.get("data").getAsJsonObject().get("dailySongs").getAsJsonArray().forEach(musicData -> {
             musics.add(new Music(api, musicData.getAsJsonObject(), null));
         });
@@ -39,7 +39,7 @@ public class My extends User {
      * 日推歌单 
      * @return 页对象
      */
-    public Page recommend_resource(){
+    public Page recommendResource(){
         JsonObject data = this.api.POST_API("/api/v1/discovery/recommend/resource", null);
         return new Page(data.get("recommend").getAsJsonArray()) {
 
@@ -76,7 +76,7 @@ public class My extends User {
      * cookie 用户收藏的专辑
      * @return 页对象
      */
-    public ApiPage sublist_album(){
+    public ApiPage sublistAlbum(){
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("limit", 24);
         data.put("offset", 0);
@@ -104,7 +104,7 @@ public class My extends User {
      * cookie 用户收藏的歌手
      * @return 页对象
      */
-    public ApiPage sublist_artist(){
+    public ApiPage sublistArtist(){
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("limit", 24);
         data.put("offset", 0);
@@ -129,13 +129,40 @@ public class My extends User {
     }
 
     /**
+     * cookie 用户收藏的电台
+     * @return 页对象
+     */
+    public ApiPage sublistDjRadio(){
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("limit", 24);
+        data.put("offset", 0);
+        data.put("total", true);
+
+        JsonObject json = this.api.POST_API("/api/djradio/get/subed", data);
+        return new ApiPage(json.get("djRadios").getAsJsonArray(), json.get("count").getAsInt(), "/api/djradio/get/subed", this.api, data) {
+            @Override
+            protected JsonArray getNewPageDataJsonArray(JsonObject result) {
+                return result.get("djRadios").getAsJsonArray();
+            }
+
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject djRadios = (JsonObject) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + djRadios.get("name").getAsString() + "§r§7 - "+ djRadios.getAsJsonObject("dj").get("nickname").getAsString() +" - id: " + djRadios.get("id").getAsLong(), "/cloudmusic dj " + djRadios.get("id").getAsLong());
+                return newPageData;
+            }
+        };
+    }
+
+    /**
      * 获取 fm 曲目
+     *
      * @return 歌曲列表
      */
-    public List<Music> fm (){
+    public List<IMusic> fm (){
         JsonObject json = this.api.POST_API("/api/v1/radio/get", null);
 
-        List<Music> musics = new ArrayList<>();
+        List<IMusic> musics = new ArrayList<>();
         json.getAsJsonArray("data").forEach(music -> {
             musics.add(new Music(this.api, music.getAsJsonObject(), null));
         });
