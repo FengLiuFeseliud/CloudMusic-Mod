@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 @Mixin(ChatHud.class)
 public class MixinChatHud {
-    private static final Pattern SHAR_PATTERN = Pattern.compile("CloudMusic#.+\\sid:\\s[^\\sid:][1-9]+[^\\sa-zA-Z]$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern SHAR_PATTERN = Pattern.compile("CloudMusic#.+\\sid:\\s[^\\sid:][1-9][^\\sa-zA-Z]+$", Pattern.CASE_INSENSITIVE);
 
     /**
      * 判断是否为分享消息
