@@ -9,6 +9,7 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -106,7 +107,9 @@ public class MixinInGameHub {
         imgMatrices.scale(0.25f,0.25f,0.25f);
         DrawableHelper.drawTexture(imgMatrices, 0, 0, 0, 0, 128, 128, 128, 128);
         client.textRenderer.draw(matrices, playingMusic.getName().length() > 16 ? playingMusic.getName().substring(0, 16) + "...": playingMusic.getName(), width - 135 - x, 4 + y, musicTitleColor);
-        if (playingMusic instanceof DjMusic){
+        if (playingMusic instanceof DjMusic music){
+            client.textRenderer.draw(matrices, Text.translatable("cloudmusic.info.dj.creator", music.dj.get("nickname").getAsString()), width - 135 - x, 14 + y, musicFontColor);
+            client.textRenderer.draw(matrices, Text.translatable("cloudmusic.info.dj.music.count", music.listenerCount, music.likedCount), width - 135 - x, 24 + y, musicFontColor);
             return;
         }
 

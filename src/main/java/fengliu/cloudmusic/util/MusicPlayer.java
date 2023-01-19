@@ -120,7 +120,16 @@ public class MusicPlayer implements Runnable {
         }
 
         if(!Configs.PLAY.PLAY_URL.getBooleanValue()){
-            File file = HttpClient.download(musicUrl, CloudMusicClient.cacheHelper.getWaitCacheFile(music.getId() + ".mp3"));
+            String[] urls = musicUrl.split("\\.");
+            String fileType = urls[urls.length - 1];
+
+            File file;
+            if (music instanceof DjMusic){
+                file = HttpClient.download(musicUrl, CloudMusicClient.cacheHelper.getWaitCacheFile("djmusic_" + music.getId() + "." + fileType));
+            } else {
+                file = HttpClient.download(musicUrl, CloudMusicClient.cacheHelper.getWaitCacheFile(music.getId() + "." + fileType));
+            }
+
             CloudMusicClient.cacheHelper.addUseSize(file);
             this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.getName()), false);
             this.play(file);
