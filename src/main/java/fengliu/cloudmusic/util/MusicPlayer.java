@@ -26,13 +26,12 @@ import net.minecraft.text.Text;
  * 歌曲播放对象
  */
 public class MusicPlayer implements Runnable {
-    private int volumePercentage = Configs.PLAY.VOLUME.getIntegerValue();
     private final MinecraftClient client = MinecraftClient.getInstance();
     protected final List<IMusic> playList;
     private SourceDataLine play;
     private Lyric lyric;
     protected int playIn = 0;
-    protected int playListSize = 0;
+    protected int playListSize;
     protected boolean loopPlayIn = true;
     private boolean load;
     private int Volume;
@@ -62,7 +61,7 @@ public class MusicPlayer implements Runnable {
         this.playListSize = playList.size();
         this.playList = playList;
 
-        this.volumeSet(toVolume(this.volumePercentage));
+        this.volumeSet(toVolume(Configs.PLAY.VOLUME.getIntegerValue()));
     }
 
     public boolean isPlaying(){
@@ -104,7 +103,7 @@ public class MusicPlayer implements Runnable {
 
         String musicUrl;
         try {
-            musicUrl = music.getPlayUrl(999000);
+            musicUrl = music.getPlayUrl();
         }catch(ActionException err){
             MinecraftClient client = MinecraftClient.getInstance();
             if(client.player != null){
@@ -112,6 +111,7 @@ public class MusicPlayer implements Runnable {
             }
             return;
         }
+
         MusicIconTexture.getMusicIcon(music);
         if (music instanceof Music){
             this.lyric = ((Music) music).lyric();
@@ -164,7 +164,7 @@ public class MusicPlayer implements Runnable {
         }
 
         int count;
-        byte tempBuff[] = new byte[1024];
+        byte[] tempBuff = new byte[1024];
 
         this.load = true;
         while((count = audioInputStream.read(tempBuff,0,tempBuff.length)) != -1){
@@ -207,10 +207,10 @@ public class MusicPlayer implements Runnable {
 
     /**
      * 设置音量增益
+     *
      * @param volume 音量增益
-     * @return 音量增益
      */
-    public int volumeSet(int volume){
+    public void volumeSet(int volume){
         if(volume < 0){
             volume = 0;
         }
@@ -225,12 +225,11 @@ public class MusicPlayer implements Runnable {
         
         this.Volume = volume;
         if(this.play == null){
-            return this.Volume;
+            return;
         }
 
         FloatControl gainControl = (FloatControl) this.play.getControl(FloatControl.Type.MASTER_GAIN);
         gainControl.setValue(this.Volume);
-        return this.Volume;
     }
 
     /**

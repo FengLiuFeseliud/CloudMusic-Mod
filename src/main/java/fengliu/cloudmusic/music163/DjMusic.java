@@ -1,6 +1,7 @@
 package fengliu.cloudmusic.music163;
 
 import com.google.gson.JsonObject;
+import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.TextClick;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -58,17 +59,14 @@ public class DjMusic extends Music163Obj implements IMusic {
     }
 
     @Override
-    public String getPlayUrl(int br) {
-        if(br == 0){
-            br = 999000;
-        }
-
+    public String getPlayUrl(){
         HttpClient playApi = new HttpClient("https://interface3.music.163.com", this.api.getHeader());
         Map<String, Object> data = new HashMap<>();
         data.put("ids", "[" + this.mainTrackId +"]");
-        data.put("br", br);
+        data.put("level", Configs.PLAY.PLAY_QUALITY.getStringValue());
+        data.put("encodeType", "flac");
 
-        JsonObject result = playApi.POST_API("/api/song/enhance/player/url", data);
+        JsonObject result = playApi.POST_API("/api/song/enhance/player/url/v1", data);
         JsonObject music = result.get("data").getAsJsonArray().get(0).getAsJsonObject();
         if(music.get("code").getAsInt() != 200){
             throw new ActionException(Text.translatable("cloudmusic.exception.music.get.url", this.name));

@@ -56,17 +56,11 @@ public class MixinInGameHub {
             int lyricY = Configs.GUI.LYRIC_Y.getIntegerValue();
             int lyricX = Configs.GUI.LYRIC_X.getIntegerValue();
 
-            int lyriccolor;
-            try{
-                lyriccolor = Integer.parseInt(Configs.GUI.LYRIC_COLOR.getStringValue(), 16);
-            }catch(Exception err){
-                lyriccolor = 0xFFFFFF;
-            }
-
+            int lyricColor = Configs.GUI.LYRIC_COLOR.getIntegerValue();
             for(String lyric: MusicCommand.getPlayer().getLyric()){
                 MatrixStack lyricMatrices =new MatrixStack();
                 lyricMatrices.scale(lyricScale, lyricScale, lyricScale);
-                client.textRenderer.draw(lyricMatrices, lyric, lyricX, lyricY, lyriccolor);
+                client.textRenderer.draw(lyricMatrices, lyric, lyricX, lyricY, lyricColor);
                 lyricY += 10;
             }
         }
@@ -78,35 +72,16 @@ public class MixinInGameHub {
         int y = Configs.GUI.MUSIC_INFO_Y.getIntegerValue();
         int x = Configs.GUI.MUSIC_INFO_X.getIntegerValue();
 
-        int musicColor;
-        try{
-            musicColor = Integer.parseInt(Configs.GUI.MUSIC_INFO_COLOR.getStringValue(), 16);
-        }catch(Exception err){
-            musicColor = 0x4DE41318;
-        }
-
-        int musicTitleColor;
-        try{
-            musicTitleColor = Integer.parseInt(Configs.GUI.MUSIC_INFO_TITLE_FONT_COLOR.getStringValue(), 16);
-        }catch(Exception err){
-            musicTitleColor = 0x9E9E9E;
-        }
-
-        int musicFontColor;
-        try{
-            musicFontColor = Integer.parseInt(Configs.GUI.MUSIC_INFO_FONT_COLOR.getStringValue(), 16);
-        }catch(Exception err){
-            musicFontColor = 0x9E9E9E;
-        }
-
-        DrawableHelper.fill(matrices, width - 175 - x, y, width - x,  38 + y, musicColor);
+        DrawableHelper.fill(matrices, width - 175 - x, y, width - x,  38 + y, Configs.GUI.MUSIC_INFO_COLOR.getIntegerValue());
         RenderSystem.setShaderTexture(0, MusicIconTexture.MUSIC_ICON_ID);
 
         MatrixStack imgMatrices =new MatrixStack();
         imgMatrices.translate(width - 172 - x, 2.5f + y, 0);
         imgMatrices.scale(0.25f,0.25f,0.25f);
         DrawableHelper.drawTexture(imgMatrices, 0, 0, 0, 0, 128, 128, 128, 128);
-        client.textRenderer.draw(matrices, playingMusic.getName().length() > 16 ? playingMusic.getName().substring(0, 16) + "...": playingMusic.getName(), width - 135 - x, 4 + y, musicTitleColor);
+        client.textRenderer.draw(matrices, playingMusic.getName().length() > 16 ? playingMusic.getName().substring(0, 16) + "...": playingMusic.getName(), width - 135 - x, 4 + y, Configs.GUI.MUSIC_INFO_TITLE_FONT_COLOR.getIntegerValue());
+
+        int musicFontColor = Configs.GUI.MUSIC_INFO_FONT_COLOR.getIntegerValue();
         if (playingMusic instanceof DjMusic music){
             client.textRenderer.draw(matrices, Text.translatable("cloudmusic.info.dj.creator", music.dj.get("nickname").getAsString()), width - 135 - x, 14 + y, musicFontColor);
             client.textRenderer.draw(matrices, Text.translatable("cloudmusic.info.dj.music.count", music.listenerCount, music.likedCount), width - 135 - x, 24 + y, musicFontColor);

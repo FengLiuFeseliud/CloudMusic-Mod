@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 @Mixin(ChatHud.class)
 public class MixinChatHud {
-    private static final Pattern SHAR_PATTERN = Pattern.compile("CloudMusic#.+\\sid:\\s[^\\sid:][1-9][^\\sa-zA-Z]+$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern SHAR_PATTERN = Pattern.compile("CloudMusic#.+\\sid:\\s[^\\sid:a-zA-Z]\\w[^\\sa-zA-Z]+$", Pattern.CASE_INSENSITIVE);
 
     /**
      * 判断是否为分享消息
@@ -54,13 +54,19 @@ public class MixinChatHud {
                 continue;
             }
 
-            ((MutableText) message).setStyle(
-                Style.EMPTY.withClickEvent(new ClickEvent(
-                        ClickEvent.Action.SUGGEST_COMMAND,
-                        shar.getCommand(Long.parseLong(keyValuePair[1]))
-                    ))
-                    .withColor(0x87CEEB)
-            );
+            try {
+                ((MutableText) message).setStyle(
+                    Style.EMPTY.withClickEvent(new ClickEvent(
+                            ClickEvent.Action.SUGGEST_COMMAND,
+                            shar.getCommand(Long.parseLong(keyValuePair[1]))
+                        ))
+                        .withColor(0x87CEEB)
+                        .withUnderline(true)
+                );
+            } catch (NumberFormatException err) {
+                return;
+            }
+
             return;
         }
     }

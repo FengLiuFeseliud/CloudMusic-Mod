@@ -5,14 +5,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import fengliu.cloudmusic.CloudMusicClient;
+import fengliu.cloudmusic.music163.IMusic;
+import fengliu.cloudmusic.music163.Quality;
 import fi.dy.masa.malilib.config.ConfigUtils;
 import fi.dy.masa.malilib.config.IConfigBase;
 import fi.dy.masa.malilib.config.IConfigHandler;
-import fi.dy.masa.malilib.config.options.ConfigBoolean;
-import fi.dy.masa.malilib.config.options.ConfigDouble;
-import fi.dy.masa.malilib.config.options.ConfigInteger;
-import fi.dy.masa.malilib.config.options.ConfigString;
-import fi.dy.masa.malilib.config.options.ConfigHotkey;
+import fi.dy.masa.malilib.config.options.*;
 import fi.dy.masa.malilib.util.FileUtils;
 import fi.dy.masa.malilib.util.JsonUtils;
 
@@ -27,6 +25,7 @@ public class Configs implements IConfigHandler {
         public static final ConfigInteger VOLUME = new ConfigInteger("cloudmusic.config.volume", 80, 0, 100, "cloudmusic.config.volume.comment");
         public static final ConfigBoolean PLAY_URL = new ConfigBoolean("cloudmusic.config.play.url", false, "cloudmusic.config.play.url.comment");
         public static final ConfigBoolean PLAY_LOOP = new ConfigBoolean("cloudmusic.config.play.loop", true, "cloudmusic.config.play.loop.comment");
+        public static final ConfigOptionList PLAY_QUALITY = new ConfigOptionList("cloudmusic.config.play.quality", Quality.EXHIGH, "cloudmusic.config.play.quality.comment");
         public static final ConfigBoolean DJRADIO_PLAY_ASC = new ConfigBoolean("cloudmusic.config.dj.radio.play.asc", false, "cloudmusic.config.dj.radio.play.asc.comment");
         public static final ConfigString CACHE_PATH = new ConfigString("cloudmusic.config.cache.path", (new File(FileUtils.getMinecraftDirectory(), "cloud_music_cache")).getAbsolutePath(), "cloudmusic.config.cache.path.comment");
         public static final ConfigInteger CACHE_MAX_MB = new ConfigInteger("cloudmusic.config.cache.max.mb", 512, 512, 8000, "cloudmusic.config.cache.max.mb.comment");
@@ -35,11 +34,11 @@ public class Configs implements IConfigHandler {
         public static final ConfigBoolean MUSIC_INFO = new ConfigBoolean("cloudmusic.config.music.info", true, "cloudmusic.config.music.info.comment");
         public static final ConfigInteger MUSIC_INFO_X = new ConfigInteger("cloudmusic.config.music.info.x", 0, 0, 4000, "cloudmusic.config.music.info.x.comment");
         public static final ConfigInteger MUSIC_INFO_Y = new ConfigInteger("cloudmusic.config.music.info.y", 30, 0, 3000, "cloudmusic.config.music.info.y.comment");
-        public static final ConfigString MUSIC_INFO_COLOR= new ConfigString("cloudmusic.config.music.info.color", "4DE41318", "cloudmusic.config.music.info.color.comment");
-        public static final ConfigString MUSIC_INFO_TITLE_FONT_COLOR= new ConfigString("cloudmusic.config.music.info.title.font.color", "FFFFFF", "cloudmusic.config.music.info.title.font.color.comment");
-        public static final ConfigString MUSIC_INFO_FONT_COLOR= new ConfigString("cloudmusic.config.music.info.font.color", "9E9E9E", "cloudmusic.config.music.info.font.color.comment");
+        public static final ConfigColor MUSIC_INFO_COLOR = new ConfigColor("cloudmusic.config.music.info.color", "#4DE41318", "cloudmusic.config.music.info.color.comment");
+        public static final ConfigColor MUSIC_INFO_TITLE_FONT_COLOR = new ConfigColor("cloudmusic.config.music.info.title.font.color", "#00FFFFFF", "cloudmusic.config.music.info.title.font.color.comment");
+        public static final ConfigColor MUSIC_INFO_FONT_COLOR = new ConfigColor("cloudmusic.config.music.info.font.color", "#009E9E9E", "cloudmusic.config.music.info.font.color.comment");
         public static final ConfigBoolean LYRIC = new ConfigBoolean("cloudmusic.config.lyric", true, "cloudmusic.config.lyric.comment");
-        public static final ConfigString LYRIC_COLOR = new ConfigString("cloudmusic.config.lyric.color", "FFFFFF", "cloudmusic.config.lyric.color.comment");
+        public static final ConfigColor LYRIC_COLOR = new ConfigColor("cloudmusic.config.lyric.color", "#00FFFFFF", "cloudmusic.config.lyric.color.comment");
         public static final ConfigDouble LYRIC_SCALE = new ConfigDouble("cloudmusic.config.lyric.scale", 1.5, "cloudmusic.config.lyric.scale.comment");
         public static final ConfigInteger LYRIC_X = new ConfigInteger("cloudmusic.config.lyric.x", 0, 0, 4000, "cloudmusic.config.lyric.x.comment");
         public static final ConfigInteger LYRIC_Y = new ConfigInteger("cloudmusic.config.lyric.y", 0, 0, 3000, "cloudmusic.config.lyric.y.comment");
@@ -66,6 +65,7 @@ public class Configs implements IConfigHandler {
             VOLUME,
             PLAY_URL,
             PLAY_LOOP,
+            PLAY_QUALITY,
             DJRADIO_PLAY_ASC,
             CACHE_PATH,
             CACHE_MAX_MB,
@@ -107,6 +107,7 @@ public class Configs implements IConfigHandler {
         public static final ConfigInteger VOLUME = ALL.VOLUME;
         public static final ConfigBoolean PLAY_URL = ALL.PLAY_URL;
         public static final ConfigBoolean PLAY_LOOP = ALL.PLAY_LOOP;
+        public static final ConfigOptionList PLAY_QUALITY = ALL.PLAY_QUALITY;
         public static final ConfigBoolean DJRADIO_PLAY_ASC = ALL.DJRADIO_PLAY_ASC;
         public static final ConfigString CACHE_PATH = ALL.CACHE_PATH;
         public static final ConfigInteger CACHE_MAX_MB = ALL.CACHE_MAX_MB;
@@ -116,6 +117,7 @@ public class Configs implements IConfigHandler {
             VOLUME,
             PLAY_URL,
             PLAY_LOOP,
+            PLAY_QUALITY,
             DJRADIO_PLAY_ASC,
             CACHE_PATH,
             CACHE_MAX_MB,
@@ -128,11 +130,11 @@ public class Configs implements IConfigHandler {
         public static final ConfigBoolean MUSIC_INFO = ALL.MUSIC_INFO;
         public static final ConfigInteger MUSIC_INFO_X = ALL.MUSIC_INFO_X;
         public static final ConfigInteger MUSIC_INFO_Y = ALL.MUSIC_INFO_Y;
-        public static final ConfigString MUSIC_INFO_COLOR = ALL.MUSIC_INFO_COLOR;
-        public static final ConfigString MUSIC_INFO_TITLE_FONT_COLOR = ALL.MUSIC_INFO_TITLE_FONT_COLOR;
-        public static final ConfigString MUSIC_INFO_FONT_COLOR = ALL.MUSIC_INFO_FONT_COLOR;
+        public static final ConfigColor MUSIC_INFO_COLOR = ALL.MUSIC_INFO_COLOR;
+        public static final ConfigColor MUSIC_INFO_TITLE_FONT_COLOR = ALL.MUSIC_INFO_TITLE_FONT_COLOR;
+        public static final ConfigColor MUSIC_INFO_FONT_COLOR = ALL.MUSIC_INFO_FONT_COLOR;
         public static final ConfigBoolean LYRIC = ALL.LYRIC;
-        public static final ConfigString LYRIC_COLOR = ALL.LYRIC_COLOR;
+        public static final ConfigColor LYRIC_COLOR = ALL.LYRIC_COLOR;
         public static final ConfigDouble LYRIC_SCALE = ALL.LYRIC_SCALE;
         public static final ConfigInteger LYRIC_X = ALL.LYRIC_X;
         public static final ConfigInteger LYRIC_Y = ALL.LYRIC_Y;

@@ -201,6 +201,12 @@
     "cloudmusic.exception.http": "网络请求重试超出最大次数 %d 次, 错误: %s",
     "cloudmusic.exception.http.download": "下载文件重试超出最大次数 %d 次, 错误: %s",
 
+    "cloudmusic.play.quality.standard": "标准",
+    "cloudmusic.play.quality.higher": "较高",
+    "cloudmusic.play.quality.exhigh": "极高",
+    "cloudmusic.play.quality.lossless": "无损 (VIP)",
+    "cloudmusic.play.quality.hires": "Hi-Res (VIP)",
+
     "cloudmusic.gui.configs.title": "CloudMusic 云歌曲 By FengLiuFeseliud",
     "cloudmusic.gui.tab.all": "全部",
     "cloudmusic.gui.tab.play": "播放",
@@ -217,6 +223,9 @@
 
     "cloudmusic.config.play.loop": "循环播放 | play.loop",
     "cloudmusic.config.play.loop.comment": "循环播放播放列表",
+
+    "cloudmusic.config.play.quality": "播放音质 | play.quality",
+    "cloudmusic.config.play.quality.comment": "最大播放音质 (默认 极高)",
 
     "cloudmusic.config.dj.radio.play.asc": "升序播放电台 | dj.radio.play.asc",
     "cloudmusic.config.dj.radio.play.asc.comment": "排序方式, 设置 true 可改为 老 => 新 (默认为 false 新 => 老)",
@@ -243,19 +252,19 @@
     "cloudmusic.config.music.info.y.comment": "歌曲信息绘制所在y轴",
 
     "cloudmusic.config.music.info.color": "歌曲信息背景颜色 | music.info.color",
-    "cloudmusic.config.music.info.color.comment": "歌曲信息背景颜色, 十六进制 (默认 4DE41318 半透明红色)",
+    "cloudmusic.config.music.info.color.comment": "歌曲信息背景颜色, 十六进制 (默认 #4DE41318 半透明红色)",
 
     "cloudmusic.config.music.info.title.font.color": "歌曲歌名颜色 | music.info.title.font.color",
-    "cloudmusic.config.music.info.title.font.color.comment": "歌曲歌名颜色, 十六进制 (默认 FFFFFF 白色)",
+    "cloudmusic.config.music.info.title.font.color.comment": "歌曲歌名颜色, 十六进制 (默认 #00FFFFFF 白色)",
 
     "cloudmusic.config.music.info.font.color": "歌曲副标题颜色 | music.info.font.color",
-    "cloudmusic.config.music.info.font.color.comment": "歌曲副标题颜色, 十六进制 (默认 9E9E9E 灰色)",
+    "cloudmusic.config.music.info.font.color.comment": "歌曲副标题颜色, 十六进制 (默认 #009E9E9E 灰色)",
 
     "cloudmusic.config.lyric": "绘制歌词 | lyric",
     "cloudmusic.config.lyric.comment": "是否在游戏内绘制歌词",
 
     "cloudmusic.config.lyric.color": "歌词颜色 | lyric.color",
-    "cloudmusic.config.lyric.color.comment": "歌词颜色, 十六进制 (默认 FFFFFF 白色)",
+    "cloudmusic.config.lyric.color.comment": "歌词颜色, 十六进制 (默认 #00FFFFFF 白色)",
 
     "cloudmusic.config.lyric.scale": "歌词缩放比例 | lyric.scale",
     "cloudmusic.config.lyric.scale.comment": "歌词绘制缩放比例 (默认 1.5 倍)",
