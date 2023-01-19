@@ -1,11 +1,8 @@
 package fengliu.cloudmusic.mixin;
 
-import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.music163.DjMusic;
 import fengliu.cloudmusic.music163.IMusic;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -24,9 +21,8 @@ import fengliu.cloudmusic.command.MusicCommand;
 import fengliu.cloudmusic.render.MusicIconTexture;
 import fengliu.cloudmusic.music163.Music;
 
-@Environment(EnvType.CLIENT)
 @Mixin(InGameHud.class)
-public class InGameHubMixin {
+public class MixinInGameHub {
     private final MinecraftClient client = MinecraftClient.getInstance();
     
     @Inject(method = "render", at = @At("HEAD"))

@@ -118,6 +118,7 @@ public class DjRadio extends MusicPlayer implements ICanSubscribe, IPrint {
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic dj play " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic dj subscribe " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unsubscribe").getString(), "/cloudmusic dj unsubscribe " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.DJ_RADIO.getShar(this.id));
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
 }

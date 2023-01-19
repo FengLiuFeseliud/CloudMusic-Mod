@@ -86,6 +86,7 @@ public class Album extends Music163Obj implements IMusicList, ICanSubscribe {
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic album play " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic album subscribe " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unsubscribe").getString(), "/cloudmusic album unsubscribe " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.ALBUM.getShar(this.id));
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
 

@@ -128,8 +128,9 @@ public class PlayList extends Music163Obj implements IMusicList, ICanSubscribe {
 
         Map<String, String> optionsTextData = new LinkedHashMap<>();
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic playlist play " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic platlist subscribe " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unsubscribe").getString(), "/cloudmusic platlist unsubscribe " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic playlist subscribe " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unsubscribe").getString(), "/cloudmusic playlist unsubscribe " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.PLAY_LIST.getShar(this.id));
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
 

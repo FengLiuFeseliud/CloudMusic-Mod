@@ -140,6 +140,7 @@ public class Artist extends Music163Obj implements IPrint, ICanSubscribe {
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.similar.artist").getString(), "/cloudmusic artist similar " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic artist subscribe " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unsubscribe").getString(), "/cloudmusic artist unsubscribe " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.ARTIST.getShar(this.id));
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
 

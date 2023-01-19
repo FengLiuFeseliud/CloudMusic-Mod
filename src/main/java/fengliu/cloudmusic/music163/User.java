@@ -188,6 +188,7 @@ public class User extends Music163Obj implements IPrint {
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.user.like").getString(), "/cloudmusic user like " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.user.playlist").getString(), "/cloudmusic user playlist " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.user.dj").getString(), "/cloudmusic user dj " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.USER.getShar(this.id));
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
 
         optionsTextData.clear();

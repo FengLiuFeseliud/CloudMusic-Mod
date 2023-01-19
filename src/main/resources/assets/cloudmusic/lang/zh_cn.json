@@ -82,6 +82,13 @@
     "cloudmusic.help.exit": "退出播放 (无法继续播放) /cloudmusic exit",
     "cloudmusic.help.cloudmusic": "显示本帮助 /cloudmusic",
 
+    "cloudmusic.shar.music": "分享网易云歌曲",
+    "cloudmusic.shar.album": "分享网易云专辑",
+    "cloudmusic.shar.artist": "分享网易云歌手",
+    "cloudmusic.shar.dj.radio": "分享网易云电台",
+    "cloudmusic.shar.playlist": "分享网易云歌单",
+    "cloudmusic.shar.user": "分享网易云用户",
+
     "cloudmusic.info.not.cookie": "§c§l无效的 Cookie, 请设置 Cookie 后重试",
     "cloudmusic.info.page.count": "§c§l===========%d页§c§l===========",
     "cloudmusic.info.volume": "当前音量: %d",
@@ -156,6 +163,7 @@
     "cloudmusic.info.command.country.code": "设置手机号国家码为 %d...",
 
     "cloudmusic.options.play": "[播放]",
+    "cloudmusic.options.shar": "[分享]",
     "cloudmusic.options.play.top50": "[热门50首]",
     "cloudmusic.options.album": "[专辑]",
     "cloudmusic.options.like": "[红心]",
