@@ -11,7 +11,8 @@ public enum Shares {
     ARTIST ("cloudmusic.shar.artist", "/cloudmusic artist"),
     DJ_RADIO ("cloudmusic.shar.dj.radio", "/cloudmusic dj"),
     PLAY_LIST ("cloudmusic.shar.playlist", "/cloudmusic playlist"),
-    USER ("cloudmusic.shar.user", "/cloudmusic user");
+    USER ("cloudmusic.shar.user", "/cloudmusic user"),
+    STYLE ("cloudmusic.shar.style", "/cloudmusic style");
 
     private final String translationKey;
     private final String command;

@@ -13,6 +13,7 @@ import java.util.Map;
 import fengliu.cloudmusic.config.Configs;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.util.MusicPlayer;
@@ -70,9 +71,11 @@ public class MusicCommand {
 
         Text.translatable("cloudmusic.help.my"),
         Text.translatable("cloudmusic.help.my.fm"),
+        Text.translatable("cloudmusic.help.my.intelligence"),
         Text.translatable("cloudmusic.help.my.like"),
         Text.translatable("cloudmusic.help.my.playlist"),
         Text.translatable("cloudmusic.help.my.dj"),
+        Text.translatable("cloudmusic.help.my.style"),
         Text.translatable("cloudmusic.help.my.playlist.add"),
         Text.translatable("cloudmusic.help.my.playlist.del"),
         Text.translatable("cloudmusic.help.my.recommend.music"),
@@ -80,6 +83,10 @@ public class MusicCommand {
         Text.translatable("cloudmusic.help.my.sublist.album"),
         Text.translatable("cloudmusic.help.my.sublist.artist"),
         Text.translatable("cloudmusic.help.my.sublist.dj"),
+
+        Text.translatable("cloudmusic.help.style"),
+        Text.translatable("cloudmusic.help.style.all"),
+        Text.translatable("cloudmusic.help.style.children"),
 
         Text.translatable("cloudmusic.help.search.music"),
         Text.translatable("cloudmusic.help.search.album"),
@@ -169,7 +176,7 @@ public class MusicCommand {
     }
 
     private static void resetCookie(String cookie){
-        if(cookie == null){
+        if(cookie == null || music163.getHttpClient().getCookies().equals(cookie)){
             return;
         }
 
@@ -214,6 +221,7 @@ public class MusicCommand {
         LiteralArgumentBuilder<FabricClientCommandSource> Dj = literal("dj");
         LiteralArgumentBuilder<FabricClientCommandSource> User = literal("user");
         LiteralArgumentBuilder<FabricClientCommandSource> My = literal("my");
+        LiteralArgumentBuilder<FabricClientCommandSource> Style = literal("style");
         LiteralArgumentBuilder<FabricClientCommandSource> Playing = literal("playing");
         LiteralArgumentBuilder<FabricClientCommandSource> Search = literal("search");
         LiteralArgumentBuilder<FabricClientCommandSource> Volume = literal("volume");
@@ -673,6 +681,16 @@ public class MusicCommand {
             return Command.SINGLE_SUCCESS;
         })));
 
+        // cloudmusic my intelligence
+        CloudMusic.then(My.then(literal("intelligence").executes(contextData -> {
+            runCommand(contextData, context -> {
+                resetPlayer(getMy(false).intelligencePlayMode());
+                context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.intelligence"));
+                player.start();
+            });
+            return Command.SINGLE_SUCCESS;
+        })));
+
         LiteralArgumentBuilder<FabricClientCommandSource> MyPlayList = literal("playlist");
 
         // cloudmusic my playlist
@@ -690,6 +708,16 @@ public class MusicCommand {
             runCommand(contextData, context -> {
                 page = getMy(false).djRadio();
                 page.setInfoText(Text.translatable("cloudmusic.info.page.user.dj", getMy(false).name));
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        })));
+
+        // cloudmusic my style
+        CloudMusic.then(My.then(literal("style").executes(contextData -> {
+            runCommand(contextData, context -> {
+                page = getMy(false).preferenceStyles();
+                page.setInfoText(Text.translatable("cloudmusic.info.page.preference.style", getMy(false).name));
                 page.look(context.getSource());
             });
             return Command.SINGLE_SUCCESS;
@@ -772,6 +800,44 @@ public class MusicCommand {
             });
             return Command.SINGLE_SUCCESS;
         }))));
+
+        // cloudmusic style id
+        CloudMusic.then(Style.then(
+            argument("id", IntegerArgumentType.integer()).executes(contextData -> {
+                runCommand(contextData, context -> {
+                    data = music163.style(IntegerArgumentType.getInteger(context, "id"));
+                    ((StyleTag) data).printToChatHud(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        ));
+
+        // cloudmusic style all
+        CloudMusic.then(Style.then(literal("all").executes(contextData -> {
+            runCommand(contextData, context -> {
+                page = music163.styleList();
+                page.setInfoText(Text.translatable("cloudmusic.info.page.style"));
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        })));
+
+        // cloudmusic style children id
+        CloudMusic.then(Style.then(literal("children").then(
+            argument("id", IntegerArgumentType.integer()).executes(contextData -> {
+                runCommand(contextData, context -> {
+                    StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
+                    page = style.childrenStyles();
+                    if (page == null) {
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.style.not.children", style.name, style.enName));
+                        return;
+                    }
+                    page.setInfoText(Text.translatable("cloudmusic.info.page.style.children", style.name, style.enName));
+                    page.look(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
 
         // cloudmusic search music
         CloudMusic.then(Search.then(literal("music").then(

@@ -185,7 +185,7 @@ public class MusicPlayer implements Runnable {
      * 通过 URL 播放歌曲
      * @param url 歌曲 url
      */
-    public void play(String url){
+    private void play(String url){
         try {
             this.play(AudioSystem.getAudioInputStream(AudioSystem.getAudioInputStream(new URL(url))));
         } catch (Exception e) {
@@ -197,7 +197,7 @@ public class MusicPlayer implements Runnable {
      * 通过文件对象播放歌曲
      * @param file 文件对象
      */
-    public void play(File file){
+    private void play(File file){
         try {
             this.play(AudioSystem.getAudioInputStream(file));
         } catch (Exception e) {

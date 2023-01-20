@@ -53,6 +53,30 @@ public class My extends User {
         };
     }
 
+    /**
+     * 心动模式
+     * @return 歌曲列表
+     */
+    public List<IMusic> intelligencePlayMode(){
+        PlayList playList = this.likeMusicPlayList();
+        List<IMusic> musics = playList.getMusics();
+        IMusic randomMusic = musics.get((int) (Math.random() * musics.size()));
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("songId", randomMusic.getId());
+        data.put("type", "fromPlayOne");
+        data.put("playlistId", playList.id);
+        data.put("startMusicId", randomMusic.getId());
+        data.put("count", 1);
+
+        musics.clear();
+        JsonObject json = this.api.POST_API("/api/playmode/intelligence/list", data);
+        json.getAsJsonArray("data").forEach(musicData -> {
+            musics.add(new Music(this.api, ((JsonObject) musicData).getAsJsonObject("songInfo"), null));
+        });
+        return musics;
+    }
+
     public ApiPage playListSetMusic(long musicId, String op){
         Object[] data = this.getPlayListPageData();
         return new ApiPage(((JsonObject) data[0]).getAsJsonArray("playlist"), this.playlistCount, "/api/user/playlist", this.api, (Map<String, Object>) data[1]) {
@@ -167,6 +191,22 @@ public class My extends User {
             musics.add(new Music(this.api, music.getAsJsonObject(), null));
         });
         return musics;
+    }
+
+    /**
+     * cookie 用户曲风偏好
+     * @return 页对象
+     */
+    public Page preferenceStyles(){
+        JsonObject json = this.api.POST_API("/api/tag/my/preference/get", null);
+        return new Page(json.getAsJsonObject("data").getAsJsonArray("tags")) {
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject style = (JsonObject) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + style.get("tagName").getAsString() + "§r§7 - " + style.get("enName").getAsString() + " - id: " + style.get("tagId").getAsInt(), "/cloudmusic style " + style.get("tagId").getAsInt());
+                return newPageData;
+            }
+        };
     }
 
 }

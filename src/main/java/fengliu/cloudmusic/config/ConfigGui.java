@@ -1,6 +1,7 @@
 package fengliu.cloudmusic.config;
 
 import fengliu.cloudmusic.CloudMusicClient;
+import fengliu.cloudmusic.command.MusicCommand;
 import fi.dy.masa.malilib.config.IConfigBase;
 import fi.dy.masa.malilib.gui.GuiConfigsBase;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
@@ -114,5 +115,7 @@ public class ConfigGui extends GuiConfigsBase {
     public void removed() {
         super.removed();
         Configs.INSTANCE.save();
+
+        MusicCommand.getPlayer().volumeSet(Configs.PLAY.VOLUME.getIntegerValue());
     }
 }

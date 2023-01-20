@@ -1,8 +1,10 @@
 package fengliu.cloudmusic.music163;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import fengliu.cloudmusic.util.page.Page;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonArray;
@@ -143,6 +145,18 @@ public class Music163 {
     }
 
     /**
+     * 获取曲风
+     * @param id 曲风 id
+     * @return 曲风对象
+     */
+    public StyleTag style(int id){
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("tagId", id);
+
+        return new StyleTag(this.api, this.api.POST_API("/api/style-tag/home/head", data).getAsJsonObject("data"));
+    }
+
+    /**
      * 获取搜索数据
      * @param key 搜索内容
      * @param type 搜索类型 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户
@@ -277,6 +291,25 @@ public class Music163 {
             protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
                 JsonObject djRadios = (JsonObject) data;
                 newPageData.put("[" +(newPageData.size() + 1) + "] §b" + djRadios.get("name").getAsString() + "§r§7 - " + djRadios.getAsJsonObject("dj").get("nickname").getAsString() + " - id: " + djRadios.get("id").getAsLong(), "/cloudmusic dj " + djRadios.get("id").getAsLong());
+                return newPageData;
+            }
+        };
+    }
+
+    public JsonArray styles(){
+        return this.api.POST_API("/api/tag/list/get", null).getAsJsonArray("data");
+    }
+
+    /**
+     * 曲风列表
+     * @return 页对象
+     */
+    public Page styleList(){
+        return new Page(this.styles()) {
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject style = (JsonObject) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + style.get("tagName").getAsString() + "§r§7 - " + style.get("enName").getAsString() + " - id: " + style.get("tagId").getAsInt(), "/cloudmusic style " + style.get("tagId").getAsInt());
                 return newPageData;
             }
         };
