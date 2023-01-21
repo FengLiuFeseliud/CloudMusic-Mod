@@ -327,7 +327,7 @@ public class MusicCommand {
             argument("id", LongArgumentType.longArg()).executes(contextData -> {
                 runCommand(contextData, context -> {
                     data = music163.playlist(LongArgumentType.getLong(context, "id"));
-                    ((fengliu.cloudmusic.music163.data.PlayList) data).printToChatHud(context.getSource());
+                    ((PlayList) data).printToChatHud(context.getSource());
                 });
                 return Command.SINGLE_SUCCESS;
             })
@@ -490,7 +490,7 @@ public class MusicCommand {
             argument("id", LongArgumentType.longArg()).executes(contextData -> {
                 runCommand(contextData, context -> {
                     data = music163.album(LongArgumentType.getLong(context, "id"));
-                    ((fengliu.cloudmusic.music163.data.Album) data).printToChatHud(context.getSource());
+                    ((Album) data).printToChatHud(context.getSource());
                 });
                 return Command.SINGLE_SUCCESS;
             })
