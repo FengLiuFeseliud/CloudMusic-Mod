@@ -1,7 +1,10 @@
-package fengliu.cloudmusic.music163;
+package fengliu.cloudmusic.music163.data;
 
 import com.google.gson.JsonObject;
 import fengliu.cloudmusic.config.Configs;
+import fengliu.cloudmusic.music163.ActionException;
+import fengliu.cloudmusic.music163.IMusic;
+import fengliu.cloudmusic.music163.Music163Obj;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.TextClick;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;

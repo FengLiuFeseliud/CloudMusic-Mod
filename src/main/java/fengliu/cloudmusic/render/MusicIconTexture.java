@@ -2,7 +2,6 @@ package fengliu.cloudmusic.render;
 
 import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.music163.IMusic;
-import fengliu.cloudmusic.music163.Music;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.QRCode;
 import net.minecraft.client.MinecraftClient;

@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import fengliu.cloudmusic.config.Configs;
+import fengliu.cloudmusic.music163.data.*;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.util.MusicPlayer;
@@ -87,6 +87,10 @@ public class MusicCommand {
         Text.translatable("cloudmusic.help.style"),
         Text.translatable("cloudmusic.help.style.all"),
         Text.translatable("cloudmusic.help.style.children"),
+        Text.translatable("cloudmusic.help.style.music"),
+        Text.translatable("cloudmusic.help.style.playlist"),
+        Text.translatable("cloudmusic.help.style.artist"),
+        Text.translatable("cloudmusic.help.style.album"),
 
         Text.translatable("cloudmusic.help.search.music"),
         Text.translatable("cloudmusic.help.search.album"),
@@ -323,7 +327,7 @@ public class MusicCommand {
             argument("id", LongArgumentType.longArg()).executes(contextData -> {
                 runCommand(contextData, context -> {
                     data = music163.playlist(LongArgumentType.getLong(context, "id"));
-                    ((PlayList) data).printToChatHud(context.getSource());
+                    ((fengliu.cloudmusic.music163.data.PlayList) data).printToChatHud(context.getSource());
                 });
                 return Command.SINGLE_SUCCESS;
             })
@@ -401,7 +405,7 @@ public class MusicCommand {
             argument("id", LongArgumentType.longArg()).executes(contextData -> {
                 runCommand(contextData, context -> {
                     data = music163.artist(LongArgumentType.getLong(context, "id"));
-                    ((Artist) data).printToChatHud(context.getSource());
+                    ((fengliu.cloudmusic.music163.data.Artist) data).printToChatHud(context.getSource());
                 });
                 return Command.SINGLE_SUCCESS;
             })
@@ -486,7 +490,7 @@ public class MusicCommand {
             argument("id", LongArgumentType.longArg()).executes(contextData -> {
                 runCommand(contextData, context -> {
                     data = music163.album(LongArgumentType.getLong(context, "id"));
-                    ((Album) data).printToChatHud(context.getSource());
+                    ((fengliu.cloudmusic.music163.data.Album) data).printToChatHud(context.getSource());
                 });
                 return Command.SINGLE_SUCCESS;
             })
@@ -833,6 +837,58 @@ public class MusicCommand {
                         return;
                     }
                     page.setInfoText(Text.translatable("cloudmusic.info.page.style.children", style.name, style.enName));
+                    page.look(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
+
+        // cloudmusic style music id
+        CloudMusic.then(Style.then(literal("music").then(
+            argument("id", IntegerArgumentType.integer()).executes(contextData -> {
+                runCommand(contextData, context -> {
+                    StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
+                    page = style.music();
+                    page.setInfoText(Text.translatable("cloudmusic.info.page.style.music", style.name, style.enName));
+                    page.look(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
+
+        // cloudmusic style playlist id
+        CloudMusic.then(Style.then(literal("playlist").then(
+            argument("id", IntegerArgumentType.integer()).executes(contextData -> {
+                runCommand(contextData, context -> {
+                    StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
+                    page = style.playlist();
+                    page.setInfoText(Text.translatable("cloudmusic.info.page.style.playlist", style.name, style.enName));
+                    page.look(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
+
+        // cloudmusic style artist id
+        CloudMusic.then(Style.then(literal("artist").then(
+            argument("id", IntegerArgumentType.integer()).executes(contextData -> {
+                runCommand(contextData, context -> {
+                    StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
+                    page = style.artist();
+                    page.setInfoText(Text.translatable("cloudmusic.info.page.style.artist", style.name, style.enName));
+                    page.look(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
+
+        // cloudmusic style album id
+        CloudMusic.then(Style.then(literal("album").then(
+            argument("id", IntegerArgumentType.integer()).executes(contextData -> {
+                runCommand(contextData, context -> {
+                    StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
+                    page = style.album();
+                    page.setInfoText(Text.translatable("cloudmusic.info.page.style.album", style.name, style.enName));
                     page.look(context.getSource());
                 });
                 return Command.SINGLE_SUCCESS;

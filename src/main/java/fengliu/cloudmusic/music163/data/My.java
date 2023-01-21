@@ -1,4 +1,4 @@
-package fengliu.cloudmusic.music163;
+package fengliu.cloudmusic.music163.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +8,7 @@ import java.util.Map;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import fengliu.cloudmusic.music163.IMusic;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.page.ApiPage;
 import fengliu.cloudmusic.util.page.Page;

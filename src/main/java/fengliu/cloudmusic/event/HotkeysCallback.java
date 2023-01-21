@@ -1,18 +1,15 @@
 package fengliu.cloudmusic.event;
 
-import com.mojang.brigadier.arguments.LongArgumentType;
-import com.mojang.brigadier.context.CommandContext;
 import fengliu.cloudmusic.command.MusicCommand;
 import fengliu.cloudmusic.config.ConfigGui;
 import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.music163.IMusic;
-import fengliu.cloudmusic.music163.Music;
+import fengliu.cloudmusic.music163.data.Music;
 import fengliu.cloudmusic.util.MusicPlayer;
 import fengliu.cloudmusic.util.page.Page;
 import fi.dy.masa.malilib.hotkeys.IHotkeyCallback;
 import fi.dy.masa.malilib.hotkeys.IKeybind;
 import fi.dy.masa.malilib.hotkeys.KeyAction;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 

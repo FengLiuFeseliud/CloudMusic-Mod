@@ -12,11 +12,11 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
  * 动态页对象, 翻页超出数据时自动请求 Api
  */
 public abstract class ApiPage extends Page {
-    private final String path;
-    private final HttpClient api;
-    private final Map<String, Object> postData;
+    protected final String path;
+    protected final HttpClient api;
+    protected final Map<String, Object> postData;
     private int canUsePageCount = 0;
-    private int getPageIn = 0;
+    protected int getPageIn = 0;
 
     /**
      * 动态页对象, 翻页超出数据时自动请求 Api
@@ -43,7 +43,7 @@ public abstract class ApiPage extends Page {
         this.canUsePageCount = this.data.size();
     }
 
-    private JsonArray getNewPageData(){
+    protected JsonArray getNewPageData(){
         this.getPageIn ++;
         this.postData.put("offset", (int) postData.get("limit") * this.getPageIn);
 

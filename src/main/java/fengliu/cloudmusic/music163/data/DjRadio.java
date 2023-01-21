@@ -1,8 +1,12 @@
-package fengliu.cloudmusic.music163;
+package fengliu.cloudmusic.music163.data;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fengliu.cloudmusic.config.Configs;
+import fengliu.cloudmusic.music163.ICanSubscribe;
+import fengliu.cloudmusic.music163.IPrint;
+import fengliu.cloudmusic.music163.Shares;
+import fengliu.cloudmusic.music163.data.DjMusic;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.MusicPlayer;
 import fengliu.cloudmusic.util.TextClick;

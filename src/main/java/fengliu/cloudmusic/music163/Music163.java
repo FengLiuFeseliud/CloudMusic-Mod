@@ -1,15 +1,14 @@
 package fengliu.cloudmusic.music163;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import fengliu.cloudmusic.music163.data.*;
 import fengliu.cloudmusic.util.page.Page;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonElement;
 
 
 import fengliu.cloudmusic.util.HttpClient;

@@ -1,7 +1,7 @@
 package fengliu.cloudmusic.mixin;
 
 import fengliu.cloudmusic.config.Configs;
-import fengliu.cloudmusic.music163.DjMusic;
+import fengliu.cloudmusic.music163.data.DjMusic;
 import fengliu.cloudmusic.music163.IMusic;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -20,7 +20,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import fengliu.cloudmusic.command.MusicCommand;
 import fengliu.cloudmusic.render.MusicIconTexture;
-import fengliu.cloudmusic.music163.Music;
+import fengliu.cloudmusic.music163.data.Music;
 
 @Mixin(InGameHud.class)
 public class MixinInGameHub {

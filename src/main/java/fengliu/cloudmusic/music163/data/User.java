@@ -1,7 +1,10 @@
-package fengliu.cloudmusic.music163;
+package fengliu.cloudmusic.music163.data;
 
 import java.util.*;
 
+import fengliu.cloudmusic.music163.*;
+import fengliu.cloudmusic.music163.data.Music;
+import fengliu.cloudmusic.music163.data.PlayList;
 import fengliu.cloudmusic.util.TextClick;
 import org.jetbrains.annotations.Nullable;
 

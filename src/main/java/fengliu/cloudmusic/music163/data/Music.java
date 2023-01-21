@@ -1,10 +1,11 @@
-package fengliu.cloudmusic.music163;
+package fengliu.cloudmusic.music163.data;
 
 import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Map;
 
 import fengliu.cloudmusic.config.Configs;
+import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.util.page.Page;
 import org.jetbrains.annotations.Nullable;
 
