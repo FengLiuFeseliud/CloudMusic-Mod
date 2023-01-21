@@ -405,7 +405,7 @@ public class MusicCommand {
             argument("id", LongArgumentType.longArg()).executes(contextData -> {
                 runCommand(contextData, context -> {
                     data = music163.artist(LongArgumentType.getLong(context, "id"));
-                    ((fengliu.cloudmusic.music163.data.Artist) data).printToChatHud(context.getSource());
+                    ((Artist) data).printToChatHud(context.getSource());
                 });
                 return Command.SINGLE_SUCCESS;
             })
