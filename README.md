@@ -10,6 +10,14 @@
 
 ![run.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/run.png?raw=true)
 
+## 分享
+
+可以在服务器内使用聊天框分享资源, 点击消息后自动填充获取资源指令
+
+只需要服务器其他人也安装 mod, 服务器不安装
+
+![share.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/share.png?raw=true)
+
 ## 登录
 
 实现了四种登录接口 验证码 手机号密码 邮箱 二维码
@@ -55,3 +63,7 @@
 ![7.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/7.png?raw=true)
 
 ![8.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/8.png?raw=true)
+
+![9.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/9.png?raw=true)
+
+![10.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/10.png?raw=true)
