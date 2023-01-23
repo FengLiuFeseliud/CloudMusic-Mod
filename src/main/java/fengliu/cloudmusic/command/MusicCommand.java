@@ -1130,7 +1130,7 @@ public class MusicCommand {
         
         // cloudmusic playing
         CloudMusic.then(Playing.executes(context -> {
-            player.playingMusic().printToChatHud(context.getSource());
+            player.getPlayingMusic().printToChatHud(context.getSource());
             return Command.SINGLE_SUCCESS;
         }));
 
@@ -1260,7 +1260,7 @@ public class MusicCommand {
                     .then(
                         // cloudmusic trash
                         literal("trash").executes(contextData -> {
-                            IMusic music = player.playingMusic();
+                            IMusic music = player.getPlayingMusic();
                             if (!(music instanceof Music)){
                                 return Command.SINGLE_SUCCESS;
                             }

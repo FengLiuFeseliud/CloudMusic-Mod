@@ -25,6 +25,7 @@ public class DjMusic extends Music163Obj implements IMusic {
     public final long listenerCount;
     public final long likedCount;
     public final String[] description;
+    public final long duration;
 
     /**
      * 初始化对象
@@ -44,6 +45,7 @@ public class DjMusic extends Music163Obj implements IMusic {
         this.listenerCount = data.get("listenerCount").getAsLong();
         this.likedCount = data.get("likedCount").getAsLong();
         this.description = data.get("description").getAsString().split("\n");
+        this.duration = data.get("duration").getAsLong();
     }
 
     @Override
@@ -78,6 +80,11 @@ public class DjMusic extends Music163Obj implements IMusic {
     }
 
     @Override
+    public long getDuration() {
+        return this.duration;
+    }
+
+    @Override
     public void printToChatHud(FabricClientCommandSource source) {
         source.sendFeedback(Text.literal(""));
 
@@ -88,6 +95,7 @@ public class DjMusic extends Music163Obj implements IMusic {
         source.sendFeedback(TextClick.suggestText("cloudmusic.info.dj.music.radio", this.radio.get("name").getAsString(), "/cloudmusic dj " + this.dj.get("userId").getAsLong()));
         source.sendFeedback(TextClick.suggestText("cloudmusic.info.dj.creator", "§b" + this.dj.get("nickname").getAsString(), "/cloudmusic user " + this.dj.get("userId").getAsLong()));
         source.sendFeedback(Text.translatable("cloudmusic.info.dj.music.count", this.listenerCount, this.likedCount));
+        source.sendFeedback(Text.translatable("cloudmusic.info.dj.music.duration", this.getDurationToString()));
         source.sendFeedback(Text.translatable("cloudmusic.info.dj.music.id", this.mainTrackId));
         source.sendFeedback(Text.translatable("cloudmusic.info.dj.id", this.id));
 

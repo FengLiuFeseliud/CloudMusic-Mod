@@ -1,8 +1,10 @@
 package fengliu.cloudmusic.mixin;
 
+import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.music163.data.DjMusic;
 import fengliu.cloudmusic.music163.IMusic;
+import fengliu.cloudmusic.util.MusicPlayer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -41,7 +43,8 @@ public class MixinInGameHub {
             DrawableHelper.drawTexture(imgMatrices, 0, 0, 0, 0, 128, 128, 128, 128);
         }
 
-        IMusic playingMusic = MusicCommand.getPlayer().playingMusic();
+        MusicPlayer player = MusicCommand.getPlayer();
+        IMusic playingMusic = player.getPlayingMusic();
 
         if(playingMusic == null){
             return;
@@ -72,7 +75,13 @@ public class MixinInGameHub {
         int y = Configs.GUI.MUSIC_INFO_Y.getIntegerValue();
         int x = Configs.GUI.MUSIC_INFO_X.getIntegerValue();
 
-        DrawableHelper.fill(matrices, width - 175 - x, y, width - x,  38 + y, Configs.GUI.MUSIC_INFO_COLOR.getIntegerValue());
+        DrawableHelper.fill(matrices, width - 175 - x, y, width - x,  48 + y, Configs.GUI.MUSIC_INFO_COLOR.getIntegerValue());
+        DrawableHelper.fill(matrices, width - 145 - x, 40 + y, width - 30 - x,  43 + y, Configs.GUI.MUSIC_PROGRESS_BAR_COLOR.getIntegerValue());
+        int progress = Math.round((115 / (float) playingMusic.getDurationSecond()) * player.getPlayingProgressSecond());
+        if (progress > 115){
+            progress = 115;
+        }
+        DrawableHelper.fill(matrices, width - 145 - x, 40 + y, width - 145 + progress - x,  43 + y, Configs.GUI.MUSIC_PLAYED_PROGRESS_BAR_COLOR.getIntegerValue());
         RenderSystem.setShaderTexture(0, MusicIconTexture.MUSIC_ICON_ID);
 
         MatrixStack imgMatrices =new MatrixStack();
@@ -81,6 +90,9 @@ public class MixinInGameHub {
         DrawableHelper.drawTexture(imgMatrices, 0, 0, 0, 0, 128, 128, 128, 128);
         client.textRenderer.draw(matrices, playingMusic.getName().length() > 16 ? playingMusic.getName().substring(0, 16) + "...": playingMusic.getName(), width - 135 - x, 4 + y, Configs.GUI.MUSIC_INFO_TITLE_FONT_COLOR.getIntegerValue());
 
+        int progressFontColor = Configs.GUI.MUSIC_PROGRESS_FONT_COLOR.getIntegerValue();
+        client.textRenderer.draw(matrices, player.getPlayingProgressToString(), width - 172 - x, 38 + y, progressFontColor);
+        client.textRenderer.draw(matrices, playingMusic.getDurationToString(), width - 28 - x, 38 + y, progressFontColor);
         int musicFontColor = Configs.GUI.MUSIC_INFO_FONT_COLOR.getIntegerValue();
         if (playingMusic instanceof DjMusic music){
             client.textRenderer.draw(matrices, Text.translatable("cloudmusic.info.dj.creator", music.dj.get("nickname").getAsString()), width - 135 - x, 14 + y, musicFontColor);

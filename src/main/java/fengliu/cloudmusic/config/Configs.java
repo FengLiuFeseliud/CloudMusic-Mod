@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import fengliu.cloudmusic.CloudMusicClient;
-import fengliu.cloudmusic.music163.IMusic;
 import fengliu.cloudmusic.music163.Quality;
 import fi.dy.masa.malilib.config.ConfigUtils;
 import fi.dy.masa.malilib.config.IConfigBase;
@@ -35,8 +34,11 @@ public class Configs implements IConfigHandler {
         public static final ConfigInteger MUSIC_INFO_X = new ConfigInteger("cloudmusic.config.music.info.x", 0, 0, 4000, "cloudmusic.config.music.info.x.comment");
         public static final ConfigInteger MUSIC_INFO_Y = new ConfigInteger("cloudmusic.config.music.info.y", 30, 0, 3000, "cloudmusic.config.music.info.y.comment");
         public static final ConfigColor MUSIC_INFO_COLOR = new ConfigColor("cloudmusic.config.music.info.color", "#4DE41318", "cloudmusic.config.music.info.color.comment");
+        public static final ConfigColor MUSIC_PROGRESS_BAR_COLOR = new ConfigColor("cloudmusic.config.music.progress.bar.color", "#FF858585", "cloudmusic.config.music.progress.bar.color.comment");
+        public static final ConfigColor MUSIC_PLAYED_PROGRESS_BAR_COLOR = new ConfigColor("cloudmusic.config.music.player.progress.bar.color", "#FFFF9600", "cloudmusic.config.music.player.progress.bar.color.comment");
+        public static final ConfigColor MUSIC_PROGRESS_FONT_COLOR = new ConfigColor("cloudmusic.config.music.progress.font.color", "#00858585", "cloudmusic.config.music.progress.font.color.comment");
         public static final ConfigColor MUSIC_INFO_TITLE_FONT_COLOR = new ConfigColor("cloudmusic.config.music.info.title.font.color", "#00FFFFFF", "cloudmusic.config.music.info.title.font.color.comment");
-        public static final ConfigColor MUSIC_INFO_FONT_COLOR = new ConfigColor("cloudmusic.config.music.info.font.color", "#009E9E9E", "cloudmusic.config.music.info.font.color.comment");
+        public static final ConfigColor MUSIC_INFO_FONT_COLOR = new ConfigColor("cloudmusic.config.music.info.font.color", "#00858585", "cloudmusic.config.music.info.font.color.comment");
         public static final ConfigBoolean LYRIC = new ConfigBoolean("cloudmusic.config.lyric", true, "cloudmusic.config.lyric.comment");
         public static final ConfigColor LYRIC_COLOR = new ConfigColor("cloudmusic.config.lyric.color", "#00FFFFFF", "cloudmusic.config.lyric.color.comment");
         public static final ConfigDouble LYRIC_SCALE = new ConfigDouble("cloudmusic.config.lyric.scale", 1.5, "cloudmusic.config.lyric.scale.comment");
@@ -75,6 +77,9 @@ public class Configs implements IConfigHandler {
             MUSIC_INFO_X,
             MUSIC_INFO_Y,
             MUSIC_INFO_COLOR,
+            MUSIC_PROGRESS_BAR_COLOR,
+            MUSIC_PLAYED_PROGRESS_BAR_COLOR,
+            MUSIC_PROGRESS_FONT_COLOR,
             MUSIC_INFO_TITLE_FONT_COLOR,
             MUSIC_INFO_FONT_COLOR,
             LYRIC,
@@ -131,6 +136,9 @@ public class Configs implements IConfigHandler {
         public static final ConfigInteger MUSIC_INFO_X = ALL.MUSIC_INFO_X;
         public static final ConfigInteger MUSIC_INFO_Y = ALL.MUSIC_INFO_Y;
         public static final ConfigColor MUSIC_INFO_COLOR = ALL.MUSIC_INFO_COLOR;
+        public static final ConfigColor MUSIC_PROGRESS_BAR_COLOR = ALL.MUSIC_PROGRESS_BAR_COLOR;
+        public static final ConfigColor MUSIC_PLAYED_PROGRESS_BAR_COLOR = ALL.MUSIC_PLAYED_PROGRESS_BAR_COLOR;
+        public static final ConfigColor MUSIC_PROGRESS_FONT_COLOR = ALL.MUSIC_PROGRESS_FONT_COLOR;
         public static final ConfigColor MUSIC_INFO_TITLE_FONT_COLOR = ALL.MUSIC_INFO_TITLE_FONT_COLOR;
         public static final ConfigColor MUSIC_INFO_FONT_COLOR = ALL.MUSIC_INFO_FONT_COLOR;
         public static final ConfigBoolean LYRIC = ALL.LYRIC;
@@ -145,6 +153,9 @@ public class Configs implements IConfigHandler {
             MUSIC_INFO_X,
             MUSIC_INFO_Y,
             MUSIC_INFO_COLOR,
+            MUSIC_PROGRESS_BAR_COLOR,
+            MUSIC_PLAYED_PROGRESS_BAR_COLOR,
+            MUSIC_PROGRESS_FONT_COLOR,
             MUSIC_INFO_TITLE_FONT_COLOR,
             MUSIC_INFO_FONT_COLOR,
             LYRIC,

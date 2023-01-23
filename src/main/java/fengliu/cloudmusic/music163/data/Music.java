@@ -205,6 +205,11 @@ public class Music extends Music163Obj implements IMusic {
     }
 
     @Override
+    public long getDuration() {
+        return this.duration * 1000;
+    }
+
+    @Override
     public void printToChatHud(FabricClientCommandSource source) {
        source.sendFeedback(Text.literal(""));
 
@@ -224,6 +229,7 @@ public class Music extends Music163Obj implements IMusic {
        
        source.sendFeedback(TextClick.suggestTextMap("cloudmusic.info.music.artist", artistsTextData, "§f§l/"));
        source.sendFeedback(TextClick.suggestText("cloudmusic.info.music.album", "§b" + this.album.get("name").getAsString(), "/cloudmusic album " + this.album.get("id").getAsLong()));
+       source.sendFeedback(Text.translatable("cloudmusic.info.music.duration", this.getDurationToString()));
        source.sendFeedback(Text.translatable("cloudmusic.info.music.id", this.id));
 
        Map<String, String> optionsTextData = new LinkedHashMap<>();

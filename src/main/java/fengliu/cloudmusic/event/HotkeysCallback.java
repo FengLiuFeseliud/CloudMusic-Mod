@@ -68,7 +68,7 @@ public class HotkeysCallback implements IHotkeyCallback {
 
         if (key == Configs.HOTKEY.SWITCH_PLAY_MUSIC.getKeybind() && action == KeyAction.PRESS){
             MusicPlayer player = MusicCommand.getPlayer();
-            if (player.playingMusic() == null){
+            if (player.getPlayingMusic() == null){
                 return true;
             }
 
@@ -113,7 +113,7 @@ public class HotkeysCallback implements IHotkeyCallback {
 
         if (key == Configs.HOTKEY.TRASH_ADD_PLAY_MUSIC.getKeybind() && action == KeyAction.PRESS){
             MusicPlayer player = MusicCommand.getPlayer();
-            IMusic music = player.playingMusic();
+            IMusic music = player.getPlayingMusic();
             if (!(music instanceof Music)){
                 return true;
             }
@@ -129,7 +129,7 @@ public class HotkeysCallback implements IHotkeyCallback {
         }
 
         if (key == Configs.HOTKEY.LIKE_MUSIC.getKeybind() && action == KeyAction.PRESS){
-            IMusic music = MusicCommand.getPlayer().playingMusic();
+            IMusic music = MusicCommand.getPlayer().getPlayingMusic();
             if (!(music instanceof Music)){
                 return true;
             }
@@ -145,7 +145,7 @@ public class HotkeysCallback implements IHotkeyCallback {
         }
 
         if (key == Configs.HOTKEY.PLAYLIST_ADD_MUSIC.getKeybind() && action == KeyAction.PRESS){
-            IMusic music = MusicCommand.getPlayer().playingMusic();
+            IMusic music = MusicCommand.getPlayer().getPlayingMusic();
             if (!(music instanceof Music)){
                 return true;
             }
@@ -160,7 +160,7 @@ public class HotkeysCallback implements IHotkeyCallback {
         }
 
         if (key == Configs.HOTKEY.PLAYLIST_DEL_MUSIC.getKeybind() && action == KeyAction.PRESS){
-            IMusic music = MusicCommand.getPlayer().playingMusic();
+            IMusic music = MusicCommand.getPlayer().getPlayingMusic();
             if (!(music instanceof Music)){
                 return true;
             }

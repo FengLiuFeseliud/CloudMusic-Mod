@@ -111,8 +111,10 @@
     "cloudmusic.info.not.cookie": "§c§l无效的 Cookie, 请设置 Cookie 后重试",
     "cloudmusic.info.page.count": "§c§l===========%d页§c§l===========",
     "cloudmusic.info.volume": "当前音量: %d",
+
     "cloudmusic.info.music.artist": "%d",
     "cloudmusic.info.music.album": "专辑: %d",
+    "cloudmusic.info.music.duration": "时长: %d",
     "cloudmusic.info.music.id": "id: %d",
 
     "cloudmusic.info.playlist.creator": "创建者: %d",
@@ -137,6 +139,7 @@
     "cloudmusic.info.dj.size": "节目数: %d",
     "cloudmusic.info.dj.count": "收藏数: %d 分享数: %d",
     "cloudmusic.info.dj.music.count": "播放数: %d 点赞数: %d",
+    "cloudmusic.info.dj.music.duration": "时长: %d",
     "cloudmusic.info.dj.music.id": "电台歌曲 id (用于获取歌曲 url): %d",
     "cloudmusic.info.dj.id": "id: %d",
 
@@ -298,11 +301,20 @@
     "cloudmusic.config.music.info.color": "歌曲信息背景颜色 | music.info.color",
     "cloudmusic.config.music.info.color.comment": "歌曲信息背景颜色, 十六进制 (默认 #4DE41318 半透明红色)",
 
+    "cloudmusic.config.music.progress.bar.color": "歌曲进度条颜色 | music.progress.bar.color",
+    "cloudmusic.config.music.progress.bar.color.comment": "歌曲进度条颜色, 十六进制 (默认 #FF858585 灰色)",
+
+    "cloudmusic.config.music.player.progress.bar.color": "歌曲已播放进度条颜色 | music.player.progress.bar.color",
+    "cloudmusic.config.music.player.progress.bar.color.comment": "歌曲已播放进度条颜色, 十六进制 (默认 #FFFF9600 黄色)",
+
+    "cloudmusic.config.music.progress.font.color": "歌曲播放进度信息颜色 | music.progress.font.color",
+    "cloudmusic.config.music.progress.font.color.comment": "歌曲播放进度信息颜色, 十六进制 (默认 #00858585 灰色)",
+
     "cloudmusic.config.music.info.title.font.color": "歌曲歌名颜色 | music.info.title.font.color",
     "cloudmusic.config.music.info.title.font.color.comment": "歌曲歌名颜色, 十六进制 (默认 #00FFFFFF 白色)",
 
     "cloudmusic.config.music.info.font.color": "歌曲副标题颜色 | music.info.font.color",
-    "cloudmusic.config.music.info.font.color.comment": "歌曲副标题颜色, 十六进制 (默认 #009E9E9E 灰色)",
+    "cloudmusic.config.music.info.font.color.comment": "歌曲副标题颜色, 十六进制 (默认 #00858585 灰色)",
 
     "cloudmusic.config.lyric": "绘制歌词 | lyric",
     "cloudmusic.config.lyric.comment": "是否在游戏内绘制歌词",

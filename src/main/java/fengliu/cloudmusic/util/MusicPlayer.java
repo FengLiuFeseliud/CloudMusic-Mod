@@ -30,6 +30,7 @@ import net.minecraft.text.Text;
 public class MusicPlayer implements Runnable {
     private final MinecraftClient client = MinecraftClient.getInstance();
     protected final List<IMusic> playList;
+    private IMusic playingMusic = null;
     private SourceDataLine play;
     private Lyric lyric;
     protected int playIn = 0;
@@ -37,6 +38,8 @@ public class MusicPlayer implements Runnable {
     protected boolean loopPlayIn = true;
     private boolean load;
     private int Volume;
+    private long playingProgress;
+    private long startPlayingTime;
 
     /**
      * 通过音量百分比计算音量增益
@@ -121,6 +124,7 @@ public class MusicPlayer implements Runnable {
             this.lyric = null;
         }
 
+        this.playingMusic = music;
         if(!Configs.PLAY.PLAY_URL.getBooleanValue()){
             String[] urls = musicUrl.split("\\.");
             String fileType = urls[urls.length - 1];
@@ -169,12 +173,14 @@ public class MusicPlayer implements Runnable {
         byte[] tempBuff = new byte[1024];
 
         this.load = true;
+        this.startPlayingTime = System.currentTimeMillis();
         while((count = audioInputStream.read(tempBuff,0,tempBuff.length)) != -1){
             synchronized(this){
             while(!load)
                 wait();
             }
             play.write(tempBuff,0,count);
+            this.playingProgress = System.currentTimeMillis() - this.startPlayingTime;
 
         }
 
@@ -314,6 +320,7 @@ public class MusicPlayer implements Runnable {
         if (this.lyric != null){
             this.lyric.continues();
         }
+        this.startPlayingTime = System.currentTimeMillis() - this.playingProgress;
 
         synchronized(this){
             this.load = true;
@@ -333,7 +340,7 @@ public class MusicPlayer implements Runnable {
             this.playListSize = this.playList.size();
         }
 
-        this.playList.remove(this.playingMusic());
+        this.playList.remove(this.getPlayingMusic());
         this.playListSize -= 1;
         this.playIn -= 1;
         this.next();
@@ -343,16 +350,20 @@ public class MusicPlayer implements Runnable {
      * 正在播放 
      * @return 歌曲对象
      */
-    public IMusic playingMusic(){
-        if(this.playList.isEmpty()){
-            return null;
-        }
-        
-        try {
-            return this.playList.get(this.playIn);
-        } catch (Exception err) {
-            return null;
-        }
+    public IMusic getPlayingMusic(){
+        return this.playingMusic;
+    }
+
+    public long getPlayingProgress() {
+        return this.playingProgress;
+    }
+
+    public int getPlayingProgressSecond() {
+        return (int) (this.playingProgress / 1000);
+    }
+
+    public String getPlayingProgressToString() {
+        return Time.secondToString(this.getPlayingProgressSecond());
     }
 
     public Page playingAll(){
