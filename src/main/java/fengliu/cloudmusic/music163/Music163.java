@@ -314,4 +314,158 @@ public class Music163 {
         };
     }
 
+    /**
+     * 歌单标签
+     * @return 页对象
+     */
+    public Page playListTags(){
+        return new Page(this.api.POST_API("/api/playlist/catalogue", null).getAsJsonArray("sub")) {
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject tags = (JsonObject) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + tags.get("name").getAsString(), "/cloudmusic top playlist \"" + tags.get("name").getAsString() + "\"");
+                return newPageData;
+            }
+        };
+    }
+
+    /**
+     * 热门歌单标签
+     * @return 页对象
+     */
+    public Page playListTagsHot(){
+        return new Page(this.api.POST_API("/api/playlist/hottags", null).getAsJsonArray("tags")) {
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject tags = (JsonObject) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + tags.get("name").getAsString(), "/cloudmusic top playlist \"" + tags.get("name").getAsString() + "\"");
+                return newPageData;
+            }
+        };
+    }
+
+    /**
+     * 精品歌单标签
+     * @return 页对象
+     */
+    public Page playListHighQualityTags(){
+        return new Page(this.api.POST_API("/api/playlist/highquality/tags", null).getAsJsonArray("tags")) {
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject tags = (JsonObject) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + tags.get("name").getAsString(), "/cloudmusic top playlist highquality \"" + tags.get("name").getAsString() + "\"");
+                return newPageData;
+            }
+        };
+    }
+
+    /**
+     * 获取精品歌单
+     * @param highQualityTags 标签 playListHighQualityTags()
+     * @return 页对象
+     */
+    public Page topPlayListHighQuality(String highQualityTags){
+        Map<String, Object> data = new HashMap<>();
+        data.put("cat", highQualityTags);
+        data.put("limit", 48);
+        data.put("lasttime", 0);
+        data.put("total", true);
+
+        JsonObject json = this.api.POST_API("/api/playlist/highquality/list", data);
+        if (!json.has("total")){
+            return null;
+        }
+        return new ApiPage(json.getAsJsonArray("playlists"), json.get("total").getAsInt(), "/api/playlist/highquality/list", this.api, data) {
+            @Override
+            protected JsonArray getNewPageData() {
+                this.getPageIn ++;
+
+                JsonObject json = this.api.POST_API(this.path, postData);
+                this.postData.put("lasttime", json.get("lasttime").getAsLong());
+                return this.getNewPageDataJsonArray(json);
+            }
+
+            @Override
+            protected JsonArray getNewPageDataJsonArray(JsonObject result) {
+                return json.getAsJsonArray("playlists");
+            }
+
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject playList = (JsonObject) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r§7 - "+ playList.getAsJsonObject("creator").get("nickname").getAsString() +" - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
+                return newPageData;
+            }
+        };
+    }
+
+    /**
+     * 歌单 (网友精选碟)
+     * @param tag 标签 topPlayListTags() / topPlayListTagsHot()
+     * @return 页对象
+     */
+    public Page topPlayList(String tag){
+        Map<String, Object> data = new HashMap<>();
+        data.put("cat", tag);
+        data.put("limit", 48);
+        data.put("offset", 0);
+        data.put("order", "hot");
+        data.put("total", true);
+
+        JsonObject json = this.api.POST_API("/api/playlist/list", data);
+        return new ApiPage(json.getAsJsonArray("playlists"), json.get("total").getAsInt(), "/api/playlist/list", this.api, data) {
+            @Override
+            protected JsonArray getNewPageDataJsonArray(JsonObject result) {
+                return json.getAsJsonArray("playlists");
+            }
+
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject playList = (JsonObject) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r§7 - "+ playList.getAsJsonObject("creator").get("nickname").getAsString() +" - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
+                return newPageData;
+            }
+        };
+    }
+
+    /**
+     * 所有榜单
+     * @return 页对象
+     */
+    public Page topList(){
+        JsonObject json = this.api.POST_API("/api/toplist", null);
+        return new Page(json.getAsJsonArray("list")) {
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject playList = (JsonObject) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r§7 - "+ playList.get("updateFrequency").getAsString() + " - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
+                return newPageData;
+            }
+        };
+    }
+
+    /**
+     * 歌手榜
+     * @return 页对象
+     */
+    public Page topArtistList(){
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("type", 1);
+        data.put("limit", 100);
+        data.put("offset", 0);
+        data.put("total", true);
+
+        JsonObject json = this.api.POST_API("/api/toplist/artist", data);
+        return new Page(json.getAsJsonObject("list").getAsJsonArray("artists")) {
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject artist = (JsonObject) data;
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + artist.get("name").getAsString() + "§r§7 - id: " + artist.get("id").getAsLong(), "/cloudmusic artist " + artist.get("id").getAsLong());
+                return newPageData;
+            }
+        };
+    }
+
+
+
 }

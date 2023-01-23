@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import fengliu.cloudmusic.music163.*;
@@ -28,7 +29,6 @@ public class PlayList extends Music163Obj implements IMusicList, ICanSubscribe {
     public final JsonObject creator;
     public final String[] description;
     public final JsonArray tags;
-    public final String tagsStr;
     private final JsonArray tracks;
     private List<IMusic> musics;
 
@@ -54,16 +54,6 @@ public class PlayList extends Music163Obj implements IMusicList, ICanSubscribe {
             this.description = null;
         }
         this.tags = playlist.get("tags").getAsJsonArray();
-
-        String[] _tagsStr = {""};
-        this.tags.forEach(element -> {
-            _tagsStr[0] += element.getAsString() + "/";
-        });
-        if(!_tagsStr[0].isEmpty()){
-            this.tagsStr = (String) _tagsStr[0].subSequence(0, _tagsStr[0].length() - 1);
-        }else{
-            this.tagsStr = "";
-        }
 
         if(!playlist.get("tracks").isJsonNull()){
             this.tracks = playlist.get("tracks").getAsJsonArray();
@@ -115,8 +105,13 @@ public class PlayList extends Music163Obj implements IMusicList, ICanSubscribe {
         source.sendFeedback(Text.literal(""));
 
         source.sendFeedback(TextClick.suggestText("cloudmusic.info.playlist.creator", "§b" + this.creator.get("nickname").getAsString(), "/cloudmusic user " + this.creator.get("userId").getAsLong()));
-        if(!this.tagsStr.isEmpty()){
-            source.sendFeedback(Text.translatable("cloudmusic.info.playlist.tags", this.tagsStr));
+        if(!this.tags.isEmpty()){
+            Map<String, String> tagsTextData = new LinkedHashMap<>();
+            for(JsonElement tag: this.tags){
+                String tagName = tag.getAsString();
+                tagsTextData.put("§b§n" + tagName, "/cloudmusic top playlist \"" + tagName + "\"");
+            }
+            source.sendFeedback(TextClick.suggestTextMap("cloudmusic.info.playlist.tags", tagsTextData, "§f§l/"));
         }
         source.sendFeedback(Text.translatable("cloudmusic.info.playlist.count", this.count, this.playCount));
         source.sendFeedback(Text.translatable("cloudmusic.info.playlist.id", this.id));

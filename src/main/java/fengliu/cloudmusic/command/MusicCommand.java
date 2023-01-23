@@ -92,6 +92,14 @@ public class MusicCommand {
         Text.translatable("cloudmusic.help.style.artist"),
         Text.translatable("cloudmusic.help.style.album"),
 
+        Text.translatable("cloudmusic.help.top.list"),
+        Text.translatable("cloudmusic.help.top.artist"),
+        Text.translatable("cloudmusic.help.top.playlist.highquality.tags"),
+        Text.translatable("cloudmusic.help.top.playlist.highquality"),
+        Text.translatable("cloudmusic.help.top.playlist.tags"),
+        Text.translatable("cloudmusic.help.top.playlist.tags.hot"),
+        Text.translatable("cloudmusic.help.top.playlist"),
+
         Text.translatable("cloudmusic.help.search.music"),
         Text.translatable("cloudmusic.help.search.album"),
         Text.translatable("cloudmusic.help.search.artist"),
@@ -226,6 +234,7 @@ public class MusicCommand {
         LiteralArgumentBuilder<FabricClientCommandSource> User = literal("user");
         LiteralArgumentBuilder<FabricClientCommandSource> My = literal("my");
         LiteralArgumentBuilder<FabricClientCommandSource> Style = literal("style");
+        LiteralArgumentBuilder<FabricClientCommandSource> Top = literal("top");
         LiteralArgumentBuilder<FabricClientCommandSource> Playing = literal("playing");
         LiteralArgumentBuilder<FabricClientCommandSource> Search = literal("search");
         LiteralArgumentBuilder<FabricClientCommandSource> Volume = literal("volume");
@@ -889,6 +898,111 @@ public class MusicCommand {
                     StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
                     page = style.album();
                     page.setInfoText(Text.translatable("cloudmusic.info.page.style.album", style.name, style.enName));
+                    page.look(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
+
+        // cloudmusic top list
+        CloudMusic.then(Top.then(literal("list").executes(contextData -> {
+            runCommand(contextData, context -> {
+                page = music163.topList();
+                page.setInfoText(Text.translatable("cloudmusic.info.page.top.list"));
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        })));
+
+        // cloudmusic top artist
+        CloudMusic.then(Top.then(literal("artist").executes(contextData -> {
+            runCommand(contextData, context -> {
+                page = music163.topArtistList();
+                page.setInfoText(Text.translatable("cloudmusic.info.page.top.artist"));
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        })));
+
+        LiteralArgumentBuilder<FabricClientCommandSource> TopPlayList = literal("playlist");
+        LiteralArgumentBuilder<FabricClientCommandSource> HighQuality = literal("highquality");
+
+        // cloudmusic top playlist highquality tags
+        CloudMusic.then(Top.then(TopPlayList.then(HighQuality.then(literal("tags").executes(contextData -> {
+            runCommand(contextData, context -> {
+                page = music163.playListHighQualityTags();
+                page.setInfoText(Text.translatable("cloudmusic.info.page.top.playlist.highquality.tags"));
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        })))));
+
+        // cloudmusic top playlist highquality
+        CloudMusic.then(Top.then(TopPlayList.then(HighQuality.executes(contextData -> {
+            runCommand(contextData, context -> {
+                page = music163.topPlayListHighQuality("全部");
+                page.setInfoText(Text.translatable("cloudmusic.info.page.top.playlist.highquality", "全部"));
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        }))));
+
+        // cloudmusic top playlist highquality tag
+        CloudMusic.then(Top.then(TopPlayList.then(HighQuality.then(
+            argument("tag", StringArgumentType.string()).executes(contextData -> {
+                runCommand(contextData, context -> {
+                    String tag = StringArgumentType.getString(context, "tag");
+                    page = music163.topPlayListHighQuality(tag);
+                    if (page == null) {
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.tag.not.top.playlist.highquality", tag));
+                        return;
+                    }
+                    page.setInfoText(Text.translatable("cloudmusic.info.page.top.playlist.highquality", tag));
+                    page.look(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        ))));
+
+        LiteralArgumentBuilder<FabricClientCommandSource> Tags = literal("tags");
+
+        // cloudmusic top playlist tags
+        CloudMusic.then(Top.then(TopPlayList.then(Tags.executes(contextData -> {
+            runCommand(contextData, context -> {
+                page = music163.playListTags();
+                page.setInfoText(Text.translatable("cloudmusic.info.page.top.playlist.tags"));
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        }))));
+
+        // cloudmusic top playlist tags hot
+        CloudMusic.then(Top.then(TopPlayList.then(Tags.then(literal("hot").executes(contextData -> {
+            runCommand(contextData, context -> {
+                page = music163.playListTagsHot();
+                page.setInfoText(Text.translatable("cloudmusic.info.page.top.playlist.hot.tags"));
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        })))));
+
+        // cloudmusic top playlist
+        CloudMusic.then(Top.then(TopPlayList.executes(contextData -> {
+            runCommand(contextData, context -> {
+                page = music163.topPlayList("全部");
+                page.setInfoText(Text.translatable("cloudmusic.info.page.top.playlist", "全部"));
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        })));
+
+        // cloudmusic top playlist tag
+        CloudMusic.then(Top.then(TopPlayList.then(
+            argument("tag", StringArgumentType.string()).executes(contextData -> {
+                runCommand(contextData, context -> {
+                    String tag = StringArgumentType.getString(context, "tag");
+                    page = music163.topPlayList(tag);
+                    page.setInfoText(Text.translatable("cloudmusic.info.page.top.playlist", tag));
                     page.look(context.getSource());
                 });
                 return Command.SINGLE_SUCCESS;
