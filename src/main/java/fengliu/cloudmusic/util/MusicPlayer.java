@@ -271,6 +271,10 @@ public class MusicPlayer implements Runnable {
         next();
     }
 
+    /**
+     * 跳转至...首播放
+     * @param in 歌曲序号 (索引加一)
+     */
     public void to(int in){
         in -= 1;
         if(in < 0){
@@ -354,18 +358,34 @@ public class MusicPlayer implements Runnable {
         return this.playingMusic;
     }
 
+    /**
+     * 获取播放进度 (毫秒)
+     * @return 毫秒
+     */
     public long getPlayingProgress() {
         return this.playingProgress;
     }
 
+    /**
+     * 获取播放进度 (秒)
+     * @return 秒
+     */
     public int getPlayingProgressSecond() {
         return (int) (this.playingProgress / 1000);
     }
 
+    /**
+     * 获取播放进度 (字符串)
+     * @return 播放进度字符串 (格式 "分:秒")
+     */
     public String getPlayingProgressToString() {
         return Time.secondToString(this.getPlayingProgressSecond());
     }
 
+    /**
+     * 播放队列
+     * @return 页对象
+     */
     public Page playingAll(){
         return new Page(this.playList) {
 

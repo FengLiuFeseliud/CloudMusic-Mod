@@ -1,6 +1,8 @@
 package fengliu.cloudmusic.music163;
 
 import com.google.gson.JsonObject;
+import fengliu.cloudmusic.command.MusicCommand;
+import fengliu.cloudmusic.util.MusicPlayer;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -86,32 +88,41 @@ public class Lyric implements Runnable{
             return;
         }
 
-        long stTime = System.currentTimeMillis();
-        while (this.loopIn){
-            long time = System.currentTimeMillis() - stTime;
-            synchronized(this){
-                while(!load) {
-                    try {
-                        wait();
-                        stTime = System.currentTimeMillis() - time;
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+        MusicPlayer player = MusicCommand.getPlayer();
+        this.lyric.forEach((lyricTime, lyricData) -> {
+            if (!this.loopIn) {
+                return;
+            }
+
+            String lyric = null, tlyric = null;
+            while (this.loopIn) {
+                synchronized(this){
+                    while(!load) {
+                        try {
+                            wait();
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
+                }
+
+                long time = player.getPlayingProgress();
+                if (time >= lyricTime){
+                    lyric = lyricData;
+                    tlyric = this.tlyric.get(lyricTime);
+                    break;
                 }
             }
 
-            String lyric = this.lyric.get(time);
-            if(lyric == null){
-                continue;
+            if (lyric != null && tlyric == null){
+                this.toLyric = new String[]{lyric};
             }
 
-            String tlyric = this.tlyric.get(time);
-            if(tlyric == null){
-                this.toLyric = new String[]{lyric};
-                continue;
+            if(lyric != null && tlyric != null){
+                this.toLyric = new String[]{lyric, tlyric};
             }
-            this.toLyric = new String[]{lyric, tlyric};
-        }
+
+        });
         this.toLyric.clone();
     }
 
