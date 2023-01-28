@@ -56,7 +56,7 @@ public class Album extends Music163Obj implements IMusicList, ICanSubscribe {
             source.sendFeedback(Text.literal(this.name));
         }else{
             String aliasName = "";
-            for(JsonElement alia: this.alias.asList()){
+            for(JsonElement alia: this.alias){
                 aliasName += alia.getAsString() + " / ";
             }
             aliasName = aliasName.substring(0, aliasName.length() - 3);
@@ -67,9 +67,9 @@ public class Album extends Music163Obj implements IMusicList, ICanSubscribe {
         source.sendFeedback(Text.literal(""));
         
         Map<String, String> artistsTextData = new LinkedHashMap<>();
-        for (JsonElement artistData : this.artists.asList()) {
-                JsonObject artist = artistData.getAsJsonObject();
-                artistsTextData.put("§b§n" + artist.get("name").getAsString(), "/cloudmusic artist " + artist.get("id").getAsLong());
+        for (JsonElement artistData : this.artists) {
+            JsonObject artist = artistData.getAsJsonObject();
+            artistsTextData.put("§b§n" + artist.get("name").getAsString(), "/cloudmusic artist " + artist.get("id").getAsLong());
         }
 
         source.sendFeedback(TextClick.suggestTextMap(artistsTextData, "§f§l/"));

@@ -7,9 +7,11 @@ import java.util.Map.Entry;
 
 import java.util.Map;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import fengliu.cloudmusic.CloudMusicClient;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.util.TextClick;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -112,11 +114,11 @@ public abstract class Page {
     }
 
     public Page(JsonArray data) {
-        this(data.asList());
+        this((List<?>) new Gson().fromJson(data, new TypeToken<List<JsonElement>>(){}.getType()));
     }
 
     public Page(JsonArray data, int dataCount) {
-        this(data.asList(), dataCount);
+        this((List<?>) new Gson().fromJson(data, new TypeToken<List<JsonElement>>(){}.getType()), dataCount);
     }
 
     /**

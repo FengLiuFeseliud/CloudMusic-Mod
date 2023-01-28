@@ -1,10 +1,14 @@
 package fengliu.cloudmusic.util.page;
 
+import java.util.List;
 import java.util.Map;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import com.google.gson.reflect.TypeToken;
 import fengliu.cloudmusic.util.HttpClient;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
@@ -39,7 +43,7 @@ public abstract class ApiPage extends Page {
     }
 
     private void addCanUsePage(JsonArray data){
-        this.data.addAll(this.splitData(data.asList()));
+        this.data.addAll(this.splitData(new Gson().fromJson(data, new TypeToken<List<JsonElement>>(){}.getType())));
         this.canUsePageCount = this.data.size();
     }
 

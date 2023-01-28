@@ -25,7 +25,7 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "fi.dy.masa.malilib:malilib-fabric-${project.minecraft_version}:${project.malilib_version}"
+	modImplementation "fi.dy.masa.malilib:malilib-fabric-1.19.2:${project.malilib_version}"
 
 	modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 

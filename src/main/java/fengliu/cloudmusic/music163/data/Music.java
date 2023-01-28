@@ -221,7 +221,7 @@ public class Music extends Music163Obj implements IMusic {
        source.sendFeedback(Text.literal(""));
 
        Map<String, String> artistsTextData = new LinkedHashMap<>();
-       for (JsonElement artistData : this.artists.asList()) {
+       for (JsonElement artistData : this.artists) {
             JsonObject artist = artistData.getAsJsonObject();
             artistsTextData.put("§b§n" + artist.get("name").getAsString(), "/cloudmusic artist " + artist.get("id").getAsLong());
        }

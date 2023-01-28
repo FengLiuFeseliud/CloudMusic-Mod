@@ -32,10 +32,9 @@
 
   "depends": {
     "fabricloader": ">=0.14.11",
-    "fabric-api": "*",
-    "minecraft": "~1.19.3",
-    "java": ">=17"
+    "fabric-api": "*"
   },
+
   "suggests": {
     "another-mod": "*"
   }

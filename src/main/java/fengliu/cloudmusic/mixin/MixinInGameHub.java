@@ -33,7 +33,7 @@ public class MixinInGameHub {
         if(MusicCommand.loadQRCode){
             int width = this.client.getWindow().getScaledWidth();
 
-            RenderSystem.setShader(GameRenderer::getPositionProgram);
+            RenderSystem.setShader(GameRenderer::getPositionShader);
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
             RenderSystem.setShaderTexture(0, MusicIconTexture.QR_CODE_ID);
 
@@ -50,7 +50,7 @@ public class MixinInGameHub {
             return;
         }
 
-        RenderSystem.setShader(GameRenderer::getPositionProgram);
+        RenderSystem.setShader(GameRenderer::getPositionShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         int width = this.client.getWindow().getScaledWidth();
 
@@ -109,7 +109,7 @@ public class MixinInGameHub {
         }
 
         StringBuilder artist = new StringBuilder();
-        for (JsonElement artistData : music.artists.asList()) {
+        for (JsonElement artistData : music.artists) {
             artist.append(artistData.getAsJsonObject().get("name").getAsString()).append("/");
         }
         artist = new StringBuilder(artist.substring(0, artist.length() - 1));
