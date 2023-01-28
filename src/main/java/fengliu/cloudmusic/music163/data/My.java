@@ -210,4 +210,83 @@ public class My extends User {
         };
     }
 
+    /**
+     * 最近播放歌曲
+     * @return 歌曲列表
+     */
+    public List<IMusic> recordPlayMusic(){
+        JsonObject json = this.api.POST_API("/api/play-record/song/list", null);
+        List<IMusic> musics = new ArrayList<>();
+        json.getAsJsonObject("data").getAsJsonArray("list").forEach(music -> {
+            musics.add(new Music(this.api, ((JsonObject) music).getAsJsonObject("data"), null));
+        });
+        return musics;
+    }
+
+    /**
+     * 最近播放声音
+     * @return 歌曲列表
+     */
+    public List<IMusic> recordPlayDjMusic(){
+        JsonObject json = this.api.POST_API("/api/play-record/voice/list", null);
+        List<IMusic> musics = new ArrayList<>();
+        json.getAsJsonObject("data").getAsJsonArray("list").forEach(music -> {
+            musics.add(new DjMusic(this.api, ((JsonObject) music).getAsJsonObject("data").getAsJsonObject("pubDJProgramData")));
+        });
+        return musics;
+    }
+
+    /**
+     * 最近播放歌单
+     * @return 页对象
+     */
+    public Page recordPlayPlayList(){
+        JsonObject json = this.api.POST_API("/api/play-record/playlist/list", null);
+        return new Page(json.getAsJsonObject("data").getAsJsonArray("list")) {
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject playList = ((JsonObject) data).getAsJsonObject("data");
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r§7 - "+ playList.getAsJsonObject("creator").get("nickname").getAsString() +" - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
+                return newPageData;
+            }
+        };
+    }
+
+    /**
+     * 最近播放专辑
+     * @return 页对象
+     */
+    public Page recordPlayAlbum(){
+        JsonObject json = this.api.POST_API("/api/play-record/album/list", null);
+        return new Page(json.getAsJsonObject("data").getAsJsonArray("list")) {
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject album = ((JsonObject) data).getAsJsonObject("data");
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + album.get("name").getAsString() + "§r§7 - "+ album.getAsJsonObject("artist").get("name").getAsString() +" - id: " + album.get("id").getAsLong(), "/cloudmusic album " + album.get("id").getAsLong());
+                return newPageData;
+            }
+        };
+    }
+
+    /**
+     *  最近播放电台
+     * @return 页对象
+     */
+    public Page recordPlayDj(){
+        JsonObject json = this.api.POST_API("/api/play-record/djradio/list", null);
+        return new Page(json.getAsJsonObject("data").getAsJsonArray("list")) {
+            @Override
+            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+                JsonObject djRadios = ((JsonObject) data).getAsJsonObject("data");
+
+                String nickname = null;
+                if (djRadios.has("nickname")){
+                    nickname = djRadios.getAsJsonObject("dj").get("nickname").getAsString();
+                }
+                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + djRadios.get("name").getAsString() + "§r§7 - " + nickname + " - id: " + djRadios.get("id").getAsLong(), "/cloudmusic dj " + djRadios.get("id").getAsLong());
+                return newPageData;
+            }
+        };
+    }
+
 }

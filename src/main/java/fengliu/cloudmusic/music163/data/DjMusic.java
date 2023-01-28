@@ -5,6 +5,7 @@ import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.music163.ActionException;
 import fengliu.cloudmusic.music163.IMusic;
 import fengliu.cloudmusic.music163.Music163Obj;
+import fengliu.cloudmusic.music163.Shares;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.TextClick;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -43,7 +44,12 @@ public class DjMusic extends Music163Obj implements IMusic {
         this.radio = data.getAsJsonObject("radio");
         this.coverUrl = data.get("coverUrl").getAsString();
         this.listenerCount = data.get("listenerCount").getAsLong();
-        this.likedCount = data.get("likedCount").getAsLong();
+        if (data.has("likedCount")){
+            this.likedCount = data.get("likedCount").getAsLong();
+        } else {
+            this.likedCount = 0;
+        }
+
         this.description = data.get("description").getAsString().split("\n");
         this.duration = data.get("duration").getAsLong();
     }
@@ -92,7 +98,7 @@ public class DjMusic extends Music163Obj implements IMusic {
 
         source.sendFeedback(Text.literal(""));
 
-        source.sendFeedback(TextClick.suggestText("cloudmusic.info.dj.music.radio", this.radio.get("name").getAsString(), "/cloudmusic dj " + this.dj.get("userId").getAsLong()));
+        source.sendFeedback(TextClick.suggestText("cloudmusic.info.dj.music.radio","§b" + this.radio.get("name").getAsString(), "/cloudmusic dj " + this.radio.get("id").getAsLong()));
         source.sendFeedback(TextClick.suggestText("cloudmusic.info.dj.creator", "§b" + this.dj.get("nickname").getAsString(), "/cloudmusic user " + this.dj.get("userId").getAsLong()));
         source.sendFeedback(Text.translatable("cloudmusic.info.dj.music.count", this.listenerCount, this.likedCount));
         source.sendFeedback(Text.translatable("cloudmusic.info.dj.music.duration", this.getDurationToString()));
@@ -108,6 +114,7 @@ public class DjMusic extends Music163Obj implements IMusic {
 
         Map<String, String> optionsTextData = new LinkedHashMap<>();
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic dj music play " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.DJ_MUSIC.getShar(this.id));
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
 }

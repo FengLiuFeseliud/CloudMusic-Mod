@@ -10,6 +10,7 @@ public enum Shares {
     ALBUM ("cloudmusic.shar.album", "/cloudmusic album"),
     ARTIST ("cloudmusic.shar.artist", "/cloudmusic artist"),
     DJ_RADIO ("cloudmusic.shar.dj.radio", "/cloudmusic dj"),
+    DJ_MUSIC ("cloudmusic.shar.dj.music", "/cloudmusic dj music"),
     PLAY_LIST ("cloudmusic.shar.playlist", "/cloudmusic playlist"),
     USER ("cloudmusic.shar.user", "/cloudmusic user"),
     STYLE ("cloudmusic.shar.style", "/cloudmusic style");

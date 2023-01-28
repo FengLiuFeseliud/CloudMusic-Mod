@@ -186,8 +186,7 @@ public class Music extends Music163Obj implements IMusic {
 
     /**
      * 获得歌曲 url
-     * @param br
-     * @return
+     * @return 歌曲文件 url
      */
     public String getPlayUrl(){
         HttpClient playApi = new HttpClient("https://interface3.music.163.com", this.api.getHeader());
@@ -238,7 +237,7 @@ public class Music extends Music163Obj implements IMusic {
        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.similar.playlist").getString(), "/cloudmusic music similar playlist " + this.id);
        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.like").getString(), "/cloudmusic music like " + this.id);
        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unlike").getString(), "/cloudmusic music unlike " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.MUSIC.getShar(this.id));
+       optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.MUSIC.getShar(this.id));
        source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
 
         optionsTextData.clear();

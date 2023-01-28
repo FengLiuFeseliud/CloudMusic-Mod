@@ -106,7 +106,10 @@ public class DjRadio extends MusicPlayer implements ICanSubscribe, IPrint {
         source.sendFeedback(Text.literal(""));
 
         source.sendFeedback(TextClick.suggestText("cloudmusic.info.dj.creator", "§b" + this.dj.get("nickname").getAsString(), "/cloudmusic user " + this.dj.get("userId").getAsLong()));
-        source.sendFeedback(TextClick.suggestText("cloudmusic.info.dj.category", "§b" + this.category + "§r§l/§r§b" + this.secondCategory, "/cloudmusic dj category " + this.categoryId + " " + this.secondCategoryId));
+        Map<String, String> artistsTextData = new LinkedHashMap<>();
+        artistsTextData.put("§b§n" + this.category, "/cloudmusic dj category " + this.categoryId);
+        artistsTextData.put("§b§n" + this.secondCategory, "/cloudmusic dj category " + this.secondCategoryId);
+        source.sendFeedback(TextClick.suggestTextMap("cloudmusic.info.dj.category", artistsTextData, "§f§l/"));
         source.sendFeedback(Text.translatable("cloudmusic.info.dj.size", this.programCount));
         source.sendFeedback(Text.translatable("cloudmusic.info.dj.count", this.subCount, this.shareCount));
         source.sendFeedback(Text.translatable("cloudmusic.info.dj.id", this.id));

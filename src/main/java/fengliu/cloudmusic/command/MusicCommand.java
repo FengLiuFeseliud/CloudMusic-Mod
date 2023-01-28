@@ -59,6 +59,8 @@ public class MusicCommand {
 
         Text.translatable("cloudmusic.help.dj"),
         Text.translatable("cloudmusic.help.dj.play"),
+        Text.translatable("cloudmusic.help.dj.music"),
+        Text.translatable("cloudmusic.help.dj.music.play"),
         Text.translatable("cloudmusic.help.dj.subscribe"),
         Text.translatable("cloudmusic.help.dj.unsubscribe"),
 
@@ -83,6 +85,11 @@ public class MusicCommand {
         Text.translatable("cloudmusic.help.my.sublist.album"),
         Text.translatable("cloudmusic.help.my.sublist.artist"),
         Text.translatable("cloudmusic.help.my.sublist.dj"),
+        Text.translatable("cloudmusic.help.my.record.music"),
+        Text.translatable("cloudmusic.help.my.record.djmusic"),
+        Text.translatable("cloudmusic.help.my.record.playlist"),
+        Text.translatable("cloudmusic.help.my.record.album"),
+        Text.translatable("cloudmusic.help.my.record.dj"),
 
         Text.translatable("cloudmusic.help.style"),
         Text.translatable("cloudmusic.help.style.all"),
@@ -180,7 +187,7 @@ public class MusicCommand {
      * 重置歌曲播放器
      * @param music 歌曲
      */
-    private static void resetPlayer(Music music){
+    private static void resetPlayer(IMusic music){
         List<IMusic> musics = new ArrayList<>();
         musics.add(music);
 
@@ -566,6 +573,32 @@ public class MusicCommand {
             })
         )));
 
+        LiteralArgumentBuilder<FabricClientCommandSource> DjMusic = literal("music");
+
+        // cloudmusic dj music id
+        CloudMusic.then(Dj.then(DjMusic.then(
+            argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                runCommand(contextData, context -> {
+                    data = music163.djMusic(LongArgumentType.getLong(context, "id"));
+                    ((DjMusic) data).printToChatHud(context.getSource());
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        )));
+
+        // cloudmusic dj music play id
+        CloudMusic.then(Dj.then(DjMusic.then(literal("play").then(
+            argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                runCommand(contextData, context -> {
+                    DjMusic music = music163.djMusic(LongArgumentType.getLong(context, "id"));
+                    resetPlayer(music);
+                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.dj.music.play", music.name));
+                    player.start();
+                });
+                return Command.SINGLE_SUCCESS;
+            })
+        ))));
+
         // cloudmusic dj subscribe id
         CloudMusic.then(Dj.then(literal("subscribe").then(
             argument("id", LongArgumentType.longArg()).executes(contextData -> {
@@ -648,6 +681,7 @@ public class MusicCommand {
                 runCommand(contextData, context -> {
                     User user = music163.user(LongArgumentType.getLong(context, "id"));
                     resetPlayer(user.recordAll());
+                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.user.record.all", user.name));
                     player.start();
                 });
                 return Command.SINGLE_SUCCESS;
@@ -660,6 +694,7 @@ public class MusicCommand {
                 runCommand(contextData, context -> {
                     User user = music163.user(LongArgumentType.getLong(context, "id"));
                     resetPlayer(user.recordWeek());
+                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.user.record.week", user.name));
                     player.start();
                 });
                 return Command.SINGLE_SUCCESS;
@@ -735,6 +770,58 @@ public class MusicCommand {
             });
             return Command.SINGLE_SUCCESS;
         })));
+
+        LiteralArgumentBuilder<FabricClientCommandSource> PlayRecord = literal("record");
+
+        // cloudmusic my record music
+        CloudMusic.then(My.then(PlayRecord.then(literal("music").executes(contextData -> {
+            runCommand(contextData, context -> {
+                resetPlayer(getMy(false).recordPlayMusic());
+                context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.record.music", getMy(false).name));
+                player.start();
+            });
+            return Command.SINGLE_SUCCESS;
+        }))));
+
+        // cloudmusic my record djmusic
+        CloudMusic.then(My.then(PlayRecord.then(literal("djmusic").executes(contextData -> {
+            runCommand(contextData, context -> {
+                resetPlayer(getMy(false).recordPlayDjMusic());
+                context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.record.djmusic", getMy(false).name));
+                player.start();
+            });
+            return Command.SINGLE_SUCCESS;
+        }))));
+
+        // cloudmusic my record playlist
+        CloudMusic.then(My.then(PlayRecord.then(literal("playlist").executes(contextData -> {
+            runCommand(contextData, context -> {
+                page = getMy(false).recordPlayPlayList();
+                page.setInfoText(Text.translatable("cloudmusic.info.page.record.playlist", getMy(false).name));
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        }))));
+
+        // cloudmusic my record album
+        CloudMusic.then(My.then(PlayRecord.then(literal("album").executes(contextData -> {
+            runCommand(contextData, context -> {
+                page = getMy(false).recordPlayAlbum();
+                page.setInfoText(Text.translatable("cloudmusic.info.page.record.album", getMy(false).name));
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        }))));
+
+        // cloudmusic my record dj
+        CloudMusic.then(My.then(PlayRecord.then(literal("dj").executes(contextData -> {
+            runCommand(contextData, context -> {
+                page = getMy(false).recordPlayDj();
+                page.setInfoText(Text.translatable("cloudmusic.info.page.record.dj", getMy(false).name));
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        }))));
 
         // cloudmusic my playlist add musicId
         CloudMusic.then(My.then(MyPlayList.then(literal("add").then(

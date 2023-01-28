@@ -114,7 +114,7 @@ public class Music163 {
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("id", id);
 
-        return new DjMusic(this.api, this.api.POST_API("", data));
+        return new DjMusic(this.api, this.api.POST_API("/api/dj/program/detail", data).getAsJsonObject("program"));
     }
 
     /**

@@ -138,9 +138,14 @@ public class User extends Music163Obj implements IPrint {
         };
     }
 
+    /**
+     * 听歌榜单(所有时间)
+     * @return 歌曲列表
+     */
     public List<IMusic> recordAll(){
         Map<String, Object> postData = new HashMap<String, Object>();
         postData.put("uid", this.id);
+        postData.put("limit", 100);
         postData.put("type", 0);
 
         JsonObject data = this.api.POST_API("/api/v1/play/record", postData);
@@ -152,9 +157,14 @@ public class User extends Music163Obj implements IPrint {
         return musics;
     }
 
+    /**
+     * 听歌榜单(周)
+     * @return 歌曲列表
+     */
     public List<IMusic> recordWeek(){
         Map<String, Object> postData = new HashMap<String, Object>();
         postData.put("uid", this.id);
+        postData.put("limit", 100);
         postData.put("type", 1);
 
         JsonObject data = this.api.POST_API("/api/v1/play/record", postData);

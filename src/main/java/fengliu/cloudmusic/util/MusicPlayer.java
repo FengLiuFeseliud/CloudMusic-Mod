@@ -181,9 +181,9 @@ public class MusicPlayer implements Runnable {
             }
             play.write(tempBuff,0,count);
             this.playingProgress = System.currentTimeMillis() - this.startPlayingTime;
-
         }
 
+        this.playingProgress = 0;
         if (lyric != null){
             this.lyric.exit();
         }
