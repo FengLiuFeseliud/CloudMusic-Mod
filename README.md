@@ -67,3 +67,7 @@
 ![9.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/9.png?raw=true)
 
 ![10.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/10.png?raw=true)
+
+## 参考项目
+
+API 来源: [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
