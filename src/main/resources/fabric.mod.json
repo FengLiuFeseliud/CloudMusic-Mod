@@ -32,7 +32,7 @@
 
   "depends": {
     "fabricloader": ">=0.14.11",
-    "fabric-api": "*"
+    "fabric": "*"
   },
 
   "suggests": {
