@@ -22,7 +22,8 @@ import fengliu.cloudmusic.music163.data.Music;
 import fengliu.cloudmusic.render.MusicIconTexture;
 import fengliu.cloudmusic.util.page.Page;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 
 /**
  * 歌曲播放对象
@@ -112,7 +113,7 @@ public class MusicPlayer implements Runnable {
         }catch(ActionException err){
             MinecraftClient client = MinecraftClient.getInstance();
             if(client.player != null){
-                client.player.sendMessage(Text.literal(err.getMessage()));
+                client.player.sendMessage(new LiteralText(err.getMessage()), false);
             }
             return;
         }
@@ -137,10 +138,10 @@ public class MusicPlayer implements Runnable {
             }
 
             CloudMusicClient.cacheHelper.addUseSize(file);
-            this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.getName()), false);
+            this.client.inGameHud.setOverlayMessage(new TranslatableText("record.nowPlaying", music.getName()), false);
             this.play(file);
         }else {
-            this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.getName()), false);
+            this.client.inGameHud.setOverlayMessage(new TranslatableText("record.nowPlaying", music.getName()), false);
             this.play(musicUrl);
         }
     }

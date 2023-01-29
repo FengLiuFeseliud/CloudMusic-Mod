@@ -13,8 +13,9 @@ import com.google.gson.JsonObject;
 import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.TextClick;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.text.Text;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 
 /**
  * 专辑对象
@@ -50,10 +51,10 @@ public class Album extends Music163Obj implements IMusicList, ICanSubscribe {
 
     @Override
     public void printToChatHud(FabricClientCommandSource source) {
-        source.sendFeedback(Text.literal(""));
+        source.sendFeedback(new LiteralText(""));
 
         if(this.alias.size() == 0){
-            source.sendFeedback(Text.literal(this.name));
+            source.sendFeedback(new LiteralText(this.name));
         }else{
             String aliasName = "";
             for(JsonElement alia: this.alias){
@@ -61,10 +62,10 @@ public class Album extends Music163Obj implements IMusicList, ICanSubscribe {
             }
             aliasName = aliasName.substring(0, aliasName.length() - 3);
 
-            source.sendFeedback(Text.literal(this.name + " §7(" + aliasName + ")"));
+            source.sendFeedback(new LiteralText(this.name + " §7(" + aliasName + ")"));
         }
 
-        source.sendFeedback(Text.literal(""));
+        source.sendFeedback(new LiteralText(""));
         
         Map<String, String> artistsTextData = new LinkedHashMap<>();
         for (JsonElement artistData : this.artists) {
@@ -73,21 +74,21 @@ public class Album extends Music163Obj implements IMusicList, ICanSubscribe {
         }
 
         source.sendFeedback(TextClick.suggestTextMap(artistsTextData, "§f§l/"));
-        source.sendFeedback(Text.translatable("cloudmusic.info.album.size", this.size));
-        source.sendFeedback(Text.translatable("cloudmusic.info.album.id", this.id));
+        source.sendFeedback(new TranslatableText("cloudmusic.info.album.size", this.size));
+        source.sendFeedback(new TranslatableText("cloudmusic.info.album.id", this.id));
         
         if(this.description != null){
-            source.sendFeedback(Text.literal(""));
+            source.sendFeedback(new LiteralText(""));
             for (String row : this.description) {
-                source.sendFeedback(Text.literal("§7" + row));
+                source.sendFeedback(new LiteralText("§7" + row));
             }
         }
 
         Map<String, String> optionsTextData = new LinkedHashMap<>();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic album play " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic album subscribe " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unsubscribe").getString(), "/cloudmusic album unsubscribe " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.ALBUM.getShar(this.id));
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.play").getString(), "/cloudmusic album play " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.subscribe").getString(), "/cloudmusic album subscribe " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.unsubscribe").getString(), "/cloudmusic album unsubscribe " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.shar").getString(), Shares.ALBUM.getShar(this.id));
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
 

@@ -11,7 +11,8 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 
-import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -95,8 +96,8 @@ public class MixinInGameHub {
         client.textRenderer.draw(matrices, playingMusic.getDurationToString(), width - 28 - x, 38 + y, progressFontColor);
         int musicFontColor = Configs.GUI.MUSIC_INFO_FONT_COLOR.getIntegerValue();
         if (playingMusic instanceof DjMusic music){
-            client.textRenderer.draw(matrices, Text.translatable("cloudmusic.info.dj.creator", music.dj.get("nickname").getAsString()), width - 135 - x, 14 + y, musicFontColor);
-            client.textRenderer.draw(matrices, Text.translatable("cloudmusic.info.dj.music.count", music.listenerCount, music.likedCount), width - 135 - x, 24 + y, musicFontColor);
+            client.textRenderer.draw(matrices, new TranslatableText("cloudmusic.info.dj.creator", music.dj.get("nickname").getAsString()), width - 135 - x, 14 + y, musicFontColor);
+            client.textRenderer.draw(matrices, new TranslatableText("cloudmusic.info.dj.music.count", music.listenerCount, music.likedCount), width - 135 - x, 24 + y, musicFontColor);
             return;
         }
 

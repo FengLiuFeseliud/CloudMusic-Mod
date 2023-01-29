@@ -11,7 +11,8 @@ import fi.dy.masa.malilib.hotkeys.IHotkeyCallback;
 import fi.dy.masa.malilib.hotkeys.IKeybind;
 import fi.dy.masa.malilib.hotkeys.KeyAction;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 
 public class HotkeysCallback implements IHotkeyCallback {
     private final MinecraftClient client = MinecraftClient.getInstance();
@@ -32,7 +33,7 @@ public class HotkeysCallback implements IHotkeyCallback {
                         return;
                     }
 
-                    mcClient.player.sendMessage(Text.literal(err.getMessage()));
+                    mcClient.player.sendMessage(new LiteralText(err.getMessage()), false);
                 }
             }
         };
@@ -123,7 +124,7 @@ public class HotkeysCallback implements IHotkeyCallback {
                 ((Music) music).addTrashCan();
 
                 if (mc.player != null){
-                    mc.player.sendMessage(Text.translatable("cloudmusic.info.command.trash", music.getName()));
+                    mc.player.sendMessage(new TranslatableText("cloudmusic.info.command.trash", music.getName()), false);
                 }
             });
         }
@@ -138,7 +139,7 @@ public class HotkeysCallback implements IHotkeyCallback {
                 ((Music) music).like();
 
                 if (mc.player != null){
-                    mc.player.sendMessage(Text.translatable("cloudmusic.info.command.music.like", music.getName()));
+                    mc.player.sendMessage(new TranslatableText("cloudmusic.info.command.music.like", music.getName()), false);
                 }
             });
             return true;
@@ -152,7 +153,7 @@ public class HotkeysCallback implements IHotkeyCallback {
 
             this.runHotKey(mc -> {
                 Page page = MusicCommand.getMy(false).playListSetMusic(music.getId(), "add");
-                page.setInfoText(Text.translatable("cloudmusic.info.page.user.playlist.add", MusicCommand.getMy(false).name));
+                page.setInfoText(new TranslatableText("cloudmusic.info.page.user.playlist.add", MusicCommand.getMy(false).name));
                 MusicCommand.setPage(page);
                 page.look();
             });
@@ -167,7 +168,7 @@ public class HotkeysCallback implements IHotkeyCallback {
 
             this.runHotKey(mc -> {
                 Page page = MusicCommand.getMy(false).playListSetMusic(music.getId(), "del");
-                page.setInfoText(Text.translatable("cloudmusic.info.page.user.playlist.del", MusicCommand.getMy(false).name));
+                page.setInfoText(new TranslatableText("cloudmusic.info.page.user.playlist.del", MusicCommand.getMy(false).name));
                 MusicCommand.setPage(page);
                 page.look();
             });

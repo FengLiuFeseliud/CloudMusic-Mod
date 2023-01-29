@@ -6,7 +6,8 @@ import java.util.Map.Entry;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
-import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.text.ClickEvent.Action;
 
 /**
@@ -21,7 +22,7 @@ public class TextClick {
      * @return 文本对象
      */
     public static MutableText suggestText(String text, String suggest){
-        return Text.literal(text).setStyle(Style.EMPTY.withClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, suggest)));
+        return new LiteralText(text).setStyle(Style.EMPTY.withClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, suggest)));
     }
 
     /**
@@ -32,7 +33,7 @@ public class TextClick {
      * @return 文本对象
      */
     public static MutableText suggestText(String key, String text, String suggest){
-        return Text.translatable(key).append(TextClick.suggestText(text, suggest));
+        return new TranslatableText(key).append(TextClick.suggestText(text, suggest));
     }
 
     /**
@@ -42,7 +43,7 @@ public class TextClick {
      * @return 文本对象
      */
     public static MutableText suggestTextMap(Map<String, String> textAndSuggest, String sign){
-        MutableText text = Text.empty();
+        MutableText text = new LiteralText("");
         int index = 0;
 
         for (Entry<String, String> data : textAndSuggest.entrySet()) {
@@ -65,6 +66,6 @@ public class TextClick {
      * @return 文本对象
      */
     public static MutableText suggestTextMap(String key, Map<String, String> textAndSuggest, String sign){
-        return Text.translatable(key).append(TextClick.suggestTextMap(textAndSuggest, sign));
+        return new TranslatableText(key).append(TextClick.suggestTextMap(textAndSuggest, sign));
     }
 }

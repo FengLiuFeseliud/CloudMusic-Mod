@@ -10,7 +10,8 @@ import fengliu.cloudmusic.command.MusicCommand;
 import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.render.MusicIconTexture;
 import fengliu.cloudmusic.util.HttpClient;
-import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 
 public class LoginMusic163 {
     private Map<String, String> Header = new HashMap<String, String>();
@@ -169,7 +170,7 @@ public class LoginMusic163 {
             }
 
             if(code == 800){
-                throw new ActionException(Text.translatable("cloudmusic.exception.login.qr.code"));
+                throw new ActionException(new TranslatableText("cloudmusic.exception.login.qr.code"));
             }
 
             if(code == 803){
@@ -177,6 +178,6 @@ public class LoginMusic163 {
             }
         }
 
-        throw new ActionException(Text.translatable("cloudmusic.exception.login.qr.code.time.out"));
+        throw new ActionException(new TranslatableText("cloudmusic.exception.login.qr.code.time.out"));
     }
 }

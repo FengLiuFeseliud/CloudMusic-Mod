@@ -6,12 +6,12 @@ import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.music163.ICanSubscribe;
 import fengliu.cloudmusic.music163.IPrint;
 import fengliu.cloudmusic.music163.Shares;
-import fengliu.cloudmusic.music163.data.DjMusic;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.MusicPlayer;
 import fengliu.cloudmusic.util.TextClick;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.text.Text;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 
 import java.util.*;
 
@@ -99,33 +99,33 @@ public class DjRadio extends MusicPlayer implements ICanSubscribe, IPrint {
 
     @Override
     public void printToChatHud(FabricClientCommandSource source) {
-        source.sendFeedback(Text.literal(""));
+        source.sendFeedback(new LiteralText(""));
 
-        source.sendFeedback(Text.literal(this.name));
+        source.sendFeedback(new LiteralText(this.name));
 
-        source.sendFeedback(Text.literal(""));
+        source.sendFeedback(new LiteralText(""));
 
         source.sendFeedback(TextClick.suggestText("cloudmusic.info.dj.creator", "§b" + this.dj.get("nickname").getAsString(), "/cloudmusic user " + this.dj.get("userId").getAsLong()));
         Map<String, String> artistsTextData = new LinkedHashMap<>();
         artistsTextData.put("§b§n" + this.category, "/cloudmusic dj category " + this.categoryId);
         artistsTextData.put("§b§n" + this.secondCategory, "/cloudmusic dj category " + this.secondCategoryId);
         source.sendFeedback(TextClick.suggestTextMap("cloudmusic.info.dj.category", artistsTextData, "§f§l/"));
-        source.sendFeedback(Text.translatable("cloudmusic.info.dj.size", this.programCount));
-        source.sendFeedback(Text.translatable("cloudmusic.info.dj.count", this.subCount, this.shareCount));
-        source.sendFeedback(Text.translatable("cloudmusic.info.dj.id", this.id));
+        source.sendFeedback(new TranslatableText("cloudmusic.info.dj.size", this.programCount));
+        source.sendFeedback(new TranslatableText("cloudmusic.info.dj.count", this.subCount, this.shareCount));
+        source.sendFeedback(new TranslatableText("cloudmusic.info.dj.id", this.id));
 
         if(this.description != null){
-            source.sendFeedback(Text.literal(""));
+            source.sendFeedback(new LiteralText(""));
             for (String row : this.description) {
-                source.sendFeedback(Text.literal("§7" + row));
+                source.sendFeedback(new LiteralText("§7" + row));
             }
         }
 
         Map<String, String> optionsTextData = new LinkedHashMap<>();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic dj play " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic dj subscribe " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unsubscribe").getString(), "/cloudmusic dj unsubscribe " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.DJ_RADIO.getShar(this.id));
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.play").getString(), "/cloudmusic dj play " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.subscribe").getString(), "/cloudmusic dj subscribe " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.unsubscribe").getString(), "/cloudmusic dj unsubscribe " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.shar").getString(), Shares.DJ_RADIO.getShar(this.id));
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
 }

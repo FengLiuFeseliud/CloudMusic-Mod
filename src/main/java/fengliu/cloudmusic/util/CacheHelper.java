@@ -11,8 +11,9 @@ import java.io.File;
 
 import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.config.Configs;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.text.Text;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 
 /**
  * 缓存工具对象, 仅在创建时遍历一次缓存目录
@@ -192,7 +193,7 @@ public class CacheHelper {
      * @param source Fabric 命令源
      */
     public void printToChatHud(FabricClientCommandSource source) {
-        source.sendFeedback(Text.translatable("cloudmusic.info.config.cache", "§c" + this.useMb, "§c" + this.maxMb, "§c" + this.deleteMb));
-        source.sendFeedback(Text.translatable("cloudmusic.info.config.cache.path", "§c" + this.cachePath));
+        source.sendFeedback(new TranslatableText("cloudmusic.info.config.cache", "§c" + this.useMb, "§c" + this.maxMb, "§c" + this.deleteMb));
+        source.sendFeedback(new TranslatableText("cloudmusic.info.config.cache.path", "§c" + this.cachePath));
     }
 }

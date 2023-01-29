@@ -1,6 +1,6 @@
 package fengliu.cloudmusic.music163;
 
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 public interface IPrint {
 

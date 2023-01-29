@@ -13,7 +13,8 @@ import com.google.gson.JsonObject;
 
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.page.ApiPage;
-import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 
 /**
  * Music163 api
@@ -52,7 +53,7 @@ public class Music163 {
 
         JsonArray json = this.api.POST_API("/api/v3/song/detail", data).getAsJsonArray("songs");
         if(json.isEmpty()){
-            throw new ActionException(Text.translatable("cloudmusic.exception.music.id"));
+            throw new ActionException(new TranslatableText("cloudmusic.exception.music.id"));
         }
         return new Music(getHttpClient(), json.get(0).getAsJsonObject(), null);
     }
@@ -92,7 +93,7 @@ public class Music163 {
     public Album album(long id){
         JsonObject json = this.api.POST_API("/api/v1/album/" + id, null);
         if(!json.get("resourceState").getAsBoolean()){
-            throw new ActionException(Text.translatable("cloudmusic.exception.album.id"));
+            throw new ActionException(new TranslatableText("cloudmusic.exception.album.id"));
         }
 
         return new Album(getHttpClient(), json);
@@ -125,7 +126,7 @@ public class Music163 {
     public User user(long id){
         JsonObject json = this.api.POST_API("/api/v1/user/detail/" + id, null);
         if(json.get("code").getAsInt() != 200){
-            throw new ActionException(Text.translatable("cloudmusic.exception.user.id"));
+            throw new ActionException(new TranslatableText("cloudmusic.exception.user.id"));
         }
 
         return new User(this.api, json);
@@ -138,7 +139,7 @@ public class Music163 {
     public My my(){
         JsonObject json = this.api.POST_API("/api/w/nuser/account/get", null);
         if(json.get("account").isJsonNull()){
-            throw new ActionException(Text.translatable("cloudmusic.exception.cookie"));
+            throw new ActionException(new TranslatableText("cloudmusic.exception.cookie"));
         }
         return new My(this.api, this.api.POST_API("/api/v1/user/detail/" + json.getAsJsonObject("profile").get("userId").getAsLong(), null));
     }

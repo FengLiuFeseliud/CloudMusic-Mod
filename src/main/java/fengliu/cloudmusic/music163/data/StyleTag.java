@@ -11,8 +11,9 @@ import fengliu.cloudmusic.music163.page.StylePage;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.TextClick;
 import fengliu.cloudmusic.util.page.Page;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.text.Text;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -177,22 +178,22 @@ public class StyleTag extends Music163Obj implements IPrint {
 
     @Override
     public void printToChatHud(FabricClientCommandSource source) {
-        source.sendFeedback(Text.literal(""));
+        source.sendFeedback(new LiteralText(""));
 
-        source.sendFeedback(Text.literal(this.name + " - " + this.enName));
+        source.sendFeedback(new LiteralText(this.name + " - " + this.enName));
 
-        source.sendFeedback(Text.literal(""));
+        source.sendFeedback(new LiteralText(""));
 
-        source.sendFeedback(Text.translatable("cloudmusic.info.style.music.count", this.songNum));
-        source.sendFeedback(Text.translatable("cloudmusic.info.style.artist.count", this.artistNum));
-        source.sendFeedback(Text.literal("§7" + this.desc));
+        source.sendFeedback(new TranslatableText("cloudmusic.info.style.music.count", this.songNum));
+        source.sendFeedback(new TranslatableText("cloudmusic.info.style.artist.count", this.artistNum));
+        source.sendFeedback(new LiteralText("§7" + this.desc));
 
         JsonObject pattern;
         if (this.professionalReviews != null){
-            source.sendFeedback(Text.literal(""));
+            source.sendFeedback(new LiteralText(""));
 
             pattern = this.professionalReviews.getAsJsonObject("pattern");
-            source.sendFeedback(Text.literal(
+            source.sendFeedback(new LiteralText(
                 this.professionalReviews.get("templateContent").getAsString()
                     .replace("${tagName}", this.name)
                     .replace("${tagPercent}",pattern.getAsJsonObject("tagPercent").get("text").getAsString())
@@ -201,16 +202,16 @@ public class StyleTag extends Music163Obj implements IPrint {
         }
 
         if (this.tagPortrait != null){
-            source.sendFeedback(Text.literal(""));
+            source.sendFeedback(new LiteralText(""));
 
             pattern = tagPortrait.getAsJsonObject("pattern");
             String[] templateContents = this.tagPortrait.get("templateContent").getAsString().split("\n");
-            source.sendFeedback(Text.literal(
+            source.sendFeedback(new LiteralText(
                 templateContents[0]
                     .replace("${tagNum}", pattern.getAsJsonObject("tagNum").get("text").getAsString())
             ));
 
-            source.sendFeedback(Text.literal(
+            source.sendFeedback(new LiteralText(
                 templateContents[1]
                     .replace("${tagName}",pattern.getAsJsonObject("tagName").get("text").getAsString())
                     .replace("${tagPercent}", pattern.getAsJsonObject("tagPercent").get("text").getAsString())
@@ -220,16 +221,16 @@ public class StyleTag extends Music163Obj implements IPrint {
                 templateContents[2] = templateContents[2].replace("${minorityTag" + index +"}", pattern.getAsJsonObject("minorityTag" + index).get("text").getAsString());
             }
 
-            source.sendFeedback(Text.literal(templateContents[2]));
+            source.sendFeedback(new LiteralText(templateContents[2]));
         }
 
         Map<String, String> optionsTextData = new LinkedHashMap<>();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.style.music").getString(), "/cloudmusic style music " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.style.playlist").getString(), "/cloudmusic style playlist " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.style.artist").getString(), "/cloudmusic style artist " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.style.album").getString(), "/cloudmusic style album " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.children.style").getString(), "/cloudmusic style children " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.STYLE.getShar(this.id));
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.style.music").getString(), "/cloudmusic style music " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.style.playlist").getString(), "/cloudmusic style playlist " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.style.artist").getString(), "/cloudmusic style artist " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.style.album").getString(), "/cloudmusic style album " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.children.style").getString(), "/cloudmusic style children " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.shar").getString(), Shares.STYLE.getShar(this.id));
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
 }

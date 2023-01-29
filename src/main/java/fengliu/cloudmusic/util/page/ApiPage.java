@@ -10,7 +10,7 @@ import com.google.gson.JsonObject;
 
 import com.google.gson.reflect.TypeToken;
 import fengliu.cloudmusic.util.HttpClient;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 /**
  * 动态页对象, 翻页超出数据时自动请求 Api

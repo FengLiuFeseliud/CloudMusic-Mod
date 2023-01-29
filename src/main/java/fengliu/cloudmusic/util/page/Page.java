@@ -10,13 +10,14 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.util.TextClick;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 /**
  * 页对象, 处理翻页
@@ -45,20 +46,20 @@ public abstract class Page {
     }
 
     protected void printToChatHud(FabricClientCommandSource source, Map<String, String> pageData) {
-        source.sendFeedback(Text.literal(""));
+        source.sendFeedback(new LiteralText(""));
         if(this.infoText != null){
             source.sendFeedback(this.infoText);
         }
-        source.sendFeedback(Text.translatable("cloudmusic.info.page.count", this.pageIn + 1 + "§c§l/§r" + this.pageCount));
+        source.sendFeedback(new TranslatableText("cloudmusic.info.page.count", this.pageIn + 1 + "§c§l/§r" + this.pageCount));
 
         for(Entry<String, String> data: pageData.entrySet()){
             source.sendFeedback(TextClick.suggestText(data.getKey(), data.getValue()));
         }
 
         Map<String, String> optionsTextData = new LinkedHashMap<>();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.prev").getString(), "/cloudmusic page prev");
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.next").getString(), "/cloudmusic page next");
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.to").getString(), "/cloudmusic page to ");
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.page.prev").getString(), "/cloudmusic page prev");
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.page.next").getString(), "/cloudmusic page next");
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.page.to").getString(), "/cloudmusic page to ");
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
 
@@ -68,21 +69,21 @@ public abstract class Page {
             return;
         }
 
-        client.player.sendMessage(Text.literal(""));
+        client.player.sendMessage(new LiteralText(""), false);
         if(this.infoText != null){
-            client.player.sendMessage(this.infoText);
+            client.player.sendMessage(this.infoText, false);
         }
-        client.player.sendMessage(Text.translatable("cloudmusic.info.page.count", this.pageIn + 1 + "§c§l/§r" + this.pageCount));
+        client.player.sendMessage(new TranslatableText("cloudmusic.info.page.count", this.pageIn + 1 + "§c§l/§r" + this.pageCount), false);
 
         for(Entry<String, String> data: pageData.entrySet()){
-            client.player.sendMessage(TextClick.suggestText(data.getKey(), data.getValue()));
+            client.player.sendMessage(TextClick.suggestText(data.getKey(), data.getValue()), false);
         }
 
         Map<String, String> optionsTextData = new LinkedHashMap<>();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.prev").getString(), "/cloudmusic page prev");
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.next").getString(), "/cloudmusic page next");
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.to").getString(), "/cloudmusic page to ");
-        client.player.sendMessage(TextClick.suggestTextMap(optionsTextData, " "));
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.page.prev").getString(), "/cloudmusic page prev");
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.page.next").getString(), "/cloudmusic page next");
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.page.to").getString(), "/cloudmusic page to ");
+        client.player.sendMessage(TextClick.suggestTextMap(optionsTextData, " "), false);
     }
 
     protected List<List<?>> splitData(List<?> data) {

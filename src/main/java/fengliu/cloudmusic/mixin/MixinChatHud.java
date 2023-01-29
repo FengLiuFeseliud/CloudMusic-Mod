@@ -2,13 +2,10 @@ package fengliu.cloudmusic.mixin;
 
 import fengliu.cloudmusic.music163.Shares;
 import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.client.gui.hud.MessageIndicator;
-import net.minecraft.network.message.MessageSignatureData;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -66,7 +63,6 @@ public class MixinChatHud {
             } catch (NumberFormatException err) {
                 return;
             }
-
             return;
         }
     }
@@ -76,8 +72,8 @@ public class MixinChatHud {
         setShar(message);
     }
 
-    @Inject(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;Lnet/minecraft/client/gui/hud/MessageIndicator;)V ", at = @At("HEAD"))
-    public void addMessage(Text message, @Nullable MessageSignatureData signature, @Nullable MessageIndicator indicator, CallbackInfo info){
+    @Inject(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At("HEAD"))
+    public void addMessage(Text message, int messageId, CallbackInfo info){
         setShar(message);
     }
 }

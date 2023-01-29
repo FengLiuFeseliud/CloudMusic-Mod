@@ -13,8 +13,9 @@ import com.google.gson.JsonObject;
 
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.page.ApiPage;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.text.Text;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 
 /**
  * 用户对象
@@ -186,27 +187,27 @@ public class User extends Music163Obj implements IPrint {
 
     @Override
     public void printToChatHud(FabricClientCommandSource source) {
-        source.sendFeedback(Text.literal(""));
-        source.sendFeedback(Text.literal(this.name));
-        source.sendFeedback(Text.literal(""));
+        source.sendFeedback(new LiteralText(""));
+        source.sendFeedback(new LiteralText(this.name));
+        source.sendFeedback(new LiteralText(""));
 
-        source.sendFeedback(Text.translatable("cloudmusic.info.user.level", this.level));
-        source.sendFeedback(Text.translatable("cloudmusic.info.user.vip", this.vip));
-        source.sendFeedback(Text.translatable("cloudmusic.info.user.id", this.id));
+        source.sendFeedback(new TranslatableText("cloudmusic.info.user.level", this.level));
+        source.sendFeedback(new TranslatableText("cloudmusic.info.user.vip", this.vip));
+        source.sendFeedback(new TranslatableText("cloudmusic.info.user.id", this.id));
         
-        source.sendFeedback(Text.literal(""));
-        source.sendFeedback(Text.literal("§7" + this.signature));
+        source.sendFeedback(new LiteralText(""));
+        source.sendFeedback(new LiteralText("§7" + this.signature));
 
         Map<String, String> optionsTextData = new LinkedHashMap<>();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.user.like").getString(), "/cloudmusic user like " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.user.playlist").getString(), "/cloudmusic user playlist " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.user.dj").getString(), "/cloudmusic user dj " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.USER.getShar(this.id));
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.user.like").getString(), "/cloudmusic user like " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.user.playlist").getString(), "/cloudmusic user playlist " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.user.dj").getString(), "/cloudmusic user dj " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.shar").getString(), Shares.USER.getShar(this.id));
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
 
         optionsTextData.clear();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.record.all").getString(), "/cloudmusic user record all " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.record.week").getString(), "/cloudmusic user record week " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.record.all").getString(), "/cloudmusic user record all " + this.id);
+        optionsTextData.put("§c§l" + new TranslatableText("cloudmusic.options.record.week").getString(), "/cloudmusic user record week " + this.id);
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
     

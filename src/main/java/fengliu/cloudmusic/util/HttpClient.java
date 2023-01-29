@@ -23,7 +23,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import fengliu.cloudmusic.music163.ActionException;
-import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 
 public class HttpClient {
     private final String MainPath;
@@ -95,7 +96,7 @@ public class HttpClient {
         
         int code = json.get("code").getAsInt();
         if(code == 301){
-            throw new ActionException(Text.translatable("cloudmusic.exception.cookie.use"));
+            throw new ActionException(new TranslatableText("cloudmusic.exception.cookie.use"));
         }
 
         if(code != 200){
@@ -115,23 +116,23 @@ public class HttpClient {
         
         int code = json.get("code").getAsInt();
         if(code == 400){
-            throw new ActionException(Text.translatable("cloudmusic.exception.login.400"));
+            throw new ActionException(new TranslatableText("cloudmusic.exception.login.400"));
         }
 
         if(code == 501){
-            throw new ActionException(Text.translatable("cloudmusic.exception.login.501"));
+            throw new ActionException(new TranslatableText("cloudmusic.exception.login.501"));
         }
 
         if(code == 502){
-            throw new ActionException(Text.translatable("cloudmusic.exception.login.502"));
+            throw new ActionException(new TranslatableText("cloudmusic.exception.login.502"));
         }
 
         if(code == 503){
-            throw new ActionException(Text.translatable("cloudmusic.exception.login.503"));
+            throw new ActionException(new TranslatableText("cloudmusic.exception.login.503"));
         }
 
         if(code != 200){
-            throw new ActionException(Text.translatable("cloudmusic.exception.login.err.code", json.toString()));
+            throw new ActionException(new TranslatableText("cloudmusic.exception.login.err.code", json.toString()));
         }
 
         return result.getSetCookie();
@@ -173,7 +174,7 @@ public class HttpClient {
             }
         } catch (Exception err) {
             if(retry <= Configs.HTTP.MAX_RETRY.getIntegerValue()){
-                throw new ActionException(Text.translatable("cloudmusic.exception.http", Configs.HTTP.MAX_RETRY.getIntegerValue(), err.getMessage()));
+                throw new ActionException(new TranslatableText("cloudmusic.exception.http", Configs.HTTP.MAX_RETRY.getIntegerValue(), err.getMessage()));
             }
             return this.connection(httpUrl, data, connection, ++retry);
         } finally {
@@ -228,7 +229,7 @@ public class HttpClient {
             out.close();
         } catch (Exception err) {
             if(retry <= Configs.HTTP.MAX_RETRY.getIntegerValue()){
-                throw new ActionException(Text.translatable("cloudmusic.exception.http.download", Configs.HTTP.MAX_RETRY.getIntegerValue(), err.getMessage()));
+                throw new ActionException(new TranslatableText("cloudmusic.exception.http.download", Configs.HTTP.MAX_RETRY.getIntegerValue(), err.getMessage()));
             }
             return HttpClient.download(path, targetFile, ++retry);
         }
@@ -258,7 +259,7 @@ public class HttpClient {
             bin = httpURLConnection.getInputStream();
         } catch (Exception err) {
             if(retry <= Configs.HTTP.MAX_RETRY.getIntegerValue()){
-                throw new ActionException(Text.translatable("cloudmusic.exception.http.download", Configs.HTTP.MAX_RETRY.getIntegerValue(), err.getMessage()));
+                throw new ActionException(new TranslatableText("cloudmusic.exception.http.download", Configs.HTTP.MAX_RETRY.getIntegerValue(), err.getMessage()));
             }
             return HttpClient.downloadStream(path, ++retry);
         }
