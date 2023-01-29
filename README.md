@@ -8,7 +8,7 @@
 
 ![logo.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/src/main/resources/assets/cloudmusic/icon.png?raw=true)
 
-![run.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/run.png?raw=true)
+![run.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/social.png?raw=true)
 
 ## 分享
 
