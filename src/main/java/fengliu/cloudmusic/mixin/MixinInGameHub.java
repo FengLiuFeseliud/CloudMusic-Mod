@@ -34,9 +34,7 @@ public class MixinInGameHub {
         if(MusicCommand.loadQRCode){
             int width = this.client.getWindow().getScaledWidth();
 
-            RenderSystem.setShader(GameRenderer::getPositionShader);
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-            RenderSystem.setShaderTexture(0, MusicIconTexture.QR_CODE_ID);
+            client.getTextureManager().bindTexture(MusicIconTexture.QR_CODE_ID);
 
             MatrixStack imgMatrices =new MatrixStack();
             imgMatrices.translate(width - 64, 74, 0);
@@ -51,8 +49,6 @@ public class MixinInGameHub {
             return;
         }
 
-        RenderSystem.setShader(GameRenderer::getPositionShader);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         int width = this.client.getWindow().getScaledWidth();
 
         if(Configs.GUI.LYRIC.getBooleanValue()){
@@ -83,7 +79,8 @@ public class MixinInGameHub {
             progress = 115;
         }
         DrawableHelper.fill(matrices, width - 145 - x, 40 + y, width - 145 + progress - x,  43 + y, Configs.GUI.MUSIC_PLAYED_PROGRESS_BAR_COLOR.getIntegerValue());
-        RenderSystem.setShaderTexture(0, MusicIconTexture.MUSIC_ICON_ID);
+
+        client.getTextureManager().bindTexture(MusicIconTexture.MUSIC_ICON_ID);
 
         MatrixStack imgMatrices =new MatrixStack();
         imgMatrices.translate(width - 172 - x, 2.5f + y, 0);

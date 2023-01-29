@@ -10,13 +10,13 @@ import fengliu.cloudmusic.util.CacheHelper;
 import fi.dy.masa.malilib.event.InputEventHandler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 public class CloudMusicClient implements ClientModInitializer  {
 
     public static final String MOD_ID = "cloudmusic";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static Path MC_PATH = FabricLoader.getInstance().getGameDir();
     /**
      * 缓存工具对象

@@ -63,7 +63,7 @@ public class HotkeysCallback implements IHotkeyCallback {
     public boolean onKeyAction(KeyAction action, IKeybind key) {
 
         if (key == Configs.HOTKEY.OPEN_CONFIG_GUI.getKeybind() && action == KeyAction.PRESS){
-            client.setScreen(new ConfigGui());
+            client.openScreen(new ConfigGui());
             return true;
         }
 

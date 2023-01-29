@@ -2,10 +2,7 @@ package fengliu.cloudmusic.mixin;
 
 import fengliu.cloudmusic.music163.Shares;
 import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -57,7 +54,7 @@ public class MixinChatHud {
                             ClickEvent.Action.SUGGEST_COMMAND,
                             shar.getCommand(Long.parseLong(keyValuePair[1]))
                         ))
-                        .withColor(0x87CEEB)
+                        .withColor(TextColor.fromRgb(0x87CEEB))
                         .withUnderline(true)
                 );
             } catch (NumberFormatException err) {
