@@ -52,7 +52,7 @@ public class Music163 {
         data.put("c", "[{\"id\": " + id + "}]");
 
         JsonArray json = this.api.POST_API("/api/v3/song/detail", data).getAsJsonArray("songs");
-        if(json.isEmpty()){
+        if(json.size() == 0){
             throw new ActionException(new TranslatableText("cloudmusic.exception.music.id"));
         }
         return new Music(getHttpClient(), json.get(0).getAsJsonObject(), null);

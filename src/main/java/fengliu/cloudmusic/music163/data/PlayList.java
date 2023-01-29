@@ -106,7 +106,7 @@ public class PlayList extends Music163Obj implements IMusicList, ICanSubscribe {
         source.sendFeedback(new LiteralText(""));
 
         source.sendFeedback(TextClick.suggestText("cloudmusic.info.playlist.creator", "§b" + this.creator.get("nickname").getAsString(), "/cloudmusic user " + this.creator.get("userId").getAsLong()));
-        if(!this.tags.isEmpty()){
+        if(!(this.tags.size() == 0)){
             Map<String, String> tagsTextData = new LinkedHashMap<>();
             for(JsonElement tag: this.tags){
                 String tagName = tag.getAsString();

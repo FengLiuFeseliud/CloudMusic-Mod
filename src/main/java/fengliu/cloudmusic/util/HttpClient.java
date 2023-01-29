@@ -299,7 +299,7 @@ public class HttpClient {
         }
 
         public JsonObject getJson(){
-            return JsonParser.parseString(getString()).getAsJsonObject();
+            return new JsonParser().parse(getString()).getAsJsonObject();
         }
 
         public String getSetCookie(){
