@@ -31,8 +31,7 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.14.11",
-    "api": "*"
+    "fabricloader": ">=0.14.11"
   },
   "suggests": {
     "another-mod": "*"
