@@ -56,6 +56,7 @@ public class HotkeysCallback implements IHotkeyCallback {
         Configs.HOTKEY.LIKE_MUSIC.getKeybind().setCallback(hotkeysCallback);
         Configs.HOTKEY.PLAYLIST_ADD_MUSIC.getKeybind().setCallback(hotkeysCallback);
         Configs.HOTKEY.PLAYLIST_DEL_MUSIC.getKeybind().setCallback(hotkeysCallback);
+        Configs.HOTKEY.PLAYLIST_RANDOM.getKeybind().setCallback(hotkeysCallback);
     }
 
     @Override
@@ -108,6 +109,11 @@ public class HotkeysCallback implements IHotkeyCallback {
 
         if (key == Configs.HOTKEY.DELETE_PLAY_MUSIC.getKeybind() && action == KeyAction.PRESS){
             MusicCommand.getPlayer().deletePlayingMusic();
+            return true;
+        }
+
+        if (key == Configs.HOTKEY.PLAYLIST_RANDOM.getKeybind() && action == KeyAction.PRESS){
+            MusicCommand.getPlayer().randomPlay();
             return true;
         }
 

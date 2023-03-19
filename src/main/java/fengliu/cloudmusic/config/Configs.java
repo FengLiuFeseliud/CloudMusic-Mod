@@ -62,6 +62,7 @@ public class Configs implements IConfigHandler {
         public static final ConfigHotkey LIKE_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.like.music", "", "cloudmusic.config.hotkey.like.music.comment");
         public static final ConfigHotkey PLAYLIST_ADD_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.playlist.add.music", "", "cloudmusic.config.hotkey.playlist.add.music.comment");
         public static final ConfigHotkey PLAYLIST_DEL_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.playlist.del.music", "", "cloudmusic.config.hotkey.playlist.del.music.comment");
+        public static final ConfigHotkey PLAYLIST_RANDOM = new ConfigHotkey("cloudmusic.config.hotkey.playlist.random", "", "cloudmusic.config.hotkey.playlist.random.comment");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
             VOLUME,
@@ -104,7 +105,8 @@ public class Configs implements IConfigHandler {
             TRASH_ADD_PLAY_MUSIC,
             LIKE_MUSIC,
             PLAYLIST_ADD_MUSIC,
-            PLAYLIST_DEL_MUSIC
+            PLAYLIST_DEL_MUSIC,
+            PLAYLIST_RANDOM
         );
     }
 
@@ -203,6 +205,7 @@ public class Configs implements IConfigHandler {
         public static final ConfigHotkey LIKE_MUSIC = ALL.LIKE_MUSIC;
         public static final ConfigHotkey PLAYLIST_ADD_MUSIC = ALL.PLAYLIST_ADD_MUSIC;
         public static final ConfigHotkey PLAYLIST_DEL_MUSIC = ALL.PLAYLIST_DEL_MUSIC;
+        public static final ConfigHotkey PLAYLIST_RANDOM = ALL.PLAYLIST_RANDOM;
 
         public static final List<ConfigHotkey> HOTKEY_LIST = ImmutableList.of(
             OPEN_CONFIG_GUI,
@@ -216,7 +219,8 @@ public class Configs implements IConfigHandler {
             TRASH_ADD_PLAY_MUSIC,
             LIKE_MUSIC,
             PLAYLIST_ADD_MUSIC,
-            PLAYLIST_DEL_MUSIC
+            PLAYLIST_DEL_MUSIC,
+            PLAYLIST_RANDOM
         );
     }
 

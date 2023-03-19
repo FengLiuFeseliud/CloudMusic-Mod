@@ -1361,6 +1361,13 @@ public class MusicCommand {
                         })
                     )
                     .then(
+                        // cloudmusic random
+                        literal("random").executes(context -> {
+                            player.randomPlay();
+                            return Command.SINGLE_SUCCESS;
+                        })
+                    )
+                    .then(
                         // cloudmusic exit
                         literal("exit").executes(context -> {
                             resetPlayer(new ArrayList<>());

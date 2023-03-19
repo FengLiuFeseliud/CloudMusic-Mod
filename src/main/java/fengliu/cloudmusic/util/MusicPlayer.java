@@ -3,6 +3,7 @@ package fengliu.cloudmusic.util;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -403,4 +404,18 @@ public class MusicPlayer implements Runnable {
             
         };
     }
+
+    /**
+     * 将播放队列随机并重新播放
+     */
+    public void randomPlay(){
+        Collections.shuffle(this.playList);
+        if (!this.isPlaying()){
+            return;
+        }
+
+        this.playIn -= 1;
+        this.next();
+    }
+
 }

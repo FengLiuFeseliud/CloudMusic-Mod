@@ -399,5 +399,8 @@
     "cloudmusic.config.hotkey.playlist.add.music.comment": "歌单添加当前播放歌曲",
 
     "cloudmusic.config.hotkey.playlist.del.music": "歌单删除歌曲 | playlist.del.music",
-    "cloudmusic.config.hotkey.playlist.del.music.comment": "歌单删除当前播放歌曲"
+    "cloudmusic.config.hotkey.playlist.del.music.comment": "歌单删除当前播放歌曲",
+
+    "cloudmusic.config.hotkey.playlist.random": "随机播放 | playlist.random",
+    "cloudmusic.config.hotkey.playlist.random.comment": "将播放队列随机并重新播放"
 }
