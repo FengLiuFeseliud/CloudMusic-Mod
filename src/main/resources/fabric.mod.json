@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "cloudmusic",
-  "version": "0.4.2",
+  "version": "0.4.3",
 
   "name": "CloudMusic",
   "description": "Use Netease Cloud Music in MC !!!",

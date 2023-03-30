@@ -136,6 +136,7 @@ public class MusicCommand {
         Text.translatable("cloudmusic.help.to"),
         Text.translatable("cloudmusic.help.del"),
         Text.translatable("cloudmusic.help.trash"),
+        Text.translatable("cloudmusic.help.random"),
         Text.translatable("cloudmusic.help.exit"),
         Text.translatable("cloudmusic.help.cloudmusic"),
     };

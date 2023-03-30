@@ -22,6 +22,7 @@ public class ConfigGui extends GuiConfigsBase {
         GUI("cloudmusic.gui.tab.gui"),
         LOGIN("cloudmusic.gui.tab.login"),
         HTTP("cloudmusic.gui.tab.http"),
+        ENABLE("cloudmusic.gui.tab.enable"),
         HOTKEY("cloudmusic.gui.tab.hotkey");
 
         private final String translationKey;
@@ -103,6 +104,8 @@ public class ConfigGui extends GuiConfigsBase {
             configs = Configs.LOGIN.OPTIONS;
         } else if (tab == ConfigGuiTab.HTTP){
             configs = Configs.HTTP.OPTIONS;
+        } else if (tab == ConfigGuiTab.ENABLE){
+            configs = Configs.ENABLE.HOTKEY_LIST;
         } else if (tab == ConfigGuiTab.HOTKEY){
             configs = Configs.HOTKEY.HOTKEY_LIST;
         } else {

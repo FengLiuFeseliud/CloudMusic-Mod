@@ -104,6 +104,7 @@
     "cloudmusic.help.to": "播放跳转至 /cloudmusic to [musicIndex]",
     "cloudmusic.help.del": "从播放列表中删除当前播放歌曲 /cloudmusic del",
     "cloudmusic.help.trash": "从播放列表中删除当前播放歌曲, 并将歌曲扔进垃圾桶 /cloudmusic trash",
+    "cloudmusic.help.random": "将播放队列随机并重新播放 /cloudmusic random",
     "cloudmusic.help.exit": "退出播放 (无法继续播放) /cloudmusic exit",
     "cloudmusic.help.cloudmusic": "显示本帮助 /cloudmusic",
 
@@ -276,6 +277,7 @@
     "cloudmusic.gui.tab.gui": "界面",
     "cloudmusic.gui.tab.login": "登录",
     "cloudmusic.gui.tab.http": "网络",
+    "cloudmusic.gui.tab.enable": "启用",
     "cloudmusic.gui.tab.hotkey": "热键",
 
     "cloudmusic.config.volume": "音量 | volume",
@@ -286,6 +288,11 @@
 
     "cloudmusic.config.play.loop": "循环播放 | play.loop",
     "cloudmusic.config.play.loop.comment": "循环播放播放列表",
+    "cloudmusic.config.play.loop.pretty": "循环播放列表",
+
+    "cloudmusic.config.play.auto.random": "自动随机播放 | play.auto.random",
+    "cloudmusic.config.play.auto.random.comment": "自动将播放队列随机播放",
+    "cloudmusic.config.play.auto.random.pretty": "自动随机播放",
 
     "cloudmusic.config.play.quality": "播放音质 | play.quality",
     "cloudmusic.config.play.quality.comment": "最大播放音质 (默认 极高)",
@@ -307,6 +314,11 @@
 
     "cloudmusic.config.music.info": "绘制歌曲信息 | music.info",
     "cloudmusic.config.music.info.comment": "是否在游戏内绘制歌曲信息",
+    "cloudmusic.config.music.info.pretty": "游戏内绘制歌曲信息",
+
+    "cloudmusic.config.lyric": "绘制歌词 | lyric",
+    "cloudmusic.config.lyric.comment": "是否在游戏内绘制歌词",
+    "cloudmusic.config.lyric.pretty": "绘制游戏内歌词",
 
     "cloudmusic.config.music.info.x": "歌曲信息x轴 | music.info.x",
     "cloudmusic.config.music.info.x.comment": "歌曲信息绘制所在x轴",
@@ -331,9 +343,6 @@
 
     "cloudmusic.config.music.info.font.color": "歌曲副标题颜色 | music.info.font.color",
     "cloudmusic.config.music.info.font.color.comment": "歌曲副标题颜色, 十六进制 (默认 #00858585 灰色)",
-
-    "cloudmusic.config.lyric": "绘制歌词 | lyric",
-    "cloudmusic.config.lyric.comment": "是否在游戏内绘制歌词",
 
     "cloudmusic.config.lyric.color": "歌词颜色 | lyric.color",
     "cloudmusic.config.lyric.color.comment": "歌词颜色, 十六进制 (默认 #00FFFFFF 白色)",

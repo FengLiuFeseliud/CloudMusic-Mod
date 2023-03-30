@@ -7,6 +7,7 @@ import fengliu.cloudmusic.music163.IMusic;
 import fengliu.cloudmusic.music163.data.Music;
 import fengliu.cloudmusic.util.MusicPlayer;
 import fengliu.cloudmusic.util.page.Page;
+import fi.dy.masa.malilib.config.options.ConfigHotkey;
 import fi.dy.masa.malilib.hotkeys.IHotkeyCallback;
 import fi.dy.masa.malilib.hotkeys.IKeybind;
 import fi.dy.masa.malilib.hotkeys.KeyAction;
@@ -44,19 +45,9 @@ public class HotkeysCallback implements IHotkeyCallback {
     public static void init(){
         HotkeysCallback hotkeysCallback = new HotkeysCallback();
 
-        Configs.HOTKEY.OPEN_CONFIG_GUI.getKeybind().setCallback(hotkeysCallback);
-        Configs.HOTKEY.SWITCH_PLAY_MUSIC.getKeybind().setCallback(hotkeysCallback);
-        Configs.HOTKEY.PLAY_MUSIC.getKeybind().setCallback(hotkeysCallback);
-        Configs.HOTKEY.NEXT_MUSIC.getKeybind().setCallback(hotkeysCallback);
-        Configs.HOTKEY.PREV_MUSIC.getKeybind().setCallback(hotkeysCallback);
-        Configs.HOTKEY.STOP_MUSIC.getKeybind().setCallback(hotkeysCallback);
-        Configs.HOTKEY.EXIT_PLAY.getKeybind().setCallback(hotkeysCallback);
-        Configs.HOTKEY.DELETE_PLAY_MUSIC.getKeybind().setCallback(hotkeysCallback);
-        Configs.HOTKEY.TRASH_ADD_PLAY_MUSIC.getKeybind().setCallback(hotkeysCallback);
-        Configs.HOTKEY.LIKE_MUSIC.getKeybind().setCallback(hotkeysCallback);
-        Configs.HOTKEY.PLAYLIST_ADD_MUSIC.getKeybind().setCallback(hotkeysCallback);
-        Configs.HOTKEY.PLAYLIST_DEL_MUSIC.getKeybind().setCallback(hotkeysCallback);
-        Configs.HOTKEY.PLAYLIST_RANDOM.getKeybind().setCallback(hotkeysCallback);
+        for(ConfigHotkey hotkey: Configs.HOTKEY.HOTKEY_LIST){
+            hotkey.getKeybind().setCallback(hotkeysCallback);
+        }
     }
 
     @Override

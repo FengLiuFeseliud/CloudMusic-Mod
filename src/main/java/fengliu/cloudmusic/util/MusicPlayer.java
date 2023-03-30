@@ -66,6 +66,9 @@ public class MusicPlayer implements Runnable {
     public MusicPlayer(List<IMusic> playList){
         this.playListSize = playList.size();
         this.playList = playList;
+        if (Configs.ENABLE.PLAY_AUTO_RANDOM.getBooleanValue()){
+            this.randomPlay();
+        }
 
         this.volumeSet(toVolume(Configs.PLAY.VOLUME.getIntegerValue()));
     }
