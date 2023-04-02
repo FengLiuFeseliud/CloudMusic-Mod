@@ -1260,7 +1260,7 @@ public class MusicCommand {
             argument("phone", LongArgumentType.longArg()).then(
                 argument("captcha", IntegerArgumentType.integer()).executes(contextData -> {
                     runCommand(contextData, context -> {
-                        resetCookie(loginMusic163.cellphone(LongArgumentType.getLong(context, "phone"), ""+IntegerArgumentType.getInteger(context, "captcha"), Configs.LOGIN.COUNTRY_CODE.getIntegerValue(), true));
+                        resetCookie(loginMusic163.cellphone(LongArgumentType.getLong(context, "phone"), IntegerArgumentType.getInteger(context, "captcha"), Configs.LOGIN.COUNTRY_CODE.getIntegerValue()));
                         context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.login", my.name));
                     });
                     return Command.SINGLE_SUCCESS;
@@ -1272,7 +1272,7 @@ public class MusicCommand {
             argument("phone", LongArgumentType.longArg()).then(
                 argument("password", StringArgumentType.string()).executes(contextData -> {
                     runCommand(contextData, context -> {
-                        resetCookie(loginMusic163.cellphone(LongArgumentType.getLong(context, "phone"), StringArgumentType.getString(context, "password"), Configs.LOGIN.COUNTRY_CODE.getIntegerValue(), false));
+                        resetCookie(loginMusic163.cellphone(LongArgumentType.getLong(context, "phone"), StringArgumentType.getString(context, "password"), Configs.LOGIN.COUNTRY_CODE.getIntegerValue()));
                         context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.login", my.name));
                     });
                     return Command.SINGLE_SUCCESS;

@@ -78,20 +78,32 @@ public class LoginMusic163 {
     }
 
     /**
-     * 手机密码 / 验证码 登录
+     * 验证码 登录
      * @param phone 手机号
-     * @param password 密码 / 验证码
+     * @param captcha 验证码
      * @param countryCode 国家码
-     * @param captcha 是否为 验证码 登录
      * @return 登录成功返回 cookie
      */
-    public String cellphone(long phone, String password, int countryCode, boolean captcha) {
+    public String cellphone(long phone, int captcha, int countryCode) {
         Map<String, Object> data = new HashMap<String, Object>();
-        if(captcha){
-            data.put("captcha", password);
-        }else{
-            data.put("password", LoginMusic163.encryption(password));
-        }
+        data.put("captcha", captcha);
+        data.put("rememberLogin", true);
+        data.put("countrycode", countryCode);
+        data.put("phone", phone);
+
+        return this.api.POST_LOGIN("/api/login/cellphone", data);
+    }
+
+    /**
+     * 手机密码 登录
+     * @param phone 手机号
+     * @param password 密码
+     * @param countryCode 国家码
+     * @return 登录成功返回 cookie
+     */
+    public String cellphone(long phone, String password, int countryCode) {
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("password", LoginMusic163.encryption(password));
         data.put("rememberLogin", true);
         data.put("countrycode", countryCode);
         data.put("phone", phone);
@@ -162,12 +174,6 @@ public class LoginMusic163 {
             JsonObject json = result.getJson();
 
             int code = json.get("code").getAsInt();
-            if(code == 801 || code == 802){
-                Thread.sleep(qrCheckTime* 1000L);
-                qrCheckNum -= 1;
-                continue;
-            }
-
             if(code == 800){
                 throw new ActionException(Text.translatable("cloudmusic.exception.login.qr.code"));
             }
@@ -175,6 +181,9 @@ public class LoginMusic163 {
             if(code == 803){
                 return result.getSetCookie();
             }
+
+            Thread.sleep(qrCheckTime* 1000L);
+            qrCheckNum -= 1;
         }
 
         throw new ActionException(Text.translatable("cloudmusic.exception.login.qr.code.time.out"));
