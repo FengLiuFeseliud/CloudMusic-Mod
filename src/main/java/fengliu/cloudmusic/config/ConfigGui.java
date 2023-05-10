@@ -27,7 +27,7 @@ public class ConfigGui extends GuiConfigsBase {
 
         private final String translationKey;
 
-        private ConfigGuiTab(String translationKey){
+        ConfigGuiTab(String translationKey){
             this.translationKey = translationKey;
         }
 
@@ -69,7 +69,7 @@ public class ConfigGui extends GuiConfigsBase {
 
     public ConfigGui(Screen screen){
         super(10, 50, CloudMusicClient.MOD_ID, null, "cloudmusic.gui.configs.title");
-        this.parentScreen = screen;
+        this.setParent(screen);
     }
 
     public ConfigGui(){
