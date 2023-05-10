@@ -7,6 +7,10 @@ import fengliu.cloudmusic.config.ConfigGui;
 public class ModMenu implements ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return ConfigGui::new;
+        return (screen) -> {
+            ConfigGui gui = new ConfigGui();
+            gui.setParent(screen);
+            return gui;
+        };
     }
 }

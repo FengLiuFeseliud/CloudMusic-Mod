@@ -126,8 +126,8 @@
     "cloudmusic.info.music.duration": "时长: %s",
     "cloudmusic.info.music.id": "id: %s",
 
-    "cloudmusic.info.playlist.creator": "创建者: ",
-    "cloudmusic.info.playlist.tags": "标签: ",
+    "cloudmusic.info.playlist.creator": "创建者: %s",
+    "cloudmusic.info.playlist.tags": "标签: %s",
     "cloudmusic.info.playlist.count": "单曲数: %s 播放数: %s",
     "cloudmusic.info.playlist.id": "id: %s",
 
@@ -142,9 +142,9 @@
     "cloudmusic.info.artist.album": "专辑数: %s",
     "cloudmusic.info.artist.id": "id: %s",
 
-    "cloudmusic.info.dj.music.radio": "电台: ",
-    "cloudmusic.info.dj.creator": "主播: ",
-    "cloudmusic.info.dj.category": "类别: ",
+    "cloudmusic.info.dj.music.radio": "电台: %s",
+    "cloudmusic.info.dj.creator": "主播: %s",
+    "cloudmusic.info.dj.category": "类别: %s",
     "cloudmusic.info.dj.size": "节目数: %s",
     "cloudmusic.info.dj.count": "收藏数: %s 分享数: %s",
     "cloudmusic.info.dj.music.count": "播放数: %s 点赞数: %s",

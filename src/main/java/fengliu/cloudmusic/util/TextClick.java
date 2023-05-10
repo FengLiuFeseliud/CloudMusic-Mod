@@ -1,13 +1,13 @@
 package fengliu.cloudmusic.util;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import net.minecraft.text.ClickEvent;
+import net.minecraft.text.ClickEvent.Action;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.ClickEvent.Action;
+
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * 自定义事件文本对象
@@ -32,7 +32,7 @@ public class TextClick {
      * @return 文本对象
      */
     public static MutableText suggestText(String key, String text, String suggest){
-        return Text.translatable(key).append(TextClick.suggestText(text, suggest));
+        return Text.translatable(key, TextClick.suggestText(text, suggest));
     }
 
     /**
@@ -65,6 +65,6 @@ public class TextClick {
      * @return 文本对象
      */
     public static MutableText suggestTextMap(String key, Map<String, String> textAndSuggest, String sign){
-        return Text.translatable(key).append(TextClick.suggestTextMap(textAndSuggest, sign));
+        return Text.translatable(key, TextClick.suggestTextMap(textAndSuggest, sign));
     }
 }
