@@ -1,20 +1,15 @@
 package fengliu.cloudmusic.music163.data;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.TextClick;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
+
+import java.util.*;
 
 /**
  * 专辑对象
@@ -55,11 +50,11 @@ public class Album extends Music163Obj implements IMusicList, ICanSubscribe {
         if(this.alias.size() == 0){
             source.sendFeedback(Text.literal(this.name));
         }else{
-            String aliasName = "";
+            StringBuilder aliasName = new StringBuilder();
             for(JsonElement alia: this.alias.asList()){
-                aliasName += alia.getAsString() + " / ";
+                aliasName.append(alia.getAsString()).append(" / ");
             }
-            aliasName = aliasName.substring(0, aliasName.length() - 3);
+            aliasName = new StringBuilder(aliasName.substring(0, aliasName.length() - 3));
 
             source.sendFeedback(Text.literal(this.name + " §7(" + aliasName + ")"));
         }

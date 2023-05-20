@@ -3,7 +3,6 @@ package fengliu.cloudmusic.config;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.music163.Quality;
 import fi.dy.masa.malilib.config.ConfigUtils;
@@ -58,6 +57,8 @@ public class Configs implements IConfigHandler {
         public static final ConfigHotkey PREV_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.prev.music", "", "cloudmusic.config.hotkey.prev.music.comment");
         public static final ConfigHotkey STOP_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.stop.music", "", "cloudmusic.config.hotkey.stop.music.comment");
         public static final ConfigHotkey EXIT_PLAY = new ConfigHotkey("cloudmusic.config.hotkey.exit.play", "", "cloudmusic.config.hotkey.exit.play.comment");
+        public static final ConfigHotkey PLAY_VOLUME_ADD = new ConfigHotkey("cloudmusic.config.hotkey.play.volume.add", "", "cloudmusic.config.hotkey.play.volume.add.comment");
+        public static final ConfigHotkey PLAY_VOLUME_DOWN = new ConfigHotkey("cloudmusic.config.hotkey.play.volume.down", "", "cloudmusic.config.hotkey.play.volume.down.comment");
         public static final ConfigHotkey DELETE_PLAY_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.delete.play.music", "", "cloudmusic.config.hotkey.delete.play.music.comment");
         public static final ConfigHotkey TRASH_ADD_PLAY_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.trash.add.play.music", "", "cloudmusic.config.hotkey.trash.add.play.music.comment");
         public static final ConfigHotkey LIKE_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.like.music", "", "cloudmusic.config.hotkey.like.music.comment");
@@ -103,6 +104,8 @@ public class Configs implements IConfigHandler {
             PREV_MUSIC,
             STOP_MUSIC,
             EXIT_PLAY,
+            PLAY_VOLUME_ADD,
+            PLAY_VOLUME_DOWN,
             DELETE_PLAY_MUSIC,
             TRASH_ADD_PLAY_MUSIC,
             LIKE_MUSIC,
@@ -218,6 +221,8 @@ public class Configs implements IConfigHandler {
         public static final ConfigHotkey PREV_MUSIC = ALL.PREV_MUSIC;
         public static final ConfigHotkey STOP_MUSIC = ALL.STOP_MUSIC;
         public static final ConfigHotkey EXIT_PLAY = ALL.EXIT_PLAY;
+        public static final ConfigHotkey PLAY_VOLUME_ADD = ALL.PLAY_VOLUME_ADD;
+        public static final ConfigHotkey PLAY_VOLUME_DOWN = ALL.PLAY_VOLUME_DOWN;
         public static final ConfigHotkey DELETE_PLAY_MUSIC = ALL.DELETE_PLAY_MUSIC;
         public static final ConfigHotkey TRASH_ADD_PLAY_MUSIC = ALL.TRASH_ADD_PLAY_MUSIC;
         public static final ConfigHotkey LIKE_MUSIC = ALL.LIKE_MUSIC;
@@ -233,6 +238,8 @@ public class Configs implements IConfigHandler {
             PREV_MUSIC,
             STOP_MUSIC,
             EXIT_PLAY,
+            PLAY_VOLUME_ADD,
+            PLAY_VOLUME_DOWN,
             DELETE_PLAY_MUSIC,
             TRASH_ADD_PLAY_MUSIC,
             LIKE_MUSIC,

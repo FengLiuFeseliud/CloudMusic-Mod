@@ -221,6 +221,9 @@
     "cloudmusic.info.command.login.send.captcha": "成功向手机号发送验证码...",
     "cloudmusic.info.command.country.code": "设置手机号国家码为 %s...",
 
+    "cloudmusic.info.hotkey.play.volume.add": "将音量增加至 %s 百分比",
+    "cloudmusic.info.hotkey.play.volume.down": "将音量下降至 %s 百分比",
+
     "cloudmusic.options.play": "[播放]",
     "cloudmusic.options.shar": "[分享]",
     "cloudmusic.options.play.top50": "[热门50首]",
@@ -394,6 +397,12 @@
 
     "cloudmusic.config.hotkey.exit.play": "退出播放 | exit.play",
     "cloudmusic.config.hotkey.exit.play.comment": "无法继续播放",
+
+    "cloudmusic.config.hotkey.play.volume.add": "增加音量 | play.volume.add",
+    "cloudmusic.config.hotkey.play.volume.add.comment": "增加百分之一音量",
+
+    "cloudmusic.config.hotkey.play.volume.down": "减小音量 | play.volume.down",
+    "cloudmusic.config.hotkey.play.volume.down.comment": "减小百分之一音量",
 
     "cloudmusic.config.hotkey.delete.play.music": "从播放列表中删除歌曲 | delete.play.music",
     "cloudmusic.config.hotkey.delete.play.music.comment": "从播放列表中删除当前播放歌曲",

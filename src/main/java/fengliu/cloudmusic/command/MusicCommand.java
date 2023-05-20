@@ -1,25 +1,27 @@
 package fengliu.cloudmusic.command;
 
 import com.mojang.brigadier.Command;
-import com.mojang.brigadier.arguments.*;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.LongArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import fengliu.cloudmusic.config.Configs;
+import fengliu.cloudmusic.music163.*;
+import fengliu.cloudmusic.music163.data.*;
+import fengliu.cloudmusic.util.MusicPlayer;
+import fengliu.cloudmusic.util.page.Page;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import fengliu.cloudmusic.config.Configs;
-import fengliu.cloudmusic.music163.data.*;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.text.Text;
-import fengliu.cloudmusic.music163.*;
-import fengliu.cloudmusic.util.MusicPlayer;
-import fengliu.cloudmusic.util.page.Page;
-
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class MusicCommand {
     private static final LoginMusic163 loginMusic163 = new LoginMusic163();
@@ -1164,7 +1166,7 @@ public class MusicCommand {
 
         // cloudmusic volume
         CloudMusic.then(Volume.executes(context -> {
-            context.getSource().sendFeedback(Text.translatable("cloudmusic.info.volume", volumePercentage));
+            context.getSource().sendFeedback(Text.translatable("cloudmusic.info.volume", Configs.PLAY.VOLUME.getIntegerValue()));
             return Command.SINGLE_SUCCESS;
         }));
 
@@ -1172,10 +1174,7 @@ public class MusicCommand {
         CloudMusic.then(Volume.then(
             argument("volume", IntegerArgumentType.integer(0, 100)).executes(contextData -> {
                 runCommand(contextData, context -> {
-                    volumePercentage = IntegerArgumentType.getInteger(context, "volume");
-                    player.volumeSet(MusicPlayer.toVolume(volumePercentage));
-                    Configs.PLAY.VOLUME.setIntegerValue(volumePercentage);
-                    Configs.INSTANCE.save();
+                    player.volumeSet(IntegerArgumentType.getInteger(context, "volume"));
                 });
                 return Command.SINGLE_SUCCESS;
             }))

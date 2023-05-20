@@ -1,34 +1,23 @@
 package fengliu.cloudmusic.util;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.net.URLConnection;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import fengliu.cloudmusic.config.Configs;
+import fengliu.cloudmusic.music163.ActionException;
+import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
+
+import java.io.*;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import fengliu.cloudmusic.config.Configs;
-import org.jetbrains.annotations.Nullable;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import fengliu.cloudmusic.music163.ActionException;
-import net.minecraft.text.Text;
-
 public class HttpClient {
     private final String MainPath;
-    private Map<String, String> Header;
+    private final Map<String, String> Header;
 
     public HttpClient(String path){
         this.MainPath = path;
@@ -55,12 +44,12 @@ public class HttpClient {
         return this.Header.get("Cookie");
     }
 
-    public String getUrl(String paht){
-        return MainPath + paht;
+    public String getUrl(String path){
+        return MainPath + path;
     }
 
-    public HttpResult GET(String paht, @Nullable Map<String, Object> data){
-        return this.connection(this.getUrl(paht), data, (HttpURLConnection connection) -> {
+    public HttpResult GET(String path, @Nullable Map<String, Object> data){
+        return this.connection(this.getUrl(path), data, (HttpURLConnection connection) -> {
             try {
                 connection.setRequestMethod("GET");
             } catch (ProtocolException exception) {
@@ -144,11 +133,11 @@ public class HttpClient {
     }
 
     private byte[] setData(Map<String, Object> data){
-        String[] toDataString = {""};
-        data.forEach((key, value) -> {
-            toDataString[0] += key + "=" + value.toString() + "&";
-        });
-        return toDataString[0].getBytes();
+        StringBuilder dataStr = new StringBuilder();
+        for (Entry<String, Object> value: data.entrySet()){
+            dataStr.append(value.getKey()).append("=").append(URLEncoder.encode(String.valueOf(value.getValue()), StandardCharsets.UTF_8)).append("&");
+        }
+        return dataStr.toString().getBytes();
     }
 
     private HttpResult connection(String httpUrl, @Nullable Map<String, Object> data, Connection connection, int retry){

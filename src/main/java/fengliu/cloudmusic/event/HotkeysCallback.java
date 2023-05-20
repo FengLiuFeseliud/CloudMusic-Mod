@@ -73,6 +73,22 @@ public class HotkeysCallback implements IHotkeyCallback {
             return true;
         }
 
+        if (key == Configs.HOTKEY.PLAY_VOLUME_ADD.getKeybind() && action == KeyAction.PRESS){
+            MusicCommand.getPlayer().volumeAdd();
+            if (client.player != null){
+                client.player.sendMessage(Text.translatable("cloudmusic.info.hotkey.play.volume.add", Configs.PLAY.VOLUME.getStringValue()), true);
+            }
+            return true;
+        }
+
+        if (key == Configs.HOTKEY.PLAY_VOLUME_DOWN.getKeybind() && action == KeyAction.PRESS){
+            MusicCommand.getPlayer().volumeDown();
+            if (client.player != null){
+                client.player.sendMessage(Text.translatable("cloudmusic.info.hotkey.play.volume.down", Configs.PLAY.VOLUME.getStringValue()), true);
+            }
+            return true;
+        }
+
         if (key == Configs.HOTKEY.PLAY_MUSIC.getKeybind() && action == KeyAction.PRESS){
             MusicCommand.getPlayer().continues();
             return true;

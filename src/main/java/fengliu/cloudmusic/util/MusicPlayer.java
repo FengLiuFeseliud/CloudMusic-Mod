@@ -1,29 +1,24 @@
 package fengliu.cloudmusic.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
-
 import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.config.Configs;
-import fengliu.cloudmusic.music163.*;
+import fengliu.cloudmusic.music163.ActionException;
+import fengliu.cloudmusic.music163.IMusic;
+import fengliu.cloudmusic.music163.Lyric;
 import fengliu.cloudmusic.music163.data.DjMusic;
 import fengliu.cloudmusic.music163.data.Music;
 import fengliu.cloudmusic.render.MusicIconTexture;
 import fengliu.cloudmusic.util.page.Page;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
+
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 歌曲播放对象
@@ -38,26 +33,9 @@ public class MusicPlayer implements Runnable {
     protected int playListSize;
     protected boolean loopPlayIn = true;
     private boolean load;
-    private int Volume;
+    private int volumePercentage;
     private long playingProgress;
     private long startPlayingTime;
-
-    /**
-     * 通过音量百分比计算音量增益
-     * @param volumePercentage 音量百分比
-     * @return 音量增益
-     */
-    public static int toVolume(int volumePercentage){
-        if(volumePercentage < 0){
-            volumePercentage = 0;
-        }
-
-        if(volumePercentage > 100){
-            volumePercentage = 100;
-        }
-
-        return (int) (86 * 0.01 * volumePercentage);
-    }
 
     /**
      * 歌曲播放对象
@@ -70,7 +48,7 @@ public class MusicPlayer implements Runnable {
             this.randomPlay();
         }
 
-        this.volumeSet(toVolume(Configs.PLAY.VOLUME.getIntegerValue()));
+        this.volumeSet(Configs.PLAY.VOLUME.getIntegerValue());
     }
 
     public boolean isPlaying(){
@@ -165,8 +143,7 @@ public class MusicPlayer implements Runnable {
         play = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
         play.open(audioFormat);
         //设置音量
-        FloatControl gainControl = (FloatControl) this.play.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(this.Volume);
+        this.volumeSet(volumePercentage);
 
         play.start();
         if (lyric != null){
@@ -219,29 +196,35 @@ public class MusicPlayer implements Runnable {
 
     /**
      * 设置音量增益
-     *
-     * @param volume 音量增益
+     * @param volume 音量百分比
      */
     public void volumeSet(int volume){
         if(volume < 0){
             volume = 0;
         }
 
-        if(volume <= 80 && volume != 0){
-            volume = (80 - volume) * -1;
-        }
-
-        if(volume > 80){
-            volume = volume - 80;
+        if(volume > 100){
+            volume = 100;
         }
         
-        this.Volume = volume;
+        this.volumePercentage = volume;
         if(this.play == null){
             return;
         }
 
         FloatControl gainControl = (FloatControl) this.play.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(this.Volume);
+        gainControl.setValue((float) (0.86 * volume - 80));
+
+        Configs.PLAY.VOLUME.setIntegerValue(this.volumePercentage);
+        Configs.INSTANCE.save();
+    }
+
+    public void volumeAdd(){
+        this.volumeSet(++this.volumePercentage);
+    }
+
+    public void volumeDown(){
+        this.volumeSet(--this.volumePercentage);
     }
 
     /**

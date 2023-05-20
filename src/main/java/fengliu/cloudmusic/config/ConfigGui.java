@@ -2,7 +2,6 @@ package fengliu.cloudmusic.config;
 
 import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.command.MusicCommand;
-import fengliu.cloudmusic.util.MusicPlayer;
 import fi.dy.masa.malilib.config.IConfigBase;
 import fi.dy.masa.malilib.gui.GuiConfigsBase;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
@@ -53,7 +52,7 @@ public class ConfigGui extends GuiConfigsBase {
         public void actionPerformedWithButton(ButtonBase button, int mouseButton){
             TabManager.setConfigGuiTab(this.tab);
 
-            this.parent.reCreateListWidget(); // apply the new config width
+            this.parent.reCreateListWidget();
             this.parent.getListWidget().resetScrollbarPosition();
             this.parent.initGui();
         }
@@ -120,6 +119,6 @@ public class ConfigGui extends GuiConfigsBase {
         super.removed();
         Configs.INSTANCE.save();
 
-        MusicCommand.getPlayer().volumeSet(MusicPlayer.toVolume(Configs.PLAY.VOLUME.getIntegerValue()));
+        MusicCommand.getPlayer().volumeSet(Configs.PLAY.VOLUME.getIntegerValue());
     }
 }
