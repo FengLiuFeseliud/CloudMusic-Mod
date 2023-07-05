@@ -1,13 +1,14 @@
 {
   "schemaVersion": 1,
   "id": "cloudmusic",
-  "version": "0.4.4",
+  "version": "0.4.5",
 
   "name": "CloudMusic",
   "description": "Use Netease Cloud Music in MC !!!",
   "authors": [
     "FengLiuFeseliud"
   ],
+
   "contact": {
     "homepage": "https://github.com/FengLiuFeseliud/CloudMusic-Mod",
     "sources": "https://github.com/FengLiuFeseliud/CloudMusic-Mod",
@@ -26,14 +27,13 @@
       "fengliu.cloudmusic.compat.ModMenu"
     ]
   },
+
   "mixins": [
     "cloudmusic.mixins.json"
   ],
 
   "depends": {
-    "fabricloader": ">=0.14.11"
-  },
-  "suggests": {
-    "another-mod": "*"
+    "minecraft": "1.20.x",
+    "malilib": "0.16.x"
   }
 }
