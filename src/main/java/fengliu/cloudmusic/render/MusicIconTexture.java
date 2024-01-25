@@ -4,6 +4,7 @@ import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.music163.IMusic;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.QRCode;
+import fengliu.cloudmusic.util.PNGConverter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
@@ -28,7 +29,7 @@ public class MusicIconTexture {
             public void run() {
                 NativeImage img;
                 try {
-                    img = NativeImage.read(HttpClient.downloadStream(music.getPicUrl() + "?param=128y128"));
+                    img = NativeImage.read(PNGConverter.convertJPEGtoPNG(HttpClient.downloadStream(music.getPicUrl() + "?param=128y128")));
                 } catch (Exception err) {
                     err.printStackTrace();
                     return;
