@@ -29,11 +29,14 @@
   },
 
   "mixins": [
-    "cloudmusic.mixins.json"
+    {
+      "config": "cloudmusic.mixins.json",
+      "environment": "client"
+    }
   ],
 
   "depends": {
-    "minecraft": "1.20.x",
+    "minecraft": "1.20.4",
     "malilib": "0.18.x"
   }
 }

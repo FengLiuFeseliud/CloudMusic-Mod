@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 public class HttpClient {
     private final String MainPath;
@@ -59,8 +60,8 @@ public class HttpClient {
         }, 0);
     }
 
-    public HttpResult POST(String paht, @Nullable Map<String, Object> data){
-        return this.connection(this.getUrl(paht), data, (HttpURLConnection connection) -> {
+    public HttpResult POST(String path, @Nullable Map<String, Object> data){
+        return this.connection(this.getUrl(path), data, (HttpURLConnection connection) -> {
             try {
                 connection.setRequestMethod("POST");
                 connection.setDoOutput(true);
@@ -79,8 +80,8 @@ public class HttpClient {
         }
     }
 
-    public JsonObject POST_API(String paht, @Nullable Map<String, Object> data){
-        HttpResult result = this.POST(paht, data);
+    public JsonObject POST_API(String path, @Nullable Map<String, Object> data){
+        HttpResult result = this.POST(path, data);
         JsonObject json = result.getJson();
         
         int code = json.get("code").getAsInt();
@@ -99,8 +100,8 @@ public class HttpClient {
         return json;
     }
 
-    public String POST_LOGIN(String paht, Map<String, Object> data){
-        HttpResult result = this.POST(paht, data);
+    public String POST_LOGIN(String path, Map<String, Object> data){
+        HttpResult result = this.POST(path, data);
         JsonObject json = result.getJson();
         
         int code = json.get("code").getAsInt();
@@ -140,12 +141,23 @@ public class HttpClient {
         return dataStr.toString().getBytes();
     }
 
+    private static URLConnection openHttpUrlProxy(String httpUrl) throws IOException {
+        if(!Configs.HTTP.HTTP_PROXY.getBooleanValue()){
+            return new URL(httpUrl).openConnection();
+        }
+
+        return new URL(httpUrl).openConnection(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
+                Configs.HTTP.HTTP_PROXY_IP.getStringValue(),
+                Configs.HTTP.HTTP_PROXY_PORT.getIntegerValue())
+        ));
+    }
+
     private HttpResult connection(String httpUrl, @Nullable Map<String, Object> data, Connection connection, int retry){
         HttpURLConnection httpConnection = null;
         InputStream inputStream = null;
         try {
             //创建连接
-            httpConnection = this.setRequestHeader(connection.set((HttpURLConnection) new URL(httpUrl).openConnection()));
+            httpConnection = this.setRequestHeader(connection.set((HttpURLConnection) openHttpUrlProxy(httpUrl)));
             if(data != null){
                 httpConnection.getOutputStream().write(this.setData(data));
             }
@@ -193,8 +205,7 @@ public class HttpClient {
             }
 
             // 统一资源
-            URL url = new URL(path);
-            URLConnection urlConnection = url.openConnection();
+            URLConnection urlConnection = openHttpUrlProxy(path);
             HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
             // 设定请求的方法
             httpURLConnection.setInstanceFollowRedirects(true);
@@ -233,8 +244,7 @@ public class HttpClient {
         InputStream bin = null;
         try {
             // 统一资源
-            URL url = new URL(path);
-            URLConnection urlConnection = url.openConnection();
+            URLConnection urlConnection = openHttpUrlProxy(path);
             HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
             // 设定请求的方法
             httpURLConnection.setInstanceFollowRedirects(true);

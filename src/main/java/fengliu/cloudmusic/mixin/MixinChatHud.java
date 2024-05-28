@@ -10,6 +10,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -19,6 +20,7 @@ import java.util.regex.Pattern;
 
 @Mixin(ChatHud.class)
 public class MixinChatHud {
+    @Unique
     private static final Pattern SHAR_PATTERN = Pattern.compile("CloudMusic#.+\\sid:\\s[^\\sid:a-zA-Z]\\w[^\\sa-zA-Z]+$", Pattern.CASE_INSENSITIVE);
 
     /**
@@ -26,6 +28,7 @@ public class MixinChatHud {
      * @param sharMatcher matcher
      * @return bool
      */
+    @Unique
     private boolean isSharMessage(Matcher sharMatcher){
         if (!sharMatcher.find()) {
             return false;
@@ -38,6 +41,7 @@ public class MixinChatHud {
      * 设置分享消息样式
      * @param message 消息
      */
+    @Unique
     private void setShar(Text message){
         Matcher sharMatcher = SHAR_PATTERN.matcher(message.getString());
         if (!isSharMessage(sharMatcher)) {

@@ -155,6 +155,8 @@
     "cloudmusic.info.style.music.count": "单曲数: %s",
     "cloudmusic.info.style.artist.count": "歌手数: %s",
 
+    "cloudmusic.info.play.free.trial": "正在试听 %s 试听时长 %s 秒 ~ %s 秒",
+
     "cloudmusic.info.page.music.similar": "%s 的相似歌曲",
     "cloudmusic.info.page.music.similar.playlist": "%s 的相似歌单",
     "cloudmusic.info.page.artist.album": "%s 的所有专辑",
@@ -329,6 +331,16 @@
     "cloudmusic.config.music.info.y": "歌曲信息y轴 | music.info.y",
     "cloudmusic.config.music.info.y.comment": "歌曲信息绘制所在y轴",
 
+    "cloudmusic.config.music.info.effect.offset": "歌曲信息在有药水效果时偏移 | music.info.effect.offset",
+    "cloudmusic.config.music.info.effect.offset.comment": "歌曲信息在有药水效果时偏移",
+    "cloudmusic.config.music.info.effect.offset.pretty": "歌曲信息在有药水效果时偏移",
+
+    "cloudmusic.config.music.info.effect.offset.x": "歌曲信息在有药水效果时向x轴偏移 | music.info.effect.offset.x",
+    "cloudmusic.config.music.info.effect.offset.x.comment": "歌曲信息在有药水效果时向x轴偏移, 有负药水效果该值将*2",
+
+    "cloudmusic.config.music.info.effect.offset.y": "歌曲信息在有药水效果时向y轴偏移 | music.info.effect.offset.y",
+    "cloudmusic.config.music.info.effect.offset.y.comment": "歌曲信息在有药水效果时向y轴偏移, 有负药水效果该值将*2",
+
     "cloudmusic.config.music.info.color": "歌曲信息背景颜色 | music.info.color",
     "cloudmusic.config.music.info.color.comment": "歌曲信息背景颜色, 十六进制 (默认 #4DE41318 半透明红色)",
 
@@ -376,6 +388,16 @@
 
     "cloudmusic.config.http.time.out": "请求超时 | time.out",
     "cloudmusic.config.http.time.out.comment": "请求超时时间, 单位秒 (默认 30 秒)",
+
+    "cloudmusic.config.http.proxy": "HTTP 代理 | http.proxy",
+    "cloudmusic.config.http.proxy.comment": "使用 HTTP 代理",
+    "cloudmusic.config.http.proxy.pretty": "使用 HTTP 代理",
+
+    "cloudmusic.config.http.proxy.ip": "HTTP 代理服务器IP | http.proxy.ip",
+    "cloudmusic.config.http.proxy.ip.comment": "代理服务器IP",
+
+    "cloudmusic.config.http.proxy.port": "HTTP 代理服务器端口 | http.proxy.port",
+    "cloudmusic.config.http.proxy.port.comment": "代理服务器端口",
 
     "cloudmusic.config.hotkey.open.config.gui": "打开配置菜单 | open.config.gui",
     "cloudmusic.config.hotkey.open.config.gui.comment": "打开该菜单",

@@ -34,6 +34,9 @@ public class Configs implements IConfigHandler {
         public static final ConfigInteger PAGE_LIMIT = new ConfigInteger("cloudmusic.config.page.limit", 8, 5, 16, "cloudmusic.config.page.limit.comment");
         public static final ConfigInteger MUSIC_INFO_X = new ConfigInteger("cloudmusic.config.music.info.x", 0, 0, 4000, "cloudmusic.config.music.info.x.comment");
         public static final ConfigInteger MUSIC_INFO_Y = new ConfigInteger("cloudmusic.config.music.info.y", 30, 0, 3000, "cloudmusic.config.music.info.y.comment");
+        public static final ConfigBooleanHotkeyed MUSIC_INFO_EFFECT_OFFSET = new ConfigBooleanHotkeyed("cloudmusic.config.music.info.effect.offset", true, "", "cloudmusic.config.music.info.effect.offset.comment", "cloudmusic.config.music.info.effect.offset.pretty");
+        public static final ConfigInteger MUSIC_INFO_EFFECT_OFFSET_X = new ConfigInteger("cloudmusic.config.music.info.effect.offset.x", 0, 0, 4000, "cloudmusic.config.music.info.effect.offset.x.comment");
+        public static final ConfigInteger MUSIC_INFO_EFFECT_OFFSET_Y = new ConfigInteger("cloudmusic.config.music.info.effect.offset.y", 21, 0, 3000, "cloudmusic.config.music.info.effect.offset.y.comment");
         public static final ConfigColor MUSIC_INFO_COLOR = new ConfigColor("cloudmusic.config.music.info.color", "#4DE41318", "cloudmusic.config.music.info.color.comment");
         public static final ConfigColor MUSIC_PROGRESS_BAR_COLOR = new ConfigColor("cloudmusic.config.music.progress.bar.color", "#FF858585", "cloudmusic.config.music.progress.bar.color.comment");
         public static final ConfigColor MUSIC_PLAYED_PROGRESS_BAR_COLOR = new ConfigColor("cloudmusic.config.music.player.progress.bar.color", "#FFFF9600", "cloudmusic.config.music.player.progress.bar.color.comment");
@@ -50,6 +53,9 @@ public class Configs implements IConfigHandler {
         public static final ConfigInteger QR_CHECK_TIME = new ConfigInteger("cloudmusic.config.login.qr.check.time", 3, 1, 60, "cloudmusic.config.login.qr.check.time.comment");
         public static final ConfigInteger MAX_RETRY = new ConfigInteger("cloudmusic.config.http.max.retry", 3, 0, 10, "cloudmusic.config.http.max.retry.comment");
         public static final ConfigInteger TIME_OUT = new ConfigInteger("cloudmusic.config.http.time.out", 30, 0, 180, "cloudmusic.config.http.time.out.comment");
+        public static final ConfigBooleanHotkeyed HTTP_PROXY = new ConfigBooleanHotkeyed("cloudmusic.config.http.proxy", false, "","cloudmusic.config.http.proxy.comment", "cloudmusic.config.http.proxy.pretty");
+        public static final ConfigString HTTP_PROXY_IP = new ConfigString("cloudmusic.config.http.proxy.ip", "","cloudmusic.config.http.proxy.ip.comment");
+        public static final ConfigInteger HTTP_PROXY_PORT = new ConfigInteger("cloudmusic.config.http.proxy.port", 8080, 0, 99999, "cloudmusic.config.http.proxy.port.comment");
         public static final ConfigHotkey OPEN_CONFIG_GUI = new ConfigHotkey("cloudmusic.config.hotkey.open.config.gui", "LEFT_CONTROL,C,M", "cloudmusic.config.hotkey.open.config.gui.comment");
         public static final ConfigHotkey SWITCH_PLAY_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.switch.play.music", "", "cloudmusic.config.hotkey.switch.play.music.comment");
         public static final ConfigHotkey PLAY_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.play.music", "", "cloudmusic.config.hotkey.play.music.comment");
@@ -67,51 +73,57 @@ public class Configs implements IConfigHandler {
         public static final ConfigHotkey PLAYLIST_RANDOM = new ConfigHotkey("cloudmusic.config.hotkey.playlist.random", "", "cloudmusic.config.hotkey.playlist.random.comment");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
-            VOLUME,
-            PLAY_URL,
-            PLAY_LOOP,
-            PLAY_AUTO_RANDOM,
-            PLAY_QUALITY,
-            DJRADIO_PLAY_ASC,
-            CACHE_PATH,
-            CACHE_MAX_MB,
-            CACHE_DELETE_MB,
-            PAGE_LIMIT,
-            MUSIC_INFO,
-            LYRIC,
-            MUSIC_INFO_X,
-            MUSIC_INFO_Y,
-            MUSIC_INFO_COLOR,
-            MUSIC_PROGRESS_BAR_COLOR,
-            MUSIC_PLAYED_PROGRESS_BAR_COLOR,
-            MUSIC_PROGRESS_FONT_COLOR,
-            MUSIC_INFO_TITLE_FONT_COLOR,
-            MUSIC_INFO_FONT_COLOR,
-            LYRIC_COLOR,
-            LYRIC_SCALE,
-            LYRIC_X,
-            LYRIC_Y,
-            COOKIE,
-            COUNTRY_CODE,
-            QR_CHECK_NUM,
-            QR_CHECK_TIME,
-            MAX_RETRY,
-            TIME_OUT,
-            OPEN_CONFIG_GUI,
-            SWITCH_PLAY_MUSIC,
-            PLAY_MUSIC,
-            NEXT_MUSIC,
-            PREV_MUSIC,
-            STOP_MUSIC,
-            EXIT_PLAY,
-            PLAY_VOLUME_ADD,
-            PLAY_VOLUME_DOWN,
-            DELETE_PLAY_MUSIC,
-            TRASH_ADD_PLAY_MUSIC,
-            LIKE_MUSIC,
-            PLAYLIST_ADD_MUSIC,
-            PLAYLIST_DEL_MUSIC,
-            PLAYLIST_RANDOM
+                VOLUME,
+                PLAY_URL,
+                PLAY_LOOP,
+                PLAY_AUTO_RANDOM,
+                PLAY_QUALITY,
+                DJRADIO_PLAY_ASC,
+                CACHE_PATH,
+                CACHE_MAX_MB,
+                CACHE_DELETE_MB,
+                PAGE_LIMIT,
+                MUSIC_INFO,
+                LYRIC,
+                MUSIC_INFO_X,
+                MUSIC_INFO_Y,
+                MUSIC_INFO_EFFECT_OFFSET,
+                MUSIC_INFO_EFFECT_OFFSET_X,
+                MUSIC_INFO_EFFECT_OFFSET_Y,
+                MUSIC_INFO_COLOR,
+                MUSIC_PROGRESS_BAR_COLOR,
+                MUSIC_PLAYED_PROGRESS_BAR_COLOR,
+                MUSIC_PROGRESS_FONT_COLOR,
+                MUSIC_INFO_TITLE_FONT_COLOR,
+                MUSIC_INFO_FONT_COLOR,
+                LYRIC_COLOR,
+                LYRIC_SCALE,
+                LYRIC_X,
+                LYRIC_Y,
+                COOKIE,
+                COUNTRY_CODE,
+                QR_CHECK_NUM,
+                QR_CHECK_TIME,
+                MAX_RETRY,
+                TIME_OUT,
+                HTTP_PROXY,
+                HTTP_PROXY_IP,
+                HTTP_PROXY_PORT,
+                OPEN_CONFIG_GUI,
+                SWITCH_PLAY_MUSIC,
+                PLAY_MUSIC,
+                NEXT_MUSIC,
+                PREV_MUSIC,
+                STOP_MUSIC,
+                EXIT_PLAY,
+                PLAY_VOLUME_ADD,
+                PLAY_VOLUME_DOWN,
+                DELETE_PLAY_MUSIC,
+                TRASH_ADD_PLAY_MUSIC,
+                LIKE_MUSIC,
+                PLAYLIST_ADD_MUSIC,
+                PLAYLIST_DEL_MUSIC,
+                PLAYLIST_RANDOM
         );
     }
 
@@ -127,15 +139,15 @@ public class Configs implements IConfigHandler {
         public static final ConfigInteger CACHE_DELETE_MB = ALL.CACHE_DELETE_MB;
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
-            VOLUME,
-            PLAY_URL,
-            PLAY_LOOP,
-            PLAY_AUTO_RANDOM,
-            PLAY_QUALITY,
-            DJRADIO_PLAY_ASC,
-            CACHE_PATH,
-            CACHE_MAX_MB,
-            CACHE_DELETE_MB
+                VOLUME,
+                PLAY_URL,
+                PLAY_LOOP,
+                PLAY_AUTO_RANDOM,
+                PLAY_QUALITY,
+                DJRADIO_PLAY_ASC,
+                CACHE_PATH,
+                CACHE_MAX_MB,
+                CACHE_DELETE_MB
         );
     }
 
@@ -145,6 +157,9 @@ public class Configs implements IConfigHandler {
         public static final ConfigInteger PAGE_LIMIT = ALL.PAGE_LIMIT;
         public static final ConfigInteger MUSIC_INFO_X = ALL.MUSIC_INFO_X;
         public static final ConfigInteger MUSIC_INFO_Y = ALL.MUSIC_INFO_Y;
+        public static final ConfigBooleanHotkeyed MUSIC_INFO_EFFECT_OFFSET = ALL.MUSIC_INFO_EFFECT_OFFSET;
+        public static final ConfigInteger MUSIC_INFO_EFFECT_OFFSET_X = ALL.MUSIC_INFO_EFFECT_OFFSET_X;
+        public static final ConfigInteger MUSIC_INFO_EFFECT_OFFSET_Y = ALL.MUSIC_INFO_EFFECT_OFFSET_Y;
         public static final ConfigColor MUSIC_INFO_COLOR = ALL.MUSIC_INFO_COLOR;
         public static final ConfigColor MUSIC_PROGRESS_BAR_COLOR = ALL.MUSIC_PROGRESS_BAR_COLOR;
         public static final ConfigColor MUSIC_PLAYED_PROGRESS_BAR_COLOR = ALL.MUSIC_PLAYED_PROGRESS_BAR_COLOR;
@@ -157,21 +172,24 @@ public class Configs implements IConfigHandler {
         public static final ConfigInteger LYRIC_Y = ALL.LYRIC_Y;
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
-            MUSIC_INFO,
-            LYRIC,
-            PAGE_LIMIT,
-            MUSIC_INFO_X,
-            MUSIC_INFO_Y,
-            MUSIC_INFO_COLOR,
-            MUSIC_PROGRESS_BAR_COLOR,
-            MUSIC_PLAYED_PROGRESS_BAR_COLOR,
-            MUSIC_PROGRESS_FONT_COLOR,
-            MUSIC_INFO_TITLE_FONT_COLOR,
-            MUSIC_INFO_FONT_COLOR,
-            LYRIC_COLOR,
-            LYRIC_SCALE,
-            LYRIC_X,
-            LYRIC_Y
+                MUSIC_INFO,
+                LYRIC,
+                PAGE_LIMIT,
+                MUSIC_INFO_X,
+                MUSIC_INFO_Y,
+                MUSIC_INFO_EFFECT_OFFSET,
+                MUSIC_INFO_EFFECT_OFFSET_X,
+                MUSIC_INFO_EFFECT_OFFSET_Y,
+                MUSIC_INFO_COLOR,
+                MUSIC_PROGRESS_BAR_COLOR,
+                MUSIC_PLAYED_PROGRESS_BAR_COLOR,
+                MUSIC_PROGRESS_FONT_COLOR,
+                MUSIC_INFO_TITLE_FONT_COLOR,
+                MUSIC_INFO_FONT_COLOR,
+                LYRIC_COLOR,
+                LYRIC_SCALE,
+                LYRIC_X,
+                LYRIC_Y
         );
     }
 
@@ -182,20 +200,26 @@ public class Configs implements IConfigHandler {
         public static final ConfigInteger QR_CHECK_TIME = ALL.QR_CHECK_TIME;
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
-            COOKIE,
-            COUNTRY_CODE,
-            QR_CHECK_NUM,
-            QR_CHECK_TIME
+                COOKIE,
+                COUNTRY_CODE,
+                QR_CHECK_NUM,
+                QR_CHECK_TIME
         );
     }
 
     public static class HTTP {
         public static final ConfigInteger MAX_RETRY = ALL.MAX_RETRY;
         public static final ConfigInteger TIME_OUT = ALL.TIME_OUT;
+        public static final ConfigBooleanHotkeyed HTTP_PROXY = ALL.HTTP_PROXY;
+        public static final ConfigString HTTP_PROXY_IP = ALL.HTTP_PROXY_IP;
+        public static final ConfigInteger HTTP_PROXY_PORT = ALL.HTTP_PROXY_PORT;
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
-            MAX_RETRY,
-            TIME_OUT
+                MAX_RETRY,
+                TIME_OUT,
+                HTTP_PROXY,
+                HTTP_PROXY_IP,
+                HTTP_PROXY_PORT
         );
     }
 
@@ -204,12 +228,16 @@ public class Configs implements IConfigHandler {
         public static final ConfigBooleanHotkeyed LYRIC = ALL.LYRIC;
         public static final ConfigBooleanHotkeyed PLAY_LOOP = ALL.PLAY_LOOP;
         public static final ConfigBooleanHotkeyed PLAY_AUTO_RANDOM = ALL.PLAY_AUTO_RANDOM;
+        public static final ConfigBooleanHotkeyed MUSIC_INFO_EFFECT_OFFSET = ALL.MUSIC_INFO_EFFECT_OFFSET;
+        public static final ConfigBooleanHotkeyed HTTP_PROXY = ALL.HTTP_PROXY;
 
         public static final ImmutableList<ConfigBooleanHotkeyed> HOTKEY_LIST = ImmutableList.of(
-            MUSIC_INFO,
-            LYRIC,
-            PLAY_LOOP,
-            PLAY_AUTO_RANDOM
+                MUSIC_INFO,
+                LYRIC,
+                PLAY_LOOP,
+                PLAY_AUTO_RANDOM,
+                MUSIC_INFO_EFFECT_OFFSET,
+                HTTP_PROXY
         );
     }
 
@@ -231,21 +259,21 @@ public class Configs implements IConfigHandler {
         public static final ConfigHotkey PLAYLIST_RANDOM = ALL.PLAYLIST_RANDOM;
 
         public static final List<ConfigHotkey> HOTKEY_LIST = ImmutableList.of(
-            OPEN_CONFIG_GUI,
-            SWITCH_PLAY_MUSIC,
-            PLAY_MUSIC,
-            NEXT_MUSIC,
-            PREV_MUSIC,
-            STOP_MUSIC,
-            EXIT_PLAY,
-            PLAY_VOLUME_ADD,
-            PLAY_VOLUME_DOWN,
-            DELETE_PLAY_MUSIC,
-            TRASH_ADD_PLAY_MUSIC,
-            LIKE_MUSIC,
-            PLAYLIST_ADD_MUSIC,
-            PLAYLIST_DEL_MUSIC,
-            PLAYLIST_RANDOM
+                OPEN_CONFIG_GUI,
+                SWITCH_PLAY_MUSIC,
+                PLAY_MUSIC,
+                NEXT_MUSIC,
+                PREV_MUSIC,
+                STOP_MUSIC,
+                EXIT_PLAY,
+                PLAY_VOLUME_ADD,
+                PLAY_VOLUME_DOWN,
+                DELETE_PLAY_MUSIC,
+                TRASH_ADD_PLAY_MUSIC,
+                LIKE_MUSIC,
+                PLAYLIST_ADD_MUSIC,
+                PLAYLIST_DEL_MUSIC,
+                PLAYLIST_RANDOM
         );
     }
 

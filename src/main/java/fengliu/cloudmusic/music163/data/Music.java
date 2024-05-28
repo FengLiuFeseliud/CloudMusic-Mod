@@ -26,6 +26,7 @@ public class Music extends Music163Obj implements IMusic {
     public final JsonObject album;
     public final long duration;
     public final String picUrl;
+    public JsonObject freeTrialInfo = null;
 
     public static String getArtistsName(JsonArray artists) {
         StringBuilder artistsName = new StringBuilder();
@@ -186,7 +187,7 @@ public class Music extends Music163Obj implements IMusic {
 
     /**
      * 获得歌曲 url
-     * @return 歌曲文件 url
+     * @return 歌曲文件
      */
     public String getPlayUrl(){
         HttpClient playApi = new HttpClient("https://interface3.music.163.com", this.api.getHeader());
@@ -199,6 +200,10 @@ public class Music extends Music163Obj implements IMusic {
         JsonObject music = result.get("data").getAsJsonArray().get(0).getAsJsonObject();
         if(music.get("code").getAsInt() != 200){
             throw new ActionException(Text.translatable("cloudmusic.exception.music.get.url", this.name));
+        }
+
+        if (!music.get("freeTrialInfo").isJsonNull()){
+            this.freeTrialInfo = music.getAsJsonObject("freeTrialInfo");
         }
         return music.get("url").getAsString();
     }

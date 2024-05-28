@@ -15,21 +15,76 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Mixin(InGameHud.class)
 public class MixinInGameHub {
+    @Unique
     private final MinecraftClient client = MinecraftClient.getInstance();
+
+    @Unique
+    public void renderLoginQrCode(DrawContext context){
+        if(!MusicCommand.loadQRCode){
+            return;
+        }
+        context.drawTexture(MusicIconTexture.QR_CODE_ID, this.client.getWindow().getScaledWidth() - 64, 72, 64, 64, 0, 0, 128, 128, 128, 128);
+    }
+
+    @Unique
+    public void renderLyric(DrawContext context){
+        if(!Configs.GUI.LYRIC.getBooleanValue()){
+            return;
+        }
+
+        float lyricScale = (float) Configs.GUI.LYRIC_SCALE.getDoubleValue();
+        int lyricY = Configs.GUI.LYRIC_Y.getIntegerValue();
+        int lyricX = Configs.GUI.LYRIC_X.getIntegerValue();
+
+        int lyricColor = Configs.GUI.LYRIC_COLOR.getIntegerValue();
+        for(String lyric: MusicCommand.getPlayer().getLyric()){
+            MatrixStack lyricMatrices =new MatrixStack();
+            lyricMatrices.scale(lyricScale, lyricScale, lyricScale);
+            this.client.textRenderer.draw(lyric, lyricX, lyricY, lyricColor, true, lyricMatrices.peek().getPositionMatrix(), context.getVertexConsumers(), TextRenderer.TextLayerType.NORMAL, 0, 15728880, this.client.textRenderer.isRightToLeft());
+            lyricY += 10;
+        }
+    }
+
+    @Unique
+    public int[] getMusicInfoPos(){
+        int y = Configs.GUI.MUSIC_INFO_Y.getIntegerValue();
+        int x = Configs.GUI.MUSIC_INFO_X.getIntegerValue();
+        if(this.client.player == null || !Configs.GUI.MUSIC_INFO_EFFECT_OFFSET.getBooleanValue()){
+            return new int[]{y, x};
+        }
+
+        int offset = 0;
+        for (StatusEffectInstance statusEffect : this.client.player.getStatusEffects()) {
+            if (statusEffect.getEffectType().isBeneficial()){
+                offset = 1;
+            } else {
+                offset = 2;
+                break;
+            }
+        }
+
+        if(offset == 0){
+            return new int[]{y, x};
+        }
+        return new int[]{y + Configs.GUI.MUSIC_INFO_EFFECT_OFFSET_Y.getIntegerValue() * offset, x + Configs.GUI.MUSIC_INFO_EFFECT_OFFSET_X.getIntegerValue()};
+    }
 
     @Inject(method = "render", at = @At("HEAD"))
     public void render(DrawContext context, float tickDelta, CallbackInfo ci){
-        if(MusicCommand.loadQRCode){
-            context.drawTexture(MusicIconTexture.QR_CODE_ID, this.client.getWindow().getScaledWidth() - 64, 72, 64, 64, 0, 0, 128, 128, 128, 128);
-        }
+        this.renderLoginQrCode(context);
 
         MusicPlayer player = MusicCommand.getPlayer();
         IMusic playingMusic = player.getPlayingMusic();
@@ -40,28 +95,17 @@ public class MixinInGameHub {
 
         RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        int width = this.client.getWindow().getScaledWidth();
 
-        if(Configs.GUI.LYRIC.getBooleanValue()){
-            float lyricScale = (float) Configs.GUI.LYRIC_SCALE.getDoubleValue();
-            int lyricY = Configs.GUI.LYRIC_Y.getIntegerValue();
-            int lyricX = Configs.GUI.LYRIC_X.getIntegerValue();
-
-            int lyricColor = Configs.GUI.LYRIC_COLOR.getIntegerValue();
-            for(String lyric: MusicCommand.getPlayer().getLyric()){
-                MatrixStack lyricMatrices =new MatrixStack();
-                lyricMatrices.scale(lyricScale, lyricScale, lyricScale);
-                this.client.textRenderer.draw(lyric, lyricX, lyricY, lyricColor, true, lyricMatrices.peek().getPositionMatrix(), context.getVertexConsumers(), TextRenderer.TextLayerType.NORMAL, 0, 15728880, this.client.textRenderer.isRightToLeft());
-                lyricY += 10;
-            }
-        }
-
+        this.renderLyric(context);
         if(!Configs.GUI.MUSIC_INFO.getBooleanValue()){
             return;
         }
 
-        int y = Configs.GUI.MUSIC_INFO_Y.getIntegerValue();
-        int x = Configs.GUI.MUSIC_INFO_X.getIntegerValue();
+        int width = this.client.getWindow().getScaledWidth();
+
+        int[] pos = this.getMusicInfoPos();
+        int y = pos[0];
+        int x = pos[1];
 
         context.fill(width - 175 - x, y, width - x,  48 + y, Configs.GUI.MUSIC_INFO_COLOR.getIntegerValue());
         context.fill(width - 145 - x, 40 + y, width - 30 - x,  43 + y, Configs.GUI.MUSIC_PROGRESS_BAR_COLOR.getIntegerValue());
@@ -98,6 +142,13 @@ public class MixinInGameHub {
         }
         artist = new StringBuilder(artist.substring(0, artist.length() - 1));
         context.drawText(this.client.textRenderer, artist.length() > 16 ? artist.substring(0, 16) + "...": artist.toString(), width - 135 - x, 24 + y, musicFontColor, true);
+
+        if (music.freeTrialInfo == null){
+            return;
+        }
+
+        int freeTrialEndProgress = Math.round((115 / (float) playingMusic.getDurationSecond()) * music.freeTrialInfo.get("end").getAsInt());
+        context.fill(width - 145 + freeTrialEndProgress - 1 - x, 40 + y, width - 145 + freeTrialEndProgress + 1 - x,  43 + y, Configs.GUI.MUSIC_PLAYED_PROGRESS_BAR_COLOR.getIntegerValue());
     }
 
 }

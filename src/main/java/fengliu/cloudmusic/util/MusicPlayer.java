@@ -32,6 +32,7 @@ public class MusicPlayer implements Runnable {
     protected int playIn = 0;
     protected int playListSize;
     protected boolean loopPlayIn = true;
+    protected boolean notExitFlag = true;
     private boolean load;
     private int volumePercentage;
     private long playingProgress;
@@ -57,17 +58,30 @@ public class MusicPlayer implements Runnable {
 
     @Override
     public void run() {
-        while(this.loopPlayIn){
-            for (this.playIn = 0; playIn < this.playListSize; this.playIn++) {
-                playMusic();
+        while (this.notExitFlag){
+            while(this.loopPlayIn){
+                for (; playIn < this.playListSize; this.playIn++) {
+                    playMusic();
+
+                    if(!this.loopPlayIn){
+                        break;
+                    }
+
+                    if(this.playIn == this.playListSize - 1 && !Configs.PLAY.PLAY_LOOP.getBooleanValue()){
+                        this.loopPlayIn = false;
+                    }
+                }
 
                 if(!this.loopPlayIn){
                     break;
                 }
+                this.playIn = 0;
+            }
 
-                if(this.playIn == this.playListSize - 1 && !Configs.PLAY.PLAY_LOOP.getBooleanValue()){
-                    this.loopPlayIn = false;
-                }
+            try {
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                return;
             }
         }
     }
@@ -96,7 +110,21 @@ public class MusicPlayer implements Runnable {
             if(client.player != null){
                 client.player.sendMessage(Text.literal(err.getMessage()));
             }
+            this.stop();
             return;
+        }
+
+        if (music instanceof Music aMusic){
+            if (aMusic.freeTrialInfo != null && this.client.player != null){
+                this.client.player.sendMessage(
+                        Text.translatable(
+                                "cloudmusic.info.play.free.trial",
+                                music.getName(),
+                                aMusic.freeTrialInfo.get("start").getAsInt(),
+                                aMusic.freeTrialInfo.get("end").getAsInt()
+                        )
+                );
+            }
         }
 
         MusicIconTexture.getMusicIcon(music);
@@ -242,6 +270,10 @@ public class MusicPlayer implements Runnable {
      * 播放下一首
      */
     public void next(){
+        if (this.playList.size() == 0){
+            return;
+        }
+
         this.play.stop();
         this.play.close();
     }
@@ -287,6 +319,7 @@ public class MusicPlayer implements Runnable {
         }
 
         this.loopPlayIn = false;
+        this.notExitFlag = false;
         next();
     }
 
@@ -302,6 +335,7 @@ public class MusicPlayer implements Runnable {
             this.load = false;
             notifyAll();
         }
+        this.loopPlayIn = false;
     }
 
     /**
@@ -317,6 +351,7 @@ public class MusicPlayer implements Runnable {
             this.load = true;
             notifyAll();
         }
+        this.loopPlayIn = true;
     }
 
     /**
