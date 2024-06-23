@@ -14,6 +14,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.text.Text;
@@ -22,9 +23,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Mixin(InGameHud.class)
 public class MixinInGameHub {
@@ -68,7 +66,7 @@ public class MixinInGameHub {
 
         int offset = 0;
         for (StatusEffectInstance statusEffect : this.client.player.getStatusEffects()) {
-            if (statusEffect.method_5579().isBeneficial()){
+            if (statusEffect.getEffectType().value().isBeneficial()){
                 offset = 1;
             } else {
                 offset = 2;
@@ -83,7 +81,7 @@ public class MixinInGameHub {
     }
 
     @Inject(method = "render", at = @At("HEAD"))
-    public void render(DrawContext context, float tickDelta, CallbackInfo ci){
+    public void render(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci){
         this.renderLoginQrCode(context);
 
         MusicPlayer player = MusicCommand.getPlayer();
