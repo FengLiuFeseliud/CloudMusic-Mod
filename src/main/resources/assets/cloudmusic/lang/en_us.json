@@ -127,5 +127,6 @@
   "cloudmusic.exception.login.503": "Failed to login, wrong captcha",
   "cloudmusic.exception.login.err.code": "Login failed, Unknown error: %d",
   "cloudmusic.exception.login.qr.code": "QR code expired...",
-  "cloudmusic.exception.login.qr.code.time.out": "Waiting for the code to time out..."
+  "cloudmusic.exception.login.qr.code.time.out": "Waiting for the code to time out...",
+  "cloudmusic.play.click2play": "Click to play music..."
 }
