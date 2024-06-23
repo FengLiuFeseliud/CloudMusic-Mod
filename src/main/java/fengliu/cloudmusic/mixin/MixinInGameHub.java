@@ -68,7 +68,7 @@ public class MixinInGameHub {
 
         int offset = 0;
         for (StatusEffectInstance statusEffect : this.client.player.getStatusEffects()) {
-            if (statusEffect.getEffectType().isBeneficial()){
+            if (statusEffect.method_5579().isBeneficial()){
                 offset = 1;
             } else {
                 offset = 2;
