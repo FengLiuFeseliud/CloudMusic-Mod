@@ -3,7 +3,7 @@ plugins {
 }
 
 base {
-    archivesName = project.archives_base_name + '-' + project.minecraft_version_out
+    archivesName = project.archives_base_name + '-' + project.minecraft_version
 }
 
 version = project.mod_version
