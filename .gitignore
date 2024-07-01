@@ -41,3 +41,7 @@ replay_*.log
 
 
 /test.http
+
+/.idea
+/remappedSrc
+/run

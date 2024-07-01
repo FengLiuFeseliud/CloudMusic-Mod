@@ -127,5 +127,6 @@
     "cloudmusic.exception.login.503": "登錄失敗, 驗證碼錯誤",
     "cloudmusic.exception.login.err.code": "登錄失敗, 未知錯誤: %d",
     "cloudmusic.exception.login.qr.code": "二維碼過期...",
-    "cloudmusic.exception.login.qr.code.time.out": "等待掃碼超時..."
+    "cloudmusic.exception.login.qr.code.time.out": "等待掃碼超時...",
+    "cloudmusic.play.click2play": "点击播放音乐..."
 }
