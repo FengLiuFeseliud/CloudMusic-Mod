@@ -7,7 +7,7 @@ import fengliu.cloudmusic.music163.IPrint;
 import fengliu.cloudmusic.music163.Music163Obj;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.IdUtil;
-import fengliu.cloudmusic.util.click.TextClickItem;
+import fengliu.cloudmusic.util.TextClickItem;
 import fengliu.cloudmusic.util.page.ApiPage;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
