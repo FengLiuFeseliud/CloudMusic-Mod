@@ -8,6 +8,7 @@ import fengliu.cloudmusic.music163.Lyric;
 import fengliu.cloudmusic.music163.data.DjMusic;
 import fengliu.cloudmusic.music163.data.Music;
 import fengliu.cloudmusic.render.MusicIconTexture;
+import fengliu.cloudmusic.util.click.TextClickItem;
 import fengliu.cloudmusic.util.page.Page;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
@@ -18,7 +19,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 歌曲播放对象
@@ -241,7 +241,7 @@ public class MusicPlayer implements Runnable {
         }
 
         FloatControl gainControl = (FloatControl) this.play.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue((float) (0.86 * volume - 80));
+        gainControl.setValue(gainControl.getMinimum() * (1 - volume / 100.0f));
 
         Configs.PLAY.VOLUME.setIntegerValue(this.volumePercentage);
         Configs.INSTANCE.save();
@@ -412,15 +412,24 @@ public class MusicPlayer implements Runnable {
         return new Page(this.playList) {
 
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
-                if (data instanceof Music music){
-                    newPageData.put("[" +(newPageData.size() + 1) + "] §b" + music.name + "§r§7 - "+ Music.getArtistsName(music.artists), "/cloudmusic to " + (this.limit * this.pageIn + newPageData.size() + 1));
+            protected TextClickItem putPageItem(Object data) {
+                if (data instanceof Music music) {
+                    return new TextClickItem(
+                            Text.literal("§b%s §r§7 - %s".formatted(music.name, Music.getArtistsName(music.artists))),
+                            Text.translatable(IdUtil.getShowInfo("page.player.to"), music.name),
+                            "/cloudmusic to " + (this.limit * this.pageIn + this.data.get(this.pageIn).indexOf(data) + 1)
+                    );
                 }
 
-                if (data instanceof DjMusic music){
-                    newPageData.put("[" +(newPageData.size() + 1) + "] §b" + music.name + "§r§7 - "+ music.dj.get("nickname").getAsString(), "/cloudmusic to " + (this.limit * this.pageIn + newPageData.size() + 1));
+                if (data instanceof DjMusic music) {
+                    return new TextClickItem(
+                            Text.literal("§b%s §r§7 - %s".formatted(music.name, music.dj.get("nickname").getAsString())),
+                            Text.translatable(IdUtil.getShowInfo("page.player.to"), music.name),
+                            "/cloudmusic to " + (this.limit * this.pageIn + this.data.get(this.pageIn).indexOf(data) + 1)
+                    );
                 }
-                return newPageData;
+
+                return null;
             }
             
         };

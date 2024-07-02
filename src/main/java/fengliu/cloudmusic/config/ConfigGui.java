@@ -2,6 +2,7 @@ package fengliu.cloudmusic.config;
 
 import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.command.MusicCommand;
+import fengliu.cloudmusic.util.IdUtil;
 import fi.dy.masa.malilib.config.IConfigBase;
 import fi.dy.masa.malilib.gui.GuiConfigsBase;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
@@ -15,24 +16,32 @@ import java.util.List;
 
 public class ConfigGui extends GuiConfigsBase {
 
-    public enum ConfigGuiTab {
-        ALL("cloudmusic.gui.tab.all"),
-        PLAY("cloudmusic.gui.tab.play"),
-        GUI("cloudmusic.gui.tab.gui"),
-        LOGIN("cloudmusic.gui.tab.login"),
-        HTTP("cloudmusic.gui.tab.http"),
-        ENABLE("cloudmusic.gui.tab.enable"),
-        HOTKEY("cloudmusic.gui.tab.hotkey");
+    @Override
+    public List<ConfigOptionWrapper> getConfigs() {
+        List<? extends IConfigBase> configs;
+        ConfigGuiTab tab = TabManager.getConfigGuiTab();
 
-        private final String translationKey;
-
-        ConfigGuiTab(String translationKey){
-            this.translationKey = translationKey;
+        if (tab == ConfigGuiTab.ALL) {
+            configs = Configs.ALL.OPTIONS;
+        } else if (tab == ConfigGuiTab.PLAY) {
+            configs = Configs.PLAY.OPTIONS;
+        } else if (tab == ConfigGuiTab.GUI) {
+            configs = Configs.GUI.OPTIONS;
+        } else if (tab == ConfigGuiTab.COMMAND) {
+            configs = Configs.COMMAND.OPTIONS;
+        } else if (tab == ConfigGuiTab.LOGIN) {
+            configs = Configs.LOGIN.OPTIONS;
+        } else if (tab == ConfigGuiTab.HTTP) {
+            configs = Configs.HTTP.OPTIONS;
+        } else if (tab == ConfigGuiTab.ENABLE) {
+            configs = Configs.ENABLE.HOTKEY_LIST;
+        } else if (tab == ConfigGuiTab.HOTKEY) {
+            configs = Configs.HOTKEY.HOTKEY_LIST;
+        } else {
+            return Collections.emptyList();
         }
 
-        public String getDisplayName(){
-            return StringUtils.translate(this.translationKey);
-        }
+        return ConfigOptionWrapper.createFor(configs);
     }
 
     public static class TabManager {
@@ -83,35 +92,30 @@ public class ConfigGui extends GuiConfigsBase {
         int x = 10;
         int y = 26;
 
-        for(ConfigGuiTab tab: ConfigGuiTab.values()){
+        for (ConfigGuiTab tab : ConfigGuiTab.values()) {
             x += this.createButton(x, y, tab);
         }
     }
 
-    @Override
-    public List<ConfigOptionWrapper> getConfigs(){
-        List<? extends IConfigBase> configs;
-        ConfigGuiTab tab = TabManager.getConfigGuiTab();
+    public enum ConfigGuiTab {
+        ALL(IdUtil.getConfigTag("all")),
+        PLAY(IdUtil.getConfigTag("play")),
+        GUI(IdUtil.getConfigTag("gui")),
+        COMMAND(IdUtil.getConfigTag("command")),
+        LOGIN(IdUtil.getConfigTag("login")),
+        HTTP(IdUtil.getConfigTag("http")),
+        ENABLE(IdUtil.getConfigTag("enable")),
+        HOTKEY(IdUtil.getConfigTag("hotkey"));
 
-        if (tab == ConfigGuiTab.ALL) {
-            configs = Configs.ALL.OPTIONS;
-        } else if (tab == ConfigGuiTab.PLAY){
-            configs = Configs.PLAY.OPTIONS;
-        } else if (tab == ConfigGuiTab.GUI){
-            configs = Configs.GUI.OPTIONS;
-        } else if (tab == ConfigGuiTab.LOGIN){
-            configs = Configs.LOGIN.OPTIONS;
-        } else if (tab == ConfigGuiTab.HTTP){
-            configs = Configs.HTTP.OPTIONS;
-        } else if (tab == ConfigGuiTab.ENABLE){
-            configs = Configs.ENABLE.HOTKEY_LIST;
-        } else if (tab == ConfigGuiTab.HOTKEY){
-            configs = Configs.HOTKEY.HOTKEY_LIST;
-        } else {
-            return Collections.emptyList();
+        private final String translationKey;
+
+        ConfigGuiTab(String translationKey) {
+            this.translationKey = translationKey;
         }
 
-        return ConfigOptionWrapper.createFor(configs);
+        public String getDisplayName() {
+            return StringUtils.translate(this.translationKey);
+        }
     }
 
     @Override

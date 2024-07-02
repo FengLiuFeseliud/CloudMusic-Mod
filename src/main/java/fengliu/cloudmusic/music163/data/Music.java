@@ -1,24 +1,25 @@
 package fengliu.cloudmusic.music163.data;
 
-import java.util.LinkedHashMap;
-import java.util.HashMap;
-import java.util.Map;
-
-import fengliu.cloudmusic.config.Configs;
-import fengliu.cloudmusic.music163.*;
-import fengliu.cloudmusic.util.page.Page;
-import org.jetbrains.annotations.Nullable;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
+import fengliu.cloudmusic.config.Configs;
+import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.util.HttpClient;
+import fengliu.cloudmusic.util.IdUtil;
 import fengliu.cloudmusic.util.TextClick;
+import fengliu.cloudmusic.util.click.TextClickItem;
+import fengliu.cloudmusic.util.page.ApiPage;
+import fengliu.cloudmusic.util.page.Page;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
 
-public class Music extends Music163Obj implements IMusic {
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class Music extends Music163Obj implements IMusic, ICanComment {
     public final long id;
     public final String name;
     public final String aliasName;
@@ -140,11 +141,20 @@ public class Music extends Music163Obj implements IMusic {
 
         JsonObject json = this.api.POST_API("/api/v1/discovery/simiSong", data);
         return new Page(json.getAsJsonArray("songs")) {
+
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject music = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + music.get("name").getAsString() + "§r§7  - " + Music.getArtistsName(music.getAsJsonArray("artists")) + " - id: " + music.get("id").getAsLong(), "/cloudmusic music " + music.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        music.get("name").getAsString(),
+                                        Music.getArtistsName(music.getAsJsonArray("ar")),
+                                        music.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), music.get("name").getAsString()),
+                        "/cloudmusic music " + music.get("id").getAsLong()
+                );
             }
         };
     }
@@ -161,11 +171,20 @@ public class Music extends Music163Obj implements IMusic {
 
         JsonObject json = this.api.POST_API("/api/discovery/simiPlaylist", data);
         return new Page(json.getAsJsonArray("playlists")) {
+
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject playList = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r§7 - "+ playList.getAsJsonObject("creator").get("nickname").getAsString() +" - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        playList.get("name").getAsString(),
+                                        playList.getAsJsonObject("creator").get("nickname").getAsString(),
+                                        playList.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), playList.get("name").getAsString()),
+                        "/cloudmusic playlist " + playList.get("id").getAsLong()
+                );
             }
         };
     }
@@ -214,41 +233,52 @@ public class Music extends Music163Obj implements IMusic {
     }
 
     @Override
-    public void printToChatHud(FabricClientCommandSource source) {
-       source.sendFeedback(Text.literal(""));
+    public String getCommentId() {
+        return "R_SO_4_%s".formatted(this.id);
+    }
 
-       if(this.aliasName.equals("")){
+    @Override
+    public ApiPage getComments(boolean hot) {
+        return this.comments(this.api, this.id, hot);
+    }
+
+    @Override
+    public void printToChatHud(FabricClientCommandSource source) {
+        source.sendFeedback(Text.literal(""));
+
+        if (this.aliasName.equals("")) {
             source.sendFeedback(Text.literal(this.name));
-       }else{
+        } else {
             source.sendFeedback(Text.literal(this.name + " §7(" + this.aliasName + ")"));
-       }
+        }
        
        source.sendFeedback(Text.literal(""));
 
        Map<String, String> artistsTextData = new LinkedHashMap<>();
-       for (JsonElement artistData : this.artists.asList()) {
+        for (JsonElement artistData : this.artists.asList()) {
             JsonObject artist = artistData.getAsJsonObject();
             artistsTextData.put("§b§n" + artist.get("name").getAsString(), "/cloudmusic artist " + artist.get("id").getAsLong());
-       }
-       
-       source.sendFeedback(TextClick.suggestTextMap("cloudmusic.info.music.artist", artistsTextData, "§f§l/"));
-       source.sendFeedback(TextClick.suggestText("cloudmusic.info.music.album", "§b" + this.album.get("name").getAsString(), "/cloudmusic album " + this.album.get("id").getAsLong()));
-       source.sendFeedback(Text.translatable("cloudmusic.info.music.duration", this.getDurationToString()));
-       source.sendFeedback(Text.translatable("cloudmusic.info.music.id", this.id));
+        }
 
-       Map<String, String> optionsTextData = new LinkedHashMap<>();
-       optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic music play " + this.id);
-       optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.similar.music").getString(), "/cloudmusic music similar music " + this.id);
-       optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.similar.playlist").getString(), "/cloudmusic music similar playlist " + this.id);
-       optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.like").getString(), "/cloudmusic music like " + this.id);
-       optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unlike").getString(), "/cloudmusic music unlike " + this.id);
-       optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.MUSIC.getShar(this.id));
-       source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
+        source.sendFeedback(TextClick.suggestTextMap("cloudmusic.info.music.artist", artistsTextData, "§f§l/"));
+        source.sendFeedback(TextClick.suggestText("cloudmusic.info.music.album", "§b" + this.album.get("name").getAsString(), "/cloudmusic album " + this.album.get("id").getAsLong()));
+        source.sendFeedback(Text.translatable("cloudmusic.info.music.duration", this.getDurationToString()));
+        source.sendFeedback(Text.translatable("cloudmusic.info.music.id", this.id));
+
+        Map<String, String> optionsTextData = new LinkedHashMap<>();
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic music play " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.similar.music").getString(), "/cloudmusic music similar music " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.similar.playlist").getString(), "/cloudmusic music similar playlist " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.like").getString(), "/cloudmusic music like " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unlike").getString(), "/cloudmusic music unlike " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.MUSIC.getShar(this.id));
+        source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
 
         optionsTextData.clear();
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.hot.comment").getString(), "/cloudmusic music hotComment " + this.id);
+        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.comment").getString(), "/cloudmusic music comment " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.playlist.add").getString(), "/cloudmusic my playlist add " + this.id);
         optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.playlist.del").getString(), "/cloudmusic my playlist del " + this.id);
         source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
     }
-    
 }

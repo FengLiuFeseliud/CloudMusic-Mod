@@ -1,25 +1,24 @@
 package fengliu.cloudmusic.music163;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import fengliu.cloudmusic.music163.data.*;
-import fengliu.cloudmusic.util.page.Page;
-import org.jetbrains.annotations.Nullable;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
-
+import fengliu.cloudmusic.music163.data.*;
 import fengliu.cloudmusic.util.HttpClient;
+import fengliu.cloudmusic.util.IdUtil;
+import fengliu.cloudmusic.util.click.TextClickItem;
 import fengliu.cloudmusic.util.page.ApiPage;
+import fengliu.cloudmusic.util.page.Page;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Music163 api
  */
 public class Music163 {
-    private Map<String, String> Header = new HashMap<String, String>();
+    private Map<String, String> Header = new HashMap<>();
     private final HttpClient api;
     
     public Music163(@Nullable String cookies){
@@ -47,7 +46,7 @@ public class Music163 {
      * @return 歌曲对象
      */
     public Music music(long id){
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("c", "[{\"id\": " + id + "}]");
 
         JsonArray json = this.api.POST_API("/api/v3/song/detail", data).getAsJsonArray("songs");
@@ -63,7 +62,7 @@ public class Music163 {
      * @return 歌单对象
      */
     public PlayList playlist(long id){
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("id", id);
         data.put("n", 100000);
 
@@ -77,7 +76,7 @@ public class Music163 {
      * @return 歌手对象
      */
     public Artist artist(long id){
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("id", id);
 
         JsonObject json = this.api.POST_API("/api/artist/head/info/get", data);
@@ -104,14 +103,14 @@ public class Music163 {
      * @return 电台对象
      */
     public DjRadio djRadio(long id){
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("id", id);
 
         return new DjRadio(this.api, this.api.POST_API("/api/djradio/v2/get", data).getAsJsonObject("data"));
     }
 
     public DjMusic djMusic(long id){
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("id", id);
 
         return new DjMusic(this.api, this.api.POST_API("/api/dj/program/detail", data).getAsJsonObject("program"));
@@ -149,7 +148,7 @@ public class Music163 {
      * @return 曲风对象
      */
     public StyleTag style(int id){
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("tagId", id);
 
         return new StyleTag(this.api, this.api.POST_API("/api/style-tag/home/head", data).getAsJsonObject("data"));
@@ -163,7 +162,7 @@ public class Music163 {
      * @return POST_API data
      */
     private Map<String, Object> searchData(String key, int type){
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("s", key);
         data.put("type", type);
         data.put("limit", 30);
@@ -188,12 +187,19 @@ public class Music163 {
             }
 
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject music = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + music.get("name").getAsString() + "§r§7 - " + Music.getArtistsName(music.getAsJsonArray("ar")) + " - id: " + music.get("id").getAsLong(), "/cloudmusic music " + music.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        music.get("name").getAsString(),
+                                        Music.getArtistsName(music.getAsJsonArray("ar")),
+                                        music.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), music.get("name").getAsString()),
+                        "/cloudmusic music " + music.get("id").getAsLong()
+                );
             }
-            
         }; 
     }
 
@@ -213,12 +219,19 @@ public class Music163 {
             }
 
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject playList = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r§7 - "+ playList.getAsJsonObject("creator").get("nickname").getAsString() +" - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        playList.get("name").getAsString(),
+                                        playList.getAsJsonObject("creator").get("nickname").getAsString(),
+                                        playList.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), playList.get("name").getAsString()),
+                        "/cloudmusic playlist " + playList.get("id").getAsLong()
+                );
             }
-            
         }; 
     }
 
@@ -238,12 +251,19 @@ public class Music163 {
             }
 
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject album = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + album.get("name").getAsString() + "§r§7 - "+ album.getAsJsonObject("artist").get("name").getAsString() +" - id: " + album.get("id").getAsLong(), "/cloudmusic album " + album.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        album.get("name").getAsString(),
+                                        album.getAsJsonObject("artist").get("name").getAsString(),
+                                        album.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), album.get("name").getAsString()),
+                        "/cloudmusic album " + album.get("id").getAsLong()
+                );
             }
-            
         }; 
     }
 
@@ -263,12 +283,18 @@ public class Music163 {
             }
 
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject artist = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + artist.get("name").getAsString() + "§r§7 - id: " + artist.get("id").getAsLong(), "/cloudmusic artist " + artist.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- id: %s"
+                                .formatted(
+                                        artist.get("name").getAsString(),
+                                        artist.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), artist.get("name").getAsString()),
+                        "/cloudmusic artist " + artist.get("id").getAsLong()
+                );
             }
-            
         }; 
     }
 
@@ -287,10 +313,18 @@ public class Music163 {
             }
 
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject djRadios = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + djRadios.get("name").getAsString() + "§r§7 - " + djRadios.getAsJsonObject("dj").get("nickname").getAsString() + " - id: " + djRadios.get("id").getAsLong(), "/cloudmusic dj " + djRadios.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        djRadios.get("name").getAsString(),
+                                        djRadios.getAsJsonObject("dj").get("nickname").getAsString(),
+                                        djRadios.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), djRadios.get("name").getAsString()),
+                        "/cloudmusic dj " + djRadios.get("id").getAsLong()
+                );
             }
         };
     }
@@ -306,10 +340,18 @@ public class Music163 {
     public Page styleList(){
         return new Page(this.styles()) {
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject style = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + style.get("tagName").getAsString() + "§r§7 - " + style.get("enName").getAsString() + " - id: " + style.get("tagId").getAsInt(), "/cloudmusic style " + style.get("tagId").getAsInt());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        style.get("tagName").getAsString(),
+                                        style.get("enName").getAsString(),
+                                        style.get("tagId").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page.style"), style.get("tagName").getAsString()),
+                        "/cloudmusic style " + style.get("tagId").getAsInt()
+                );
             }
         };
     }
@@ -320,11 +362,15 @@ public class Music163 {
      */
     public Page playListTags(){
         return new Page(this.api.POST_API("/api/playlist/catalogue", null).getAsJsonArray("sub")) {
+
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject tags = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + tags.get("name").getAsString(), "/cloudmusic top playlist \"" + tags.get("name").getAsString() + "\"");
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b" + tags.get("name").getAsString()),
+                        Text.translatable(IdUtil.getShowInfo("page.playlist.tags"), tags.get("name").getAsString()),
+                        "/cloudmusic top playlist \"" + tags.get("name").getAsString() + "\""
+                );
             }
         };
     }
@@ -335,11 +381,15 @@ public class Music163 {
      */
     public Page playListTagsHot(){
         return new Page(this.api.POST_API("/api/playlist/hottags", null).getAsJsonArray("tags")) {
+
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject tags = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + tags.get("name").getAsString(), "/cloudmusic top playlist \"" + tags.get("name").getAsString() + "\"");
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b" + tags.get("name").getAsString()),
+                        Text.translatable(IdUtil.getShowInfo("page.playlist.tags"), tags.get("name").getAsString()),
+                        "/cloudmusic top playlist \"" + tags.get("name").getAsString() + "\""
+                );
             }
         };
     }
@@ -350,11 +400,15 @@ public class Music163 {
      */
     public Page playListHighQualityTags(){
         return new Page(this.api.POST_API("/api/playlist/highquality/tags", null).getAsJsonArray("tags")) {
+
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject tags = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + tags.get("name").getAsString(), "/cloudmusic top playlist highquality \"" + tags.get("name").getAsString() + "\"");
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b" + tags.get("name").getAsString()),
+                        Text.translatable(IdUtil.getShowInfo("page.playlist.tags"), tags.get("name").getAsString()),
+                        "/cloudmusic top playlist highquality \"" + tags.get("name").getAsString() + "\""
+                );
             }
         };
     }
@@ -391,10 +445,18 @@ public class Music163 {
             }
 
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject playList = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r§7 - "+ playList.getAsJsonObject("creator").get("nickname").getAsString() +" - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        playList.get("name").getAsString(),
+                                        playList.getAsJsonObject("creator").get("nickname").getAsString(),
+                                        playList.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), playList.get("name").getAsString()),
+                        "/cloudmusic playlist " + playList.get("id").getAsLong()
+                );
             }
         };
     }
@@ -420,10 +482,18 @@ public class Music163 {
             }
 
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject playList = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r§7 - "+ playList.getAsJsonObject("creator").get("nickname").getAsString() +" - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        playList.get("name").getAsString(),
+                                        playList.getAsJsonObject("creator").get("nickname").getAsString(),
+                                        playList.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), playList.get("name").getAsString()),
+                        "/cloudmusic playlist " + playList.get("id").getAsLong()
+                );
             }
         };
     }
@@ -435,11 +505,20 @@ public class Music163 {
     public Page topList(){
         JsonObject json = this.api.POST_API("/api/toplist", null);
         return new Page(json.getAsJsonArray("list")) {
+
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject playList = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r§7 - "+ playList.get("updateFrequency").getAsString() + " - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        playList.get("name").getAsString(),
+                                        playList.get("updateFrequency").getAsString(),
+                                        playList.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), playList.get("name").getAsString()),
+                        "/cloudmusic playlist " + playList.get("id").getAsLong()
+                );
             }
         };
     }
@@ -449,7 +528,7 @@ public class Music163 {
      * @return 页对象
      */
     public Page topArtistList(){
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("type", 1);
         data.put("limit", 100);
         data.put("offset", 0);
@@ -457,15 +536,21 @@ public class Music163 {
 
         JsonObject json = this.api.POST_API("/api/toplist/artist", data);
         return new Page(json.getAsJsonObject("list").getAsJsonArray("artists")) {
+
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject artist = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + artist.get("name").getAsString() + "§r§7 - id: " + artist.get("id").getAsLong(), "/cloudmusic artist " + artist.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- id: %s"
+                                .formatted(
+                                        artist.get("name").getAsString(),
+                                        artist.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), artist.get("name").getAsString()),
+                        "/cloudmusic artist " + artist.get("id").getAsLong()
+                );
             }
         };
     }
-
-
 
 }

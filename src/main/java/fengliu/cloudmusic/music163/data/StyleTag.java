@@ -9,7 +9,9 @@ import fengliu.cloudmusic.music163.Music163Obj;
 import fengliu.cloudmusic.music163.Shares;
 import fengliu.cloudmusic.music163.page.StylePage;
 import fengliu.cloudmusic.util.HttpClient;
+import fengliu.cloudmusic.util.IdUtil;
 import fengliu.cloudmusic.util.TextClick;
+import fengliu.cloudmusic.util.click.TextClickItem;
 import fengliu.cloudmusic.util.page.Page;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
@@ -80,11 +82,20 @@ public class StyleTag extends Music163Obj implements IPrint {
         }
 
         return new Page(children) {
+
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject style = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + style.get("tagName").getAsString() + "§r§7 - " + style.get("enName").getAsString() + " - id: " + style.get("tagId").getAsInt(), "/cloudmusic style " + style.get("tagId").getAsInt());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        style.get("tagName").getAsString(),
+                                        style.get("enName").getAsString(),
+                                        style.get("tagId").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page.style"), style.get("tagName").getAsString()),
+                        "/cloudmusic style " + style.get("tagId").getAsInt()
+                );
             }
         };
     }
@@ -102,10 +113,18 @@ public class StyleTag extends Music163Obj implements IPrint {
             }
 
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject music = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + music.get("name").getAsString() + "§r§7 - "+ Music.getArtistsName(music.getAsJsonArray("ar")) +" - id: " + music.get("id").getAsLong(), "/cloudmusic music " + music.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        music.get("name").getAsString(),
+                                        Music.getArtistsName(music.getAsJsonArray("ar")),
+                                        music.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), music.get("name").getAsString()),
+                        "/cloudmusic music " + music.get("id").getAsLong()
+                );
             }
         };
     }
@@ -123,10 +142,18 @@ public class StyleTag extends Music163Obj implements IPrint {
             }
 
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
-                JsonObject playlist = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playlist.get("name").getAsString() + "§r§7 - "+ playlist.get("userName").getAsString() +" - id: " + playlist.get("id").getAsLong(), "/cloudmusic playlist " + playlist.get("id").getAsLong());
-                return newPageData;
+            protected TextClickItem putPageItem(Object data) {
+                JsonObject playList = (JsonObject) data;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        playList.get("name").getAsString(),
+                                        playList.get("userName").getAsString(),
+                                        playList.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), playList.get("name").getAsString()),
+                        "/cloudmusic playlist " + playList.get("id").getAsLong()
+                );
             }
         };
     }
@@ -144,10 +171,17 @@ public class StyleTag extends Music163Obj implements IPrint {
             }
 
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject artist = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + artist.get("name").getAsString() + "§r§7 - id: " + artist.get("id").getAsLong(), "/cloudmusic artist " + artist.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- id: %s"
+                                .formatted(
+                                        artist.get("name").getAsString(),
+                                        artist.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), artist.get("name").getAsString()),
+                        "/cloudmusic artist " + artist.get("id").getAsLong()
+                );
             }
         };
     }
@@ -165,10 +199,18 @@ public class StyleTag extends Music163Obj implements IPrint {
             }
 
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject album = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + album.get("name").getAsString() + "§r§7 - "+ album.getAsJsonArray("artists").get(0).getAsJsonObject().get("name").getAsString() +" - id: " + album.get("id").getAsLong(), "/cloudmusic album " + album.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        album.get("name").getAsString(),
+                                        album.getAsJsonArray("artists").get(0).getAsJsonObject().get("name").getAsString(),
+                                        album.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), album.get("name").getAsString()),
+                        "/cloudmusic album " + album.get("id").getAsLong()
+                );
             }
         };
     }

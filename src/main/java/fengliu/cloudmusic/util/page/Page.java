@@ -1,20 +1,17 @@
 package fengliu.cloudmusic.util.page;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map.Entry;
-
-import java.util.Map;
-
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import fengliu.cloudmusic.CloudMusicClient;
+import com.google.gson.JsonObject;
 import fengliu.cloudmusic.config.Configs;
-import fengliu.cloudmusic.util.TextClick;
+import fengliu.cloudmusic.util.click.TextClickItem;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * 页对象, 处理翻页
@@ -28,60 +25,11 @@ public abstract class Page {
 
     /**
      * 设置每一项的数据格式
-     * @param newPageData 当前页所有数据
+     *
      * @param data 当前页一项数据
      * @return 当前页所有数据
      */
-    protected abstract Map<String, String> putPageItem(Map<String, String> newPageData, Object data);
-
-    protected Map<String, String> setPageData(List<?> pageData) {
-        Map<String, String> newPageData = new LinkedHashMap<>();
-        for(Object data: pageData){
-            newPageData = this.putPageItem(newPageData, data);
-        }
-        return newPageData;
-    }
-
-    protected void printToChatHud(FabricClientCommandSource source, Map<String, String> pageData) {
-        source.sendFeedback(Text.literal(""));
-        if(this.infoText != null){
-            source.sendFeedback(this.infoText);
-        }
-        source.sendFeedback(Text.translatable("cloudmusic.info.page.count", this.pageIn + 1 + "§c§l/§r" + this.pageCount));
-
-        for(Entry<String, String> data: pageData.entrySet()){
-            source.sendFeedback(TextClick.suggestText(data.getKey(), data.getValue()));
-        }
-
-        Map<String, String> optionsTextData = new LinkedHashMap<>();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.prev").getString(), "/cloudmusic page prev");
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.next").getString(), "/cloudmusic page next");
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.to").getString(), "/cloudmusic page to ");
-        source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
-    }
-
-    protected void printToChatHud(Map<String, String> pageData) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player == null){
-            return;
-        }
-
-        client.player.sendMessage(Text.literal(""));
-        if(this.infoText != null){
-            client.player.sendMessage(this.infoText);
-        }
-        client.player.sendMessage(Text.translatable("cloudmusic.info.page.count", this.pageIn + 1 + "§c§l/§r" + this.pageCount));
-
-        for(Entry<String, String> data: pageData.entrySet()){
-            client.player.sendMessage(TextClick.suggestText(data.getKey(), data.getValue()));
-        }
-
-        Map<String, String> optionsTextData = new LinkedHashMap<>();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.prev").getString(), "/cloudmusic page prev");
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.next").getString(), "/cloudmusic page next");
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.page.to").getString(), "/cloudmusic page to ");
-        client.player.sendMessage(TextClick.suggestTextMap(optionsTextData, " "));
-    }
+    protected abstract TextClickItem putPageItem(Object data);
 
     protected List<List<?>> splitData(List<?> data) {
         List<List<?>> splitData = new ArrayList<>();
@@ -121,28 +69,72 @@ public abstract class Page {
 
     /**
      * 查看当前页
+     *
      * @param source Fabric 命令源
      */
-    public void look(FabricClientCommandSource source){
-        Map<String, String> pageData = this.setPageData(this.data.get(this.pageIn));
-        this.printToChatHud(source, pageData);
+    public void look(FabricClientCommandSource source) {
+        List<?> pageDataList = this.data.get(this.pageIn);
+        int offset = pageDataList.size() * this.pageIn;
+
+        source.sendFeedback(Text.literal(""));
+        if (this.infoText != null) {
+            source.sendFeedback(this.infoText);
+        }
+        source.sendFeedback(Text.translatable("cloudmusic.info.page.count", this.pageIn + 1 + "§c§l/§r" + this.pageCount));
+
+        for (Object data : pageDataList) {
+            source.sendFeedback(Text.literal("[%s] ".formatted(offset + pageDataList.indexOf(data))).append(this.putPageItem(data).build()));
+        }
+
+        source.sendFeedback(TextClickItem.combine("",
+                new TextClickItem("page.prev", "/cloudmusic page prev"),
+                new TextClickItem("page.next", "/cloudmusic page next"),
+                new TextClickItem("page.to", "/cloudmusic page to")
+        ));
     }
 
-    public void look(){
-        Map<String, String> pageData = this.setPageData(this.data.get(this.pageIn));
-        this.printToChatHud(pageData);
-    }
-    
-    /**
-     * 查看上一页
-     * @param source Fabric 命令源
-     */
-    public void prev(FabricClientCommandSource source){
-        if(this.pageIn <= 0){
+    public void look() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.player == null) {
             return;
         }
 
-        this.pageIn --;
+        List<?> pageDataList = this.data.get(this.pageIn);
+        int offset = pageDataList.size() * this.pageIn;
+
+        client.player.sendMessage(Text.literal(""));
+        if (this.infoText != null) {
+            client.player.sendMessage(this.infoText);
+        }
+        client.player.sendMessage(Text.translatable("cloudmusic.info.page.count", this.pageIn + 1 + "§c§l/§r" + this.pageCount));
+
+        for (Object data : pageDataList) {
+            client.player.sendMessage(Text.literal("[%s] ".formatted(offset + pageDataList.indexOf(data))).append(this.putPageItem(data).build()));
+        }
+
+        client.player.sendMessage(TextClickItem.combine("",
+                mutableText -> mutableText.setStyle(mutableText.getStyle().withBold(true).withColor(Formatting.RED)),
+                new TextClickItem("page.prev", "/cloudmusic page prev"),
+                new TextClickItem("page.next", "/cloudmusic page next"),
+                new TextClickItem("page.to", "/cloudmusic page to")
+        ));
+    }
+
+    public JsonObject getJsonItem(Function<JsonObject, Boolean> get) {
+        return (JsonObject) this.data.get(this.pageIn).stream().findAny().filter(item -> get.apply((JsonObject) item)).orElse(null);
+    }
+
+    /**
+     * 查看上一页
+     *
+     * @param source Fabric 命令源
+     */
+    public void prev(FabricClientCommandSource source) {
+        if (this.pageIn <= 0) {
+            return;
+        }
+
+        this.pageIn--;
         this.look(source);
     }
 

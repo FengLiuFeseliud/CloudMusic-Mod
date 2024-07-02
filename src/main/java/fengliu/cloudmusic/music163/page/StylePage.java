@@ -18,6 +18,7 @@ public abstract class StylePage extends ApiPage {
 
         return data;
     }
+
     /**
      * 动态页对象, 翻页超出数据时自动请求 Api
      *

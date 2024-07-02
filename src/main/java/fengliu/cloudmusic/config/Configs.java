@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fengliu.cloudmusic.CloudMusicClient;
 import fengliu.cloudmusic.music163.Quality;
+import fengliu.cloudmusic.util.ConfigUtil;
 import fi.dy.masa.malilib.config.ConfigUtils;
 import fi.dy.masa.malilib.config.IConfigBase;
 import fi.dy.masa.malilib.config.IConfigHandler;
@@ -20,57 +21,58 @@ public class Configs implements IConfigHandler {
     private static final String CONFIG_FILE_NAME = CloudMusicClient.MOD_ID + ".json";
 
     public static class ALL {
-        public static final ConfigInteger VOLUME = new ConfigInteger("cloudmusic.config.volume", 80, 0, 100, "cloudmusic.config.volume.comment");
-        public static final ConfigBoolean PLAY_URL = new ConfigBoolean("cloudmusic.config.play.url", false, "cloudmusic.config.play.url.comment");
-        public static final ConfigBooleanHotkeyed PLAY_LOOP = new ConfigBooleanHotkeyed("cloudmusic.config.play.loop", true, "", "cloudmusic.config.play.loop.comment", "cloudmusic.config.play.loop.pretty");
-        public static final ConfigBooleanHotkeyed PLAY_AUTO_RANDOM = new ConfigBooleanHotkeyed("cloudmusic.config.play.auto.random", false, "", "cloudmusic.config.play.auto.random.comment", "cloudmusic.config.play.auto.random.pretty");
-        public static final ConfigOptionList PLAY_QUALITY = new ConfigOptionList("cloudmusic.config.play.quality", Quality.EXHIGH, "cloudmusic.config.play.quality.comment");
-        public static final ConfigBoolean DJRADIO_PLAY_ASC = new ConfigBoolean("cloudmusic.config.dj.radio.play.asc", false, "cloudmusic.config.dj.radio.play.asc.comment");
-        public static final ConfigString CACHE_PATH = new ConfigString("cloudmusic.config.cache.path", (new File(FileUtils.getMinecraftDirectory(), "cloud_music_cache")).getAbsolutePath(), "cloudmusic.config.cache.path.comment");
-        public static final ConfigInteger CACHE_MAX_MB = new ConfigInteger("cloudmusic.config.cache.max.mb", 512, 512, 8000, "cloudmusic.config.cache.max.mb.comment");
-        public static final ConfigInteger CACHE_DELETE_MB = new ConfigInteger("cloudmusic.config.cache.delete.mb", 126, 126, 8000, "cloudmusic.config.cache.delete.mb.comment");
-        public static final ConfigBooleanHotkeyed MUSIC_INFO = new ConfigBooleanHotkeyed("cloudmusic.config.music.info", true, "", "cloudmusic.config.music.info.comment", "cloudmusic.config.music.info.pretty");
-        public static final ConfigBooleanHotkeyed LYRIC = new ConfigBooleanHotkeyed("cloudmusic.config.lyric", true, "", "cloudmusic.config.lyric.comment", "cloudmusic.config.lyric.pretty");
-        public static final ConfigInteger PAGE_LIMIT = new ConfigInteger("cloudmusic.config.page.limit", 8, 5, 16, "cloudmusic.config.page.limit.comment");
-        public static final ConfigInteger MUSIC_INFO_X = new ConfigInteger("cloudmusic.config.music.info.x", 0, 0, 4000, "cloudmusic.config.music.info.x.comment");
-        public static final ConfigInteger MUSIC_INFO_Y = new ConfigInteger("cloudmusic.config.music.info.y", 30, 0, 3000, "cloudmusic.config.music.info.y.comment");
-        public static final ConfigBooleanHotkeyed MUSIC_INFO_EFFECT_OFFSET = new ConfigBooleanHotkeyed("cloudmusic.config.music.info.effect.offset", true, "", "cloudmusic.config.music.info.effect.offset.comment", "cloudmusic.config.music.info.effect.offset.pretty");
-        public static final ConfigInteger MUSIC_INFO_EFFECT_OFFSET_X = new ConfigInteger("cloudmusic.config.music.info.effect.offset.x", 0, 0, 4000, "cloudmusic.config.music.info.effect.offset.x.comment");
-        public static final ConfigInteger MUSIC_INFO_EFFECT_OFFSET_Y = new ConfigInteger("cloudmusic.config.music.info.effect.offset.y", 21, 0, 3000, "cloudmusic.config.music.info.effect.offset.y.comment");
-        public static final ConfigColor MUSIC_INFO_COLOR = new ConfigColor("cloudmusic.config.music.info.color", "#4DE41318", "cloudmusic.config.music.info.color.comment");
-        public static final ConfigColor MUSIC_PROGRESS_BAR_COLOR = new ConfigColor("cloudmusic.config.music.progress.bar.color", "#FF858585", "cloudmusic.config.music.progress.bar.color.comment");
-        public static final ConfigColor MUSIC_PLAYED_PROGRESS_BAR_COLOR = new ConfigColor("cloudmusic.config.music.player.progress.bar.color", "#FFFF9600", "cloudmusic.config.music.player.progress.bar.color.comment");
-        public static final ConfigColor MUSIC_PROGRESS_FONT_COLOR = new ConfigColor("cloudmusic.config.music.progress.font.color", "#00858585", "cloudmusic.config.music.progress.font.color.comment");
-        public static final ConfigColor MUSIC_INFO_TITLE_FONT_COLOR = new ConfigColor("cloudmusic.config.music.info.title.font.color", "#00FFFFFF", "cloudmusic.config.music.info.title.font.color.comment");
-        public static final ConfigColor MUSIC_INFO_FONT_COLOR = new ConfigColor("cloudmusic.config.music.info.font.color", "#00858585", "cloudmusic.config.music.info.font.color.comment");
-        public static final ConfigColor LYRIC_COLOR = new ConfigColor("cloudmusic.config.lyric.color", "#00FFFFFF", "cloudmusic.config.lyric.color.comment");
-        public static final ConfigDouble LYRIC_SCALE = new ConfigDouble("cloudmusic.config.lyric.scale", 1.5, "cloudmusic.config.lyric.scale.comment");
-        public static final ConfigInteger LYRIC_X = new ConfigInteger("cloudmusic.config.lyric.x", 0, 0, 4000, "cloudmusic.config.lyric.x.comment");
-        public static final ConfigInteger LYRIC_Y = new ConfigInteger("cloudmusic.config.lyric.y", 0, 0, 3000, "cloudmusic.config.lyric.y.comment");
-        public static final ConfigString COOKIE = new ConfigString("cloudmusic.config.login.cookie", "", "cloudmusic.config.login.cookie.comment");
-        public static final ConfigInteger COUNTRY_CODE = new ConfigInteger("cloudmusic.config.login.country.code", 86, "cloudmusic.config.login.country.code.comment");
-        public static final ConfigInteger QR_CHECK_NUM = new ConfigInteger("cloudmusic.config.login.qr.check.num", 10, 1, 60, "cloudmusic.config.login.qr.check.num.comment");
-        public static final ConfigInteger QR_CHECK_TIME = new ConfigInteger("cloudmusic.config.login.qr.check.time", 3, 1, 60, "cloudmusic.config.login.qr.check.time.comment");
-        public static final ConfigInteger MAX_RETRY = new ConfigInteger("cloudmusic.config.http.max.retry", 3, 0, 10, "cloudmusic.config.http.max.retry.comment");
-        public static final ConfigInteger TIME_OUT = new ConfigInteger("cloudmusic.config.http.time.out", 30, 0, 180, "cloudmusic.config.http.time.out.comment");
-        public static final ConfigBooleanHotkeyed HTTP_PROXY = new ConfigBooleanHotkeyed("cloudmusic.config.http.proxy", false, "","cloudmusic.config.http.proxy.comment", "cloudmusic.config.http.proxy.pretty");
-        public static final ConfigString HTTP_PROXY_IP = new ConfigString("cloudmusic.config.http.proxy.ip", "","cloudmusic.config.http.proxy.ip.comment");
-        public static final ConfigInteger HTTP_PROXY_PORT = new ConfigInteger("cloudmusic.config.http.proxy.port", 8080, 0, 99999, "cloudmusic.config.http.proxy.port.comment");
-        public static final ConfigHotkey OPEN_CONFIG_GUI = new ConfigHotkey("cloudmusic.config.hotkey.open.config.gui", "LEFT_CONTROL,C,M", "cloudmusic.config.hotkey.open.config.gui.comment");
-        public static final ConfigHotkey SWITCH_PLAY_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.switch.play.music", "", "cloudmusic.config.hotkey.switch.play.music.comment");
-        public static final ConfigHotkey PLAY_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.play.music", "", "cloudmusic.config.hotkey.play.music.comment");
-        public static final ConfigHotkey NEXT_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.next.music", "", "cloudmusic.config.hotkey.next.music.comment");
-        public static final ConfigHotkey PREV_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.prev.music", "", "cloudmusic.config.hotkey.prev.music.comment");
-        public static final ConfigHotkey STOP_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.stop.music", "", "cloudmusic.config.hotkey.stop.music.comment");
-        public static final ConfigHotkey EXIT_PLAY = new ConfigHotkey("cloudmusic.config.hotkey.exit.play", "", "cloudmusic.config.hotkey.exit.play.comment");
-        public static final ConfigHotkey PLAY_VOLUME_ADD = new ConfigHotkey("cloudmusic.config.hotkey.play.volume.add", "", "cloudmusic.config.hotkey.play.volume.add.comment");
-        public static final ConfigHotkey PLAY_VOLUME_DOWN = new ConfigHotkey("cloudmusic.config.hotkey.play.volume.down", "", "cloudmusic.config.hotkey.play.volume.down.comment");
-        public static final ConfigHotkey DELETE_PLAY_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.delete.play.music", "", "cloudmusic.config.hotkey.delete.play.music.comment");
-        public static final ConfigHotkey TRASH_ADD_PLAY_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.trash.add.play.music", "", "cloudmusic.config.hotkey.trash.add.play.music.comment");
-        public static final ConfigHotkey LIKE_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.like.music", "", "cloudmusic.config.hotkey.like.music.comment");
-        public static final ConfigHotkey PLAYLIST_ADD_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.playlist.add.music", "", "cloudmusic.config.hotkey.playlist.add.music.comment");
-        public static final ConfigHotkey PLAYLIST_DEL_MUSIC = new ConfigHotkey("cloudmusic.config.hotkey.playlist.del.music", "", "cloudmusic.config.hotkey.playlist.del.music.comment");
-        public static final ConfigHotkey PLAYLIST_RANDOM = new ConfigHotkey("cloudmusic.config.hotkey.playlist.random", "", "cloudmusic.config.hotkey.playlist.random.comment");
+        public static final ConfigInteger VOLUME = ConfigUtil.addConfigInteger("volume", 80, 0, 100);
+        public static final ConfigBoolean PLAY_URL = ConfigUtil.addConfigBoolean("play.url");
+        public static final ConfigBooleanHotkeyed PLAY_LOOP = ConfigUtil.addConfigBooleanHotkeyed("play.loop");
+        public static final ConfigBooleanHotkeyed PLAY_AUTO_RANDOM = ConfigUtil.addConfigBooleanHotkeyed("play.auto.random", false, "");
+        public static final ConfigOptionList PLAY_QUALITY = ConfigUtil.addConfigOptionList("play.quality", Quality.EXHIGH);
+        public static final ConfigBoolean DJRADIO_PLAY_ASC = ConfigUtil.addConfigBoolean("dj.radio.play.asc");
+        public static final ConfigString CACHE_PATH = ConfigUtil.addConfigString("cache.path", (new File(FileUtils.getMinecraftDirectory(), "cloud_music_cache")).getAbsolutePath());
+        public static final ConfigInteger CACHE_MAX_MB = ConfigUtil.addConfigInteger("cache.max.mb", 512, 512, 8000);
+        public static final ConfigInteger CACHE_DELETE_MB = ConfigUtil.addConfigInteger("cache.delete.mb", 126, 126, 8000);
+        public static final ConfigBooleanHotkeyed MUSIC_INFO = ConfigUtil.addConfigBooleanHotkeyed("music.info");
+        public static final ConfigBooleanHotkeyed LYRIC = ConfigUtil.addConfigBooleanHotkeyed("lyric");
+        public static final ConfigInteger PAGE_LIMIT = ConfigUtil.addConfigInteger("page.limit", 8, 5, 16);
+        public static final ConfigInteger MUSIC_INFO_X = ConfigUtil.addConfigInteger("music.info.x", 0, 0, 4000);
+        public static final ConfigInteger MUSIC_INFO_Y = ConfigUtil.addConfigInteger("music.info.y", 30, 0, 3000);
+        public static final ConfigBooleanHotkeyed MUSIC_INFO_EFFECT_OFFSET = ConfigUtil.addConfigBooleanHotkeyed("music.info.effect.offset");
+        public static final ConfigInteger MUSIC_INFO_EFFECT_OFFSET_X = ConfigUtil.addConfigInteger("music.info.effect.offset.x", 0, 0, 4000);
+        public static final ConfigInteger MUSIC_INFO_EFFECT_OFFSET_Y = ConfigUtil.addConfigInteger("music.info.effect.offset.y", 21, 0, 3000);
+        public static final ConfigColor MUSIC_INFO_COLOR = ConfigUtil.addConfigColor("music.info.color", "#4DE41318");
+        public static final ConfigColor MUSIC_PROGRESS_BAR_COLOR = ConfigUtil.addConfigColor("music.progress.bar.color", "#FF858585");
+        public static final ConfigColor MUSIC_PLAYED_PROGRESS_BAR_COLOR = ConfigUtil.addConfigColor("music.player.progress.bar.color", "#FFFF9600");
+        public static final ConfigColor MUSIC_PROGRESS_FONT_COLOR = ConfigUtil.addConfigColor("music.progress.font.color", "#00858585");
+        public static final ConfigColor MUSIC_INFO_TITLE_FONT_COLOR = ConfigUtil.addConfigColor("music.info.title.font.color");
+        public static final ConfigColor MUSIC_INFO_FONT_COLOR = ConfigUtil.addConfigColor("music.info.font.color", "#00858585");
+        public static final ConfigColor LYRIC_COLOR = ConfigUtil.addConfigColor("lyric.color");
+        public static final ConfigDouble LYRIC_SCALE = ConfigUtil.addConfigDouble("lyric.scale", 1.5);
+        public static final ConfigInteger LYRIC_X = ConfigUtil.addConfigInteger("lyric.x", 0, 0, 4000);
+        public static final ConfigInteger LYRIC_Y = ConfigUtil.addConfigInteger("lyric.y", 0, 0, 3000);
+        public static final ConfigString COOKIE = ConfigUtil.addConfigString("login.cookie");
+        public static final ConfigInteger COUNTRY_CODE = ConfigUtil.addConfigInteger("login.country.code", 86);
+        public static final ConfigInteger QR_CHECK_NUM = ConfigUtil.addConfigInteger("login.qr.check.num", 10, 1, 60);
+        public static final ConfigInteger QR_CHECK_TIME = ConfigUtil.addConfigInteger("login.qr.check.time", 3, 1, 60);
+        public static final ConfigInteger MAX_RETRY = ConfigUtil.addConfigInteger("http.max.retry", 3, 0, 10);
+        public static final ConfigInteger TIME_OUT = ConfigUtil.addConfigInteger("http.time.out", 30, 0, 180);
+        public static final ConfigBooleanHotkeyed HTTP_PROXY = ConfigUtil.addConfigBooleanHotkeyed("http.proxy", false, "");
+        public static final ConfigString HTTP_PROXY_IP = ConfigUtil.addConfigString("http.proxy.ip");
+        public static final ConfigInteger HTTP_PROXY_PORT = ConfigUtil.addConfigInteger("http.proxy.port", 8080);
+        public static final ConfigHotkey OPEN_CONFIG_GUI = ConfigUtil.addConfigHotkey("open.config.gui", "LEFT_CONTROL,C,M");
+        public static final ConfigHotkey SWITCH_PLAY_MUSIC = ConfigUtil.addConfigHotkey("switch.play.music");
+        public static final ConfigHotkey PLAY_MUSIC = ConfigUtil.addConfigHotkey("play.music");
+        public static final ConfigHotkey NEXT_MUSIC = ConfigUtil.addConfigHotkey("next.music");
+        public static final ConfigHotkey PREV_MUSIC = ConfigUtil.addConfigHotkey("prev.music");
+        public static final ConfigHotkey STOP_MUSIC = ConfigUtil.addConfigHotkey("stop.music");
+        public static final ConfigHotkey EXIT_PLAY = ConfigUtil.addConfigHotkey("exit.play");
+        public static final ConfigHotkey PLAY_VOLUME_ADD = ConfigUtil.addConfigHotkey("play.volume.add");
+        public static final ConfigHotkey PLAY_VOLUME_DOWN = ConfigUtil.addConfigHotkey("play.volume.down");
+        public static final ConfigHotkey DELETE_PLAY_MUSIC = ConfigUtil.addConfigHotkey("delete.play.music");
+        public static final ConfigHotkey TRASH_ADD_PLAY_MUSIC = ConfigUtil.addConfigHotkey("trash.add.play.music");
+        public static final ConfigHotkey LIKE_MUSIC = ConfigUtil.addConfigHotkey("like.music");
+        public static final ConfigHotkey PLAYLIST_ADD_MUSIC = ConfigUtil.addConfigHotkey("playlist.add.music");
+        public static final ConfigHotkey PLAYLIST_DEL_MUSIC = ConfigUtil.addConfigHotkey("playlist.del.music");
+        public static final ConfigHotkey PLAYLIST_RANDOM = ConfigUtil.addConfigHotkey("playlist.random");
+        public static final ConfigBooleanHotkeyed CLICK_RUN_COMMAND = ConfigUtil.addConfigBooleanHotkeyed("click.run.command");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 VOLUME,
@@ -190,6 +192,14 @@ public class Configs implements IConfigHandler {
                 LYRIC_SCALE,
                 LYRIC_X,
                 LYRIC_Y
+        );
+    }
+
+    public static class COMMAND {
+        public static final ConfigBooleanHotkeyed CLICK_RUN_COMMAND = ALL.CLICK_RUN_COMMAND;
+
+        public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
+                CLICK_RUN_COMMAND
         );
     }
 

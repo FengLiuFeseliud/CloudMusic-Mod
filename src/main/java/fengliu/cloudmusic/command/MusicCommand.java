@@ -1,5 +1,6 @@
 package fengliu.cloudmusic.command;
 
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
@@ -10,15 +11,15 @@ import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.music163.data.*;
 import fengliu.cloudmusic.util.MusicPlayer;
+import fengliu.cloudmusic.util.TextClick;
+import fengliu.cloudmusic.util.click.TextClickItem;
 import fengliu.cloudmusic.util.page.Page;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
@@ -255,9 +256,8 @@ public class MusicCommand {
         CloudMusic.executes(context -> {
             page = new Page(helpsList) {
                 @Override
-                protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
-                    newPageData.put("[" +(newPageData.size() + 1) + "] " + ((Text) data).getString(), "");
-                    return newPageData;
+                protected TextClickItem putPageItem(Object data) {
+                    return new TextClickItem((MutableText) data, "");
                 }
             };
             page.setInfoText(Text.translatable("cloudmusic.info.page.help"));
@@ -341,15 +341,42 @@ public class MusicCommand {
                 })
         ))));
 
+        LiteralArgumentBuilder<FabricClientCommandSource> COMMENT = literal("comment");
+        LiteralArgumentBuilder<FabricClientCommandSource> HOT_COMMENT = literal("hotComment");
+
+        CloudMusic.then(Music.then(COMMENT.then(
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        Music music = music163.music(LongArgumentType.getLong(contextData, "id"));
+                        page = music.getComments(false);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.music.comments", music.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
+        )));
+
+        CloudMusic.then(Music.then(HOT_COMMENT.then(
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        Music music = music163.music(LongArgumentType.getLong(contextData, "id"));
+                        page = music.getComments(true);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.music.hot.comments", music.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
+        )));
+
         // cloudmusic playlist id
         CloudMusic.then(PlayList.then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    data = music163.playlist(LongArgumentType.getLong(context, "id"));
-                    ((PlayList) data).printToChatHud(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        data = music163.playlist(LongArgumentType.getLong(context, "id"));
+                        ((PlayList) data).printToChatHud(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         ));
         
         // cloudmusic playlist play id
@@ -1164,6 +1191,46 @@ public class MusicCommand {
             })
         )));
 
+        // cloudmusic comment
+        CloudMusic.then(COMMENT.then(
+                argument("id", LongArgumentType.longArg()).then(
+                        argument("commendId", StringArgumentType.string()).executes(context -> {
+                            long id = LongArgumentType.getLong(context, "id");
+                            JsonObject json = page.getJsonItem(jsonObject -> jsonObject.get("commendId").getAsLong() == id);
+                            if (json == null) {
+                                return Command.SINGLE_SUCCESS;
+                            }
+                            Comment comment = new Comment(music163.getHttpClient(), json, StringArgumentType.getString(context, "commentId"));
+                            comment.printToChatHud(context.getSource());
+
+                            Map<String, String> optionsTextData = new LinkedHashMap<>();
+                            optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.comment.floors").getString(), "/cloudmusic comment floors %s %s".formatted(id, comment.threadId));
+                            optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.comment.reply").getString(), "/cloudmusic comment reply %s %s".formatted(id, comment.threadId));
+                            optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.comment.like").getString(), "/cloudmusic comment like %s %s".formatted(id, comment.threadId));
+                            optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.comment.delete").getString(), "/cloudmusic comment delete %s %s".formatted(id, comment.threadId));
+                            context.getSource().sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
+                            return Command.SINGLE_SUCCESS;
+                        })
+                ))
+        );
+
+        CloudMusic.then(COMMENT.then(literal("floors").then(argument("id", LongArgumentType.longArg()).then(
+                argument("commendId", StringArgumentType.string()).executes(contextData -> {
+                    long id = LongArgumentType.getLong(contextData, "id");
+                    JsonObject json = page.getJsonItem(jsonObject -> jsonObject.get("commentId").getAsLong() == id);
+                    if (json == null) {
+                        return Command.SINGLE_SUCCESS;
+                    }
+                    Comment comment = new Comment(music163.getHttpClient(), json, StringArgumentType.getString(contextData, "commentId"));
+                    runCommand(contextData, context -> {
+                        page = comment.floors();
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.comment.floors", comment.id));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
+        ))));
+
         // cloudmusic volume
         CloudMusic.then(Volume.executes(context -> {
             context.getSource().sendFeedback(Text.translatable("cloudmusic.info.volume", Configs.PLAY.VOLUME.getIntegerValue()));
@@ -1172,12 +1239,12 @@ public class MusicCommand {
 
         // cloudmusic volume volume
         CloudMusic.then(Volume.then(
-            argument("volume", IntegerArgumentType.integer(0, 100)).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    player.volumeSet(IntegerArgumentType.getInteger(context, "volume"));
-                });
-                return Command.SINGLE_SUCCESS;
-            }))
+                argument("volume", IntegerArgumentType.integer(0, 100)).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        player.volumeSet(IntegerArgumentType.getInteger(context, "volume"));
+                    });
+                    return Command.SINGLE_SUCCESS;
+                }))
         );
         
         // cloudmusic page prev
@@ -1374,6 +1441,7 @@ public class MusicCommand {
                             return Command.SINGLE_SUCCESS;
                         })
                     )
+
             );
         });
     }

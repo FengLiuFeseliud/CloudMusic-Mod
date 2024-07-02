@@ -1,20 +1,20 @@
 package fengliu.cloudmusic.music163.data;
 
-import java.util.*;
-
-import fengliu.cloudmusic.music163.*;
-import fengliu.cloudmusic.music163.data.Music;
-import fengliu.cloudmusic.music163.data.PlayList;
-import fengliu.cloudmusic.util.TextClick;
-import org.jetbrains.annotations.Nullable;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
+import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.util.HttpClient;
+import fengliu.cloudmusic.util.IdUtil;
+import fengliu.cloudmusic.util.click.TextClickItem;
 import fengliu.cloudmusic.util.page.ApiPage;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户对象
@@ -105,12 +105,19 @@ public class User extends Music163Obj implements IPrint {
             }
 
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject playList = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + playList.get("name").getAsString() + "§r§7 - "+ playList.getAsJsonObject("creator").get("nickname").getAsString() +" - id: " + playList.get("id").getAsLong(), "/cloudmusic playlist " + playList.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        playList.get("name").getAsString(),
+                                        playList.getAsJsonObject("creator").get("nickname").getAsString(),
+                                        playList.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), playList.get("name").getAsString()),
+                        "/cloudmusic playlist " + playList.get("id").getAsLong()
+                );
             }
-            
         };
     }
 
@@ -130,10 +137,18 @@ public class User extends Music163Obj implements IPrint {
             }
 
             @Override
-            protected Map<String, String> putPageItem(Map<String, String> newPageData, Object data) {
+            protected TextClickItem putPageItem(Object data) {
                 JsonObject djRadios = (JsonObject) data;
-                newPageData.put("[" +(newPageData.size() + 1) + "] §b" + djRadios.get("name").getAsString() + "§r§7 - "+ djRadios.getAsJsonObject("dj").get("nickname").getAsString() +" - id: " + djRadios.get("id").getAsLong(), "/cloudmusic dj " + djRadios.get("id").getAsLong());
-                return newPageData;
+                return new TextClickItem(
+                        Text.literal("§b%s §r§7- %s - id: %s"
+                                .formatted(
+                                        djRadios.get("name").getAsString(),
+                                        djRadios.getAsJsonObject("dj").get("nickname").getAsString(),
+                                        djRadios.get("id").getAsLong())
+                        ),
+                        Text.translatable(IdUtil.getShowInfo("page"), djRadios.get("name").getAsString()),
+                        "/cloudmusic dj " + djRadios.get("id").getAsLong()
+                );
             }
         };
     }
@@ -193,21 +208,21 @@ public class User extends Music163Obj implements IPrint {
         source.sendFeedback(Text.translatable("cloudmusic.info.user.level", this.level));
         source.sendFeedback(Text.translatable("cloudmusic.info.user.vip", this.vip));
         source.sendFeedback(Text.translatable("cloudmusic.info.user.id", this.id));
-        
+
         source.sendFeedback(Text.literal(""));
         source.sendFeedback(Text.literal("§7" + this.signature));
 
-        Map<String, String> optionsTextData = new LinkedHashMap<>();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.user.like").getString(), "/cloudmusic user like " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.user.playlist").getString(), "/cloudmusic user playlist " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.user.dj").getString(), "/cloudmusic user dj " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.USER.getShar(this.id));
-        source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
+        source.sendFeedback(TextClickItem.combine("",
+                new TextClickItem("user.like", "/cloudmusic user like " + this.id),
+                new TextClickItem("user.playlist", "/cloudmusic user playlist " + this.id),
+                new TextClickItem("user.dj", "/cloudmusic user dj " + this.id),
+                new TextClickItem("shar", Shares.USER.getShar(this.id))
+        ));
 
-        optionsTextData.clear();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.record.all").getString(), "/cloudmusic user record all " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.record.week").getString(), "/cloudmusic user record week " + this.id);
-        source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
+        source.sendFeedback(TextClickItem.combine("",
+                new TextClickItem("record.all", "/cloudmusic user record all " + this.id),
+                new TextClickItem("record.week", "/cloudmusic user record week " + this.id)
+        ));
     }
     
 }
