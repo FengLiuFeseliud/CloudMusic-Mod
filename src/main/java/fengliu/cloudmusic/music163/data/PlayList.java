@@ -1,21 +1,20 @@
 package fengliu.cloudmusic.music163.data;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import fengliu.cloudmusic.music163.*;
-import fengliu.cloudmusic.music163.data.Music;
 import fengliu.cloudmusic.util.HttpClient;
-import fengliu.cloudmusic.util.TextClick;
+import fengliu.cloudmusic.util.IdUtil;
+import fengliu.cloudmusic.util.TextClickItem;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 歌单对象
@@ -104,31 +103,44 @@ public class PlayList extends Music163Obj implements IMusicList, ICanSubscribe {
 
         source.sendFeedback(Text.literal(""));
 
-        source.sendFeedback(TextClick.suggestText("cloudmusic.info.playlist.creator", "§b" + this.creator.get("nickname").getAsString(), "/cloudmusic user " + this.creator.get("userId").getAsLong()));
-        if(!this.tags.isEmpty()){
-            Map<String, String> tagsTextData = new LinkedHashMap<>();
-            for(JsonElement tag: this.tags){
+        source.sendFeedback(new TextClickItem(
+                "info.playlist.creator",
+                "/cloudmusic user " + this.creator.get("userId").getAsLong()
+        ).append("§b" + this.creator.get("nickname").getAsString()).build());
+
+        if (!this.tags.isEmpty()) {
+            List<TextClickItem> tagsTexts = new ArrayList<>();
+            for (JsonElement tag : this.tags) {
                 String tagName = tag.getAsString();
-                tagsTextData.put("§b§n" + tagName, "/cloudmusic top playlist \"" + tagName + "\"");
+                tagsTexts.add(new TextClickItem(
+                        Text.literal("§b§n" + tagName),
+                        Text.translatable(IdUtil.getShowInfo("playlist.tag"), tagName),
+                        "/cloudmusic top playlist \"%s\"".formatted(tagName)
+                ));
             }
-            source.sendFeedback(TextClick.suggestTextMap("cloudmusic.info.playlist.tags", tagsTextData, "§f§l/"));
+
+            source.sendFeedback(Text.translatable("cloudmusic.info.playlist.tags", TextClickItem.combine(
+                    "§f§l/",
+                    text -> text.setStyle(text.getStyle().withColor(Formatting.AQUA).withUnderline(true)),
+                    tagsTexts.toArray(new TextClickItem[]{})
+            )));
         }
         source.sendFeedback(Text.translatable("cloudmusic.info.playlist.count", this.count, this.playCount));
         source.sendFeedback(Text.translatable("cloudmusic.info.playlist.id", this.id));
 
-        if(this.description != null){
+        if (this.description != null) {
             source.sendFeedback(Text.literal(""));
             for (String row : this.description) {
                 source.sendFeedback(Text.literal("§7" + row));
             }
         }
 
-        Map<String, String> optionsTextData = new LinkedHashMap<>();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic playlist play " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic playlist subscribe " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unsubscribe").getString(), "/cloudmusic playlist unsubscribe " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.PLAY_LIST.getShar(this.id));
-        source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
+        source.sendFeedback(TextClickItem.combine(
+                new TextClickItem("play", "/cloudmusic playlist play " + this.id),
+                new TextClickItem("subscribe", "/cloudmusic playlist subscribe " + this.id),
+                new TextClickItem("unsubscribe", "/cloudmusic playlist unsubscribe " + this.id),
+                new TextClickItem("shar", Shares.PLAY_LIST.getShar(this.id))
+        ));
     }
 
     @Override

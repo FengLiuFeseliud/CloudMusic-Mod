@@ -5,11 +5,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.util.HttpClient;
-import fengliu.cloudmusic.util.TextClick;
+import fengliu.cloudmusic.util.IdUtil;
+import fengliu.cloudmusic.util.TextClickItem;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 专辑对象
@@ -60,30 +65,39 @@ public class Album extends Music163Obj implements IMusicList, ICanSubscribe {
         }
 
         source.sendFeedback(Text.literal(""));
-        
-        Map<String, String> artistsTextData = new LinkedHashMap<>();
+
+        List<TextClickItem> artistsTexts = new ArrayList<>();
         for (JsonElement artistData : this.artists.asList()) {
-                JsonObject artist = artistData.getAsJsonObject();
-                artistsTextData.put("§b§n" + artist.get("name").getAsString(), "/cloudmusic artist " + artist.get("id").getAsLong());
+            JsonObject artist = artistData.getAsJsonObject();
+            artistsTexts.add(new TextClickItem(
+                    Text.literal(artist.get("name").getAsString()),
+                    Text.translatable(IdUtil.getShowInfo("music.artist")),
+                    "/cloudmusic artist " + artist.get("id").getAsLong()
+            ));
         }
 
-        source.sendFeedback(TextClick.suggestTextMap(artistsTextData, "§f§l/"));
+        source.sendFeedback(TextClickItem.combine(
+                "§f§l/",
+                text -> text.setStyle(text.getStyle().withColor(Formatting.AQUA).withUnderline(true)),
+                artistsTexts.toArray(new TextClickItem[]{})
+        ));
+
         source.sendFeedback(Text.translatable("cloudmusic.info.album.size", this.size));
         source.sendFeedback(Text.translatable("cloudmusic.info.album.id", this.id));
-        
-        if(this.description != null){
+
+        if (this.description != null) {
             source.sendFeedback(Text.literal(""));
             for (String row : this.description) {
                 source.sendFeedback(Text.literal("§7" + row));
             }
         }
 
-        Map<String, String> optionsTextData = new LinkedHashMap<>();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic album play " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic album subscribe " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unsubscribe").getString(), "/cloudmusic album unsubscribe " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.ALBUM.getShar(this.id));
-        source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
+        source.sendFeedback(TextClickItem.combine(
+                new TextClickItem("play", "/cloudmusic album play " + this.id),
+                new TextClickItem("subscribe", "/cloudmusic album subscribe " + this.id),
+                new TextClickItem("unsubscribe", "/cloudmusic album unsubscribe " + this.id),
+                new TextClickItem("shar", Shares.ALBUM.getShar(this.id))
+        ));
     }
 
     @Override

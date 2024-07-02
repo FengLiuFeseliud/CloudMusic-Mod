@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import fengliu.cloudmusic.music163.data.Comment;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.IdUtil;
-import fengliu.cloudmusic.util.click.TextClickItem;
+import fengliu.cloudmusic.util.TextClickItem;
 import fengliu.cloudmusic.util.page.ApiPage;
 import net.minecraft.text.Text;
 

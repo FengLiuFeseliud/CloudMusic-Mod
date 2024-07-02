@@ -11,15 +11,16 @@ import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.music163.data.*;
 import fengliu.cloudmusic.util.MusicPlayer;
-import fengliu.cloudmusic.util.TextClick;
-import fengliu.cloudmusic.util.click.TextClickItem;
+import fengliu.cloudmusic.util.TextClickItem;
 import fengliu.cloudmusic.util.page.Page;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
@@ -1203,12 +1204,12 @@ public class MusicCommand {
                             Comment comment = new Comment(music163.getHttpClient(), json, StringArgumentType.getString(context, "commentId"));
                             comment.printToChatHud(context.getSource());
 
-                            Map<String, String> optionsTextData = new LinkedHashMap<>();
-                            optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.comment.floors").getString(), "/cloudmusic comment floors %s %s".formatted(id, comment.threadId));
-                            optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.comment.reply").getString(), "/cloudmusic comment reply %s %s".formatted(id, comment.threadId));
-                            optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.comment.like").getString(), "/cloudmusic comment like %s %s".formatted(id, comment.threadId));
-                            optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.comment.delete").getString(), "/cloudmusic comment delete %s %s".formatted(id, comment.threadId));
-                            context.getSource().sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
+                            context.getSource().sendFeedback(TextClickItem.combine(
+                                    new TextClickItem("comment.floors", "/cloudmusic comment floors %s %s".formatted(id, comment.threadId)),
+                                    new TextClickItem("comment.reply", "/cloudmusic comment reply %s %s".formatted(id, comment.threadId)),
+                                    new TextClickItem("comment.like", "/cloudmusic comment like %s %s".formatted(id, comment.threadId)),
+                                    new TextClickItem("comment.delete", "/cloudmusic comment delete %s %s".formatted(id, comment.threadId))
+                            ));
                             return Command.SINGLE_SUCCESS;
                         })
                 ))

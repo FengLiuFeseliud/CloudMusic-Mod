@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import fengliu.cloudmusic.music163.data.*;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.IdUtil;
-import fengliu.cloudmusic.util.click.TextClickItem;
+import fengliu.cloudmusic.util.TextClickItem;
 import fengliu.cloudmusic.util.page.ApiPage;
 import fengliu.cloudmusic.util.page.Page;
 import net.minecraft.text.Text;
@@ -18,22 +18,22 @@ import java.util.Map;
  * Music163 api
  */
 public class Music163 {
-    private Map<String, String> Header = new HashMap<>();
     private final HttpClient api;
     
-    public Music163(@Nullable String cookies){
-        if(cookies == null){
+    public Music163(@Nullable String cookies) {
+        if (cookies == null) {
             cookies = "";
         }
-        this.Header.put("Accept", "*/*");
-        this.Header.put("Accept-Language", "zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4");
-        this.Header.put("Connection", "keep-alive");
-        this.Header.put("Content-Type", "application/x-www-form-urlencoded");
-        this.Header.put("Referer", "http://music.163.com");
-        this.Header.put("Host", "music.163.com");
-        this.Header.put("Cookie", "appver=2.7.1.198277; os=pc; " + cookies);
-        this.Header.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36");
-        this.api = new HttpClient("https://music.163.com", this.Header);
+        Map<String, String> header = new HashMap<>();
+        header.put("Accept", "*/*");
+        header.put("Accept-Language", "zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4");
+        header.put("Connection", "keep-alive");
+        header.put("Content-Type", "application/x-www-form-urlencoded");
+        header.put("Referer", "http://music.163.com");
+        header.put("Host", "music.163.com");
+        header.put("Cookie", "appver=2.7.1.198277; os=pc; " + cookies);
+        header.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36");
+        this.api = new HttpClient("https://music.163.com", header);
     }
 
     public HttpClient getHttpClient(){

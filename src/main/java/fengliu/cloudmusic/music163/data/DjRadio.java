@@ -6,14 +6,17 @@ import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.music163.ICanSubscribe;
 import fengliu.cloudmusic.music163.IPrint;
 import fengliu.cloudmusic.music163.Shares;
-import fengliu.cloudmusic.music163.data.DjMusic;
 import fengliu.cloudmusic.util.HttpClient;
+import fengliu.cloudmusic.util.IdUtil;
 import fengliu.cloudmusic.util.MusicPlayer;
-import fengliu.cloudmusic.util.TextClick;
+import fengliu.cloudmusic.util.TextClickItem;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DjRadio extends MusicPlayer implements ICanSubscribe, IPrint {
     private final HttpClient api;
@@ -105,27 +108,41 @@ public class DjRadio extends MusicPlayer implements ICanSubscribe, IPrint {
 
         source.sendFeedback(Text.literal(""));
 
-        source.sendFeedback(TextClick.suggestText("cloudmusic.info.dj.creator", "§b" + this.dj.get("nickname").getAsString(), "/cloudmusic user " + this.dj.get("userId").getAsLong()));
-        Map<String, String> artistsTextData = new LinkedHashMap<>();
-        artistsTextData.put("§b§n" + this.category, "/cloudmusic dj category " + this.categoryId);
-        artistsTextData.put("§b§n" + this.secondCategory, "/cloudmusic dj category " + this.secondCategoryId);
-        source.sendFeedback(TextClick.suggestTextMap("cloudmusic.info.dj.category", artistsTextData, "§f§l/"));
+        source.sendFeedback(new TextClickItem(
+                "info.dj.creator",
+                "/cloudmusic user " + this.dj.get("userId").getAsLong()
+        ).append("§b" + this.dj.get("nickname").getAsString()).build());
+
+        source.sendFeedback(Text.translatable("cloudmusic.info.dj.category", TextClickItem.combine("§f§l/",
+                text -> text.setStyle(text.getStyle().withColor(Formatting.AQUA).withUnderline(true)),
+                new TextClickItem(
+                        Text.literal(this.category),
+                        Text.translatable(IdUtil.getShowInfo("dj.category")),
+                        "/cloudmusic dj category " + this.categoryId
+                ),
+                new TextClickItem(
+                        Text.literal(this.secondCategory),
+                        Text.translatable(IdUtil.getShowInfo("dj.category")),
+                        "/cloudmusic dj category " + this.secondCategoryId
+                )
+        )));
+
         source.sendFeedback(Text.translatable("cloudmusic.info.dj.size", this.programCount));
         source.sendFeedback(Text.translatable("cloudmusic.info.dj.count", this.subCount, this.shareCount));
         source.sendFeedback(Text.translatable("cloudmusic.info.dj.id", this.id));
 
-        if(this.description != null){
+        if (this.description != null) {
             source.sendFeedback(Text.literal(""));
             for (String row : this.description) {
                 source.sendFeedback(Text.literal("§7" + row));
             }
         }
 
-        Map<String, String> optionsTextData = new LinkedHashMap<>();
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.play").getString(), "/cloudmusic dj play " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.subscribe").getString(), "/cloudmusic dj subscribe " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.unsubscribe").getString(), "/cloudmusic dj unsubscribe " + this.id);
-        optionsTextData.put("§c§l" + Text.translatable("cloudmusic.options.shar").getString(), Shares.DJ_RADIO.getShar(this.id));
-        source.sendFeedback(TextClick.suggestTextMap(optionsTextData, " "));
+        source.sendFeedback(TextClickItem.combine(
+                new TextClickItem("play", "/cloudmusic dj play " + this.id),
+                new TextClickItem("subscribe", "/cloudmusic dj subscribe " + this.id),
+                new TextClickItem("unsubscribe", "/cloudmusic dj unsubscribe " + this.id),
+                new TextClickItem("shar", Shares.DJ_RADIO.getShar(this.id))
+        ));
     }
 }

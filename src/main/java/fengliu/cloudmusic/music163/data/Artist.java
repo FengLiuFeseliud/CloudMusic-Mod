@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.IdUtil;
-import fengliu.cloudmusic.util.click.TextClickItem;
+import fengliu.cloudmusic.util.TextClickItem;
 import fengliu.cloudmusic.util.page.ApiPage;
 import fengliu.cloudmusic.util.page.Page;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -146,7 +146,7 @@ public class Artist extends Music163Obj implements IPrint, ICanSubscribe {
         source.sendFeedback(Text.literal(""));
         source.sendFeedback(Text.literal("§7" + this.briefDesc));
 
-        source.sendFeedback(TextClickItem.combine(" ",
+        source.sendFeedback(TextClickItem.combine(
                 new TextClickItem("play.top50", "/cloudmusic artist top " + this.id),
                 new TextClickItem("album", "/cloudmusic artist album " + this.id),
                 new TextClickItem("similar.artist", "/cloudmusic artist similar " + this.id),

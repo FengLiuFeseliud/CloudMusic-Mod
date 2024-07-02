@@ -3,7 +3,7 @@ package fengliu.cloudmusic.util.page;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fengliu.cloudmusic.config.Configs;
-import fengliu.cloudmusic.util.click.TextClickItem;
+import fengliu.cloudmusic.util.TextClickItem;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
@@ -86,7 +86,7 @@ public abstract class Page {
             source.sendFeedback(Text.literal("[%s] ".formatted(offset + pageDataList.indexOf(data))).append(this.putPageItem(data).build()));
         }
 
-        source.sendFeedback(TextClickItem.combine("",
+        source.sendFeedback(TextClickItem.combine(
                 new TextClickItem("page.prev", "/cloudmusic page prev"),
                 new TextClickItem("page.next", "/cloudmusic page next"),
                 new TextClickItem("page.to", "/cloudmusic page to")

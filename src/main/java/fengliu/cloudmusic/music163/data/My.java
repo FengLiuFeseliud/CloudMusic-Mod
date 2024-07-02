@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import fengliu.cloudmusic.music163.IMusic;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.IdUtil;
-import fengliu.cloudmusic.util.click.TextClickItem;
+import fengliu.cloudmusic.util.TextClickItem;
 import fengliu.cloudmusic.util.page.ApiPage;
 import fengliu.cloudmusic.util.page.Page;
 import net.minecraft.text.Text;
@@ -105,7 +105,7 @@ public class My extends User {
                                         playList.get("name").getAsString(),
                                         playList.get("id").getAsLong())
                         ),
-                        Text.translatable(IdUtil.getShowInfo("page." + op), playList.get("name").getAsString(), musicId),
+                        Text.translatable(IdUtil.getShowInfo("page.playlist." + op), playList.get("name").getAsString(), musicId),
                         "/cloudmusic playlist %s %s %s".formatted(op, playList.get("id").getAsLong(), musicId)
                 );
             }

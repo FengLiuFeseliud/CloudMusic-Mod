@@ -8,7 +8,6 @@ import fengliu.cloudmusic.music163.Lyric;
 import fengliu.cloudmusic.music163.data.DjMusic;
 import fengliu.cloudmusic.music163.data.Music;
 import fengliu.cloudmusic.render.MusicIconTexture;
-import fengliu.cloudmusic.util.click.TextClickItem;
 import fengliu.cloudmusic.util.page.Page;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;

@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.IdUtil;
-import fengliu.cloudmusic.util.click.TextClickItem;
+import fengliu.cloudmusic.util.TextClickItem;
 import fengliu.cloudmusic.util.page.ApiPage;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
@@ -212,14 +212,14 @@ public class User extends Music163Obj implements IPrint {
         source.sendFeedback(Text.literal(""));
         source.sendFeedback(Text.literal("§7" + this.signature));
 
-        source.sendFeedback(TextClickItem.combine("",
+        source.sendFeedback(TextClickItem.combine(
                 new TextClickItem("user.like", "/cloudmusic user like " + this.id),
                 new TextClickItem("user.playlist", "/cloudmusic user playlist " + this.id),
                 new TextClickItem("user.dj", "/cloudmusic user dj " + this.id),
                 new TextClickItem("shar", Shares.USER.getShar(this.id))
         ));
 
-        source.sendFeedback(TextClickItem.combine("",
+        source.sendFeedback(TextClickItem.combine(
                 new TextClickItem("record.all", "/cloudmusic user record all " + this.id),
                 new TextClickItem("record.week", "/cloudmusic user record week " + this.id)
         ));

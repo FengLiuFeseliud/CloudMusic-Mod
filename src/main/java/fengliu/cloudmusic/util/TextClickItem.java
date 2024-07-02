@@ -1,15 +1,14 @@
-package fengliu.cloudmusic.util.click;
+package fengliu.cloudmusic.util;
 
 import fengliu.cloudmusic.config.Configs;
-import fengliu.cloudmusic.util.IdUtil;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
 import java.util.function.Function;
 
 public class TextClickItem {
-    public final Text text;
-    public final Text show;
+    public final MutableText show;
+    protected MutableText text;
     public final String commandSuggest;
 
     public TextClickItem(MutableText text, MutableText show, String commandSuggest) {
@@ -30,6 +29,36 @@ public class TextClickItem {
         this(IdUtil.getOptions(textId), IdUtil.getOptionsShow(textId), commandSuggest);
     }
 
+    public static MutableText combine(TextClickItem... items) {
+        return combine(" ", mutableText -> mutableText.setStyle(mutableText.getStyle().withBold(true).withColor(Formatting.RED)), items);
+    }
+
+    public TextClickItem appendToStarts(MutableText text) {
+        this.text = text.append(this.text);
+        return this;
+    }
+
+    public TextClickItem appendToStarts(String textId) {
+        return this.appendToStarts(Text.translatable(textId));
+    }
+
+    public TextClickItem append(MutableText text) {
+        this.text.append(text);
+        return this;
+    }
+
+    public TextClickItem append(String text) {
+        this.text.append(text);
+        return this;
+    }
+
+    public ClickEvent.Action getAction() {
+        if (Configs.COMMAND.CLICK_RUN_COMMAND.getBooleanValue() && this.commandSuggest.startsWith("/")) {
+            return ClickEvent.Action.RUN_COMMAND;
+        }
+        return ClickEvent.Action.SUGGEST_COMMAND;
+    }
+
     public static MutableText combine(String sign, Function<MutableText, MutableText> setText, TextClickItem... items) {
         MutableText text = Text.empty();
         for (int index = 0; index < items.length; index++) {
@@ -41,19 +70,8 @@ public class TextClickItem {
         return text;
     }
 
-    public static MutableText combine(String sign, TextClickItem... items) {
-        return combine(sign, mutableText -> mutableText.setStyle(mutableText.getStyle().withBold(true).withColor(Formatting.RED)), items);
-    }
-
-    public ClickEvent.Action getAction() {
-        if (Configs.COMMAND.CLICK_RUN_COMMAND.getBooleanValue()) {
-            return ClickEvent.Action.RUN_COMMAND;
-        }
-        return ClickEvent.Action.SUGGEST_COMMAND;
-    }
-
     public MutableText build() {
-        return ((MutableText) this.text).setStyle(Style.EMPTY
+        return this.text.setStyle(Style.EMPTY
                 .withClickEvent(new ClickEvent(this.getAction(), this.commandSuggest))
                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, this.show)));
     }
