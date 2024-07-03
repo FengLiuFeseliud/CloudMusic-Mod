@@ -13,15 +13,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface ICanComment {
-    ApiPage getComments(boolean hot);
+    String getThreadId();
 
-    default ApiPage comments(HttpClient api, long id, String threadId, boolean hot) {
+    HttpClient getApi();
+
+    default void send(String content) {
         Map<String, Object> data = new HashMap<String, Object>();
-        data.put("rid", id);
+        data.put("threadId", this.getThreadId());
+        data.put("content", content);
+
+        this.getApi().POST_API("/api/resource/comments/add", data);
+    }
+
+    default ApiPage comments(boolean hot) {
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("rid", this.getThreadId().split("_")[3]);
         data.put("limit", 24);
 
+        String threadId = this.getThreadId();
         String path = "/api/v1/resource/%s/%s".formatted(hot ? "hotcomments" : "comments", threadId);
-        JsonObject json = api.POST_API(path, data);
+        JsonObject json = this.getApi().POST_API(path, data);
 
         int total = json.get("total").getAsInt();
         if (total == 0) {
@@ -29,7 +40,7 @@ public interface ICanComment {
         }
 
         String arrayKey = hot ? "hotComments" : "comments";
-        return new ApiPage(json.getAsJsonArray(arrayKey), json.get("total").getAsInt(), path, api, data) {
+        return new ApiPage(json.getAsJsonArray(arrayKey), json.get("total").getAsInt(), path, this.getApi(), data) {
             @Override
             protected JsonArray getNewPageDataJsonArray(JsonObject result) {
                 return result.getAsJsonArray(arrayKey);

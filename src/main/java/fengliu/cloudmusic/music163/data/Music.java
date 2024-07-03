@@ -8,7 +8,6 @@ import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.IdUtil;
 import fengliu.cloudmusic.util.TextClickItem;
-import fengliu.cloudmusic.util.page.ApiPage;
 import fengliu.cloudmusic.util.page.Page;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
@@ -237,8 +236,13 @@ public class Music extends Music163Obj implements IMusic, ICanComment {
     }
 
     @Override
-    public ApiPage getComments(boolean hot) {
-        return this.comments(this.api, this.id, this.threadId, hot);
+    public String getThreadId() {
+        return this.threadId;
+    }
+
+    @Override
+    public HttpClient getApi() {
+        return this.api;
     }
 
     @Override
@@ -287,6 +291,7 @@ public class Music extends Music163Obj implements IMusic, ICanComment {
         ));
 
         source.sendFeedback(TextClickItem.combine(
+                new TextClickItem("send.comment", "/cloudmusic music send comment " + this.id),
                 new TextClickItem("hot.comment", "/cloudmusic music hotComment " + this.id),
                 new TextClickItem("comment", "/cloudmusic music comment " + this.id),
                 new TextClickItem("playlist.add", "/cloudmusic my playlist add " + this.id),

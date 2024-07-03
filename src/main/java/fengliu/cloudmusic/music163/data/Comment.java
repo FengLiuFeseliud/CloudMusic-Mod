@@ -11,6 +11,7 @@ import fengliu.cloudmusic.util.TextClickItem;
 import fengliu.cloudmusic.util.page.ApiPage;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class Comment extends Music163Obj implements IPrint {
      */
     public Comment(HttpClient api, JsonObject data, String threadId) {
         super(api, data);
-        this.id = data.get("commentId").getAsLong();
+        this.id = data.has("commentId") ? data.get("commentId").getAsLong() : data.get("beRepliedCommentId").getAsLong();
         this.threadId = threadId;
         this.content = data.get("content").getAsString();
         this.time = data.get("time").getAsLong();
@@ -47,22 +48,22 @@ public class Comment extends Music163Obj implements IPrint {
 
     public ApiPage floors() {
         String threadId = this.threadId;
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("parentCommentId", this.id);
         data.put("threadId", threadId);
         data.put("limit", 24);
 
         JsonObject json = api.POST_API("/api/resource/comment/floor/get", data);
 
-        int total = json.get("total").getAsInt();
+        int total = json.getAsJsonObject("data").get("totalCount").getAsInt();
         if (total == 0) {
-            throw new ActionException(Text.translatable("cloudmusic.exception.not.hot.comments"));
+            throw new ActionException(Text.translatable("cloudmusic.exception.not.comment.floors"));
         }
 
-        return new ApiPage(json.getAsJsonArray("comments"), json.get("total").getAsInt(), "/api/resource/comment/floor/get", api, data) {
+        return new ApiPage(json.getAsJsonObject("data").getAsJsonArray("comments"), total, "/api/resource/comment/floor/get", api, data) {
             @Override
             protected JsonArray getNewPageDataJsonArray(JsonObject result) {
-                return result.getAsJsonArray("comments");
+                return result.getAsJsonObject("data").getAsJsonArray("comments");
             }
 
             @Override
@@ -98,15 +99,65 @@ public class Comment extends Music163Obj implements IPrint {
                 this.content, Text.translatable("cloudmusic.page.item.comments.like", this.likedCount).getString(), this.id);
     }
 
+    public void reply(String content) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("threadId", this.threadId);
+        data.put("commentId", this.id);
+        data.put("content", content);
+
+        this.api.POST_API("/api/resource/comments/reply", data);
+    }
+
+    protected void like(boolean _in) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("threadId", this.threadId);
+        data.put("commentId", this.id);
+
+        this.api.POST_API("/api/v1/comment/" + (_in ? "like" : "unlike"), data);
+    }
+
+    public void like() {
+        this.like(true);
+    }
+
+    public void unlike() {
+        this.like(false);
+    }
+
+    public void delete() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("threadId", this.threadId);
+        data.put("commentId", this.id);
+
+        this.api.POST_API("/api/resource/comments/delete", data);
+    }
+
     @Override
     public void printToChatHud(FabricClientCommandSource source) {
         if (!this.beReplied.isEmpty()) {
+//            source.sendFeedback(new TextClickItem(
+//                    (MutableText) this.getBeContent(),
+//                    Text.translatable(IdUtil.getShowInfo("page.comment")),
+//                    "/cloudmusic comment %s %s".formatted(this.beReplied.get(0).getAsJsonObject().get("beRepliedCommentId").getAsLong(), this.threadId)
+//            ).build());
             source.sendFeedback(this.getBeContent());
-            source.sendFeedback(Text.literal(""));
+            source.sendFeedback(Text.literal("========================").formatted(Formatting.GRAY));
         }
 
-        source.sendFeedback(Text.literal("%s - %s: %s".formatted(this.user.get("nickname").getAsString(), this.ipLocation.get("location").getAsString(), this.content)));
+        source.sendFeedback(new TextClickItem(
+                Text.literal("%s - %s: %s".formatted(this.user.get("nickname").getAsString(), this.ipLocation.get("location").getAsString(), this.content)),
+                Text.translatable(IdUtil.getShowInfo("comment.user")),
+                "/cloudmusic user " + this.user.get("userId").getAsLong()
+        ).build());
         source.sendFeedback(Text.translatable("cloudmusic.info.comment.time", this.timeStr));
         source.sendFeedback(Text.translatable("cloudmusic.page.item.comments.like", this.likedCount));
+
+        source.sendFeedback(TextClickItem.combine(
+                new TextClickItem("comment.floors", "/cloudmusic comment floors %s %s".formatted(id, this.threadId)),
+                new TextClickItem("comment.reply", "/cloudmusic comment reply %s %s".formatted(id, this.threadId)),
+                new TextClickItem("comment.like", "/cloudmusic comment like %s %s".formatted(id, this.threadId)),
+                new TextClickItem("comment.unlike", "/cloudmusic comment unlike %s %s".formatted(id, this.threadId)),
+                new TextClickItem("comment.delete", "/cloudmusic comment delete %s %s".formatted(id, this.threadId))
+        ));
     }
 }

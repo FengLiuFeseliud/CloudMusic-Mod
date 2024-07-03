@@ -11,7 +11,6 @@ import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.IdUtil;
 import fengliu.cloudmusic.util.MusicPlayer;
 import fengliu.cloudmusic.util.TextClickItem;
-import fengliu.cloudmusic.util.page.ApiPage;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -89,8 +88,13 @@ public class DjRadio extends MusicPlayer implements ICanSubscribe, IPrint, ICanC
     }
 
     @Override
-    public ApiPage getComments(boolean hot) {
-        return this.comments(this.api, this.id, this.threadId, hot);
+    public String getThreadId() {
+        return this.threadId;
+    }
+
+    @Override
+    public HttpClient getApi() {
+        return this.api;
     }
 
     @Override
@@ -149,6 +153,7 @@ public class DjRadio extends MusicPlayer implements ICanSubscribe, IPrint, ICanC
 
         source.sendFeedback(TextClickItem.combine(
                 new TextClickItem("play", "/cloudmusic dj play " + this.id),
+                new TextClickItem("send.comment", "/cloudmusic dj send comment " + this.id),
                 new TextClickItem("hot.comment", "/cloudmusic dj hotComment " + this.id),
                 new TextClickItem("comment", "/cloudmusic dj comment " + this.id),
                 new TextClickItem("subscribe", "/cloudmusic dj subscribe " + this.id),
