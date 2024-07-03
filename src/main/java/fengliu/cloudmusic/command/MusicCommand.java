@@ -82,6 +82,13 @@ public class MusicCommand {
             Text.translatable("cloudmusic.help.dj.comment"),
             Text.translatable("cloudmusic.help.dj.hot.comment"),
 
+            Text.translatable("cloudmusic.help.comment"),
+            Text.translatable("cloudmusic.help.comment.floors"),
+            Text.translatable("cloudmusic.help.comment.like"),
+            Text.translatable("cloudmusic.help.comment.unlike"),
+            Text.translatable("cloudmusic.help.comment.delete"),
+            Text.translatable("cloudmusic.help.comment.reply"),
+
             Text.translatable("cloudmusic.help.user"),
             Text.translatable("cloudmusic.help.user.playlist"),
             Text.translatable("cloudmusic.help.user.dj"),
