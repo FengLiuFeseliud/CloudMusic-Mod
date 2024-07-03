@@ -28,121 +28,130 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.lit
 public class MusicCommand {
     private static final LoginMusic163 loginMusic163 = new LoginMusic163();
     private static Music163 music163 = new Music163(Configs.LOGIN.COOKIE.getStringValue());
-    private static int volumePercentage = Configs.PLAY.VOLUME.getIntegerValue();
     private static MusicPlayer player = new MusicPlayer(new ArrayList<>());
     private static Page page = null;
     private static Object data = null;
     private static My my = null;
     public static boolean loadQRCode = false;
     private static final Text[] helps = {
-        Text.translatable("cloudmusic.help.music"),
-        Text.translatable("cloudmusic.help.music.play"),
-        Text.translatable("cloudmusic.help.music.like"),
-        Text.translatable("cloudmusic.help.music.unlike"),
-        Text.translatable("cloudmusic.help.music.similar.music"),
-        Text.translatable("cloudmusic.help.music.similar.playlist"),
+            Text.translatable("cloudmusic.help.music"),
+            Text.translatable("cloudmusic.help.music.play"),
+            Text.translatable("cloudmusic.help.music.like"),
+            Text.translatable("cloudmusic.help.music.unlike"),
+            Text.translatable("cloudmusic.help.music.similar.music"),
+            Text.translatable("cloudmusic.help.music.similar.playlist"),
+            Text.translatable("cloudmusic.help.music.comment"),
+            Text.translatable("cloudmusic.help.music.hot.comment"),
 
-        Text.translatable("cloudmusic.help.playlist"),
-        Text.translatable("cloudmusic.help.playlist.play"),
-        Text.translatable("cloudmusic.help.playlist.subscribe"),
-        Text.translatable("cloudmusic.help.playlist.unsubscribe"),
-        Text.translatable("cloudmusic.help.playlist.add"),
-        Text.translatable("cloudmusic.help.playlist.del"),
+            Text.translatable("cloudmusic.help.playlist"),
+            Text.translatable("cloudmusic.help.playlist.play"),
+            Text.translatable("cloudmusic.help.playlist.subscribe"),
+            Text.translatable("cloudmusic.help.playlist.unsubscribe"),
+            Text.translatable("cloudmusic.help.playlist.add"),
+            Text.translatable("cloudmusic.help.playlist.del"),
+            Text.translatable("cloudmusic.help.playlist.comment"),
+            Text.translatable("cloudmusic.help.playlist.hot.comment"),
 
-        Text.translatable("cloudmusic.help.artist"),
-        Text.translatable("cloudmusic.help.artist.top"),
-        Text.translatable("cloudmusic.help.artist.album"),
-        Text.translatable("cloudmusic.help.artist.similar"),
-        Text.translatable("cloudmusic.help.artist.subscribe"),
-        Text.translatable("cloudmusic.help.artist.unsubscribe"),
+            Text.translatable("cloudmusic.help.artist"),
+            Text.translatable("cloudmusic.help.artist.top"),
+            Text.translatable("cloudmusic.help.artist.album"),
+            Text.translatable("cloudmusic.help.artist.similar"),
+            Text.translatable("cloudmusic.help.artist.subscribe"),
+            Text.translatable("cloudmusic.help.artist.unsubscribe"),
 
-        Text.translatable("cloudmusic.help.album"),
-        Text.translatable("cloudmusic.help.album.play"),
-        Text.translatable("cloudmusic.help.album.subscribe"),
-        Text.translatable("cloudmusic.help.album.unsubscribe"),
+            Text.translatable("cloudmusic.help.album"),
+            Text.translatable("cloudmusic.help.album.play"),
+            Text.translatable("cloudmusic.help.album.subscribe"),
+            Text.translatable("cloudmusic.help.album.unsubscribe"),
+            Text.translatable("cloudmusic.help.album.comment"),
+            Text.translatable("cloudmusic.help.album.hot.comment"),
 
-        Text.translatable("cloudmusic.help.dj"),
-        Text.translatable("cloudmusic.help.dj.play"),
-        Text.translatable("cloudmusic.help.dj.music"),
-        Text.translatable("cloudmusic.help.dj.music.play"),
-        Text.translatable("cloudmusic.help.dj.subscribe"),
-        Text.translatable("cloudmusic.help.dj.unsubscribe"),
+            Text.translatable("cloudmusic.help.dj"),
+            Text.translatable("cloudmusic.help.dj.play"),
+            Text.translatable("cloudmusic.help.dj.music"),
+            Text.translatable("cloudmusic.help.dj.music.play"),
+            Text.translatable("cloudmusic.help.dj.music.comment"),
+            Text.translatable("cloudmusic.help.dj.music.hot.comment"),
+            Text.translatable("cloudmusic.help.dj.subscribe"),
+            Text.translatable("cloudmusic.help.dj.unsubscribe"),
+            Text.translatable("cloudmusic.help.dj.comment"),
+            Text.translatable("cloudmusic.help.dj.hot.comment"),
 
-        Text.translatable("cloudmusic.help.user"),
-        Text.translatable("cloudmusic.help.user.playlist"),
-        Text.translatable("cloudmusic.help.user.dj"),
-        Text.translatable("cloudmusic.help.user.like"),
-        Text.translatable("cloudmusic.help.user.record.all"),
-        Text.translatable("cloudmusic.help.user.record.week"),
+            Text.translatable("cloudmusic.help.user"),
+            Text.translatable("cloudmusic.help.user.playlist"),
+            Text.translatable("cloudmusic.help.user.dj"),
+            Text.translatable("cloudmusic.help.user.like"),
+            Text.translatable("cloudmusic.help.user.record.all"),
+            Text.translatable("cloudmusic.help.user.record.week"),
 
-        Text.translatable("cloudmusic.help.my"),
-        Text.translatable("cloudmusic.help.my.fm"),
-        Text.translatable("cloudmusic.help.my.intelligence"),
-        Text.translatable("cloudmusic.help.my.like"),
-        Text.translatable("cloudmusic.help.my.playlist"),
-        Text.translatable("cloudmusic.help.my.dj"),
-        Text.translatable("cloudmusic.help.my.style"),
-        Text.translatable("cloudmusic.help.my.playlist.add"),
-        Text.translatable("cloudmusic.help.my.playlist.del"),
-        Text.translatable("cloudmusic.help.my.recommend.music"),
-        Text.translatable("cloudmusic.help.my.recommend.playlist"),
-        Text.translatable("cloudmusic.help.my.sublist.album"),
-        Text.translatable("cloudmusic.help.my.sublist.artist"),
-        Text.translatable("cloudmusic.help.my.sublist.dj"),
-        Text.translatable("cloudmusic.help.my.record.music"),
-        Text.translatable("cloudmusic.help.my.record.djmusic"),
-        Text.translatable("cloudmusic.help.my.record.playlist"),
-        Text.translatable("cloudmusic.help.my.record.album"),
-        Text.translatable("cloudmusic.help.my.record.dj"),
+            Text.translatable("cloudmusic.help.my"),
+            Text.translatable("cloudmusic.help.my.fm"),
+            Text.translatable("cloudmusic.help.my.intelligence"),
+            Text.translatable("cloudmusic.help.my.like"),
+            Text.translatable("cloudmusic.help.my.playlist"),
+            Text.translatable("cloudmusic.help.my.dj"),
+            Text.translatable("cloudmusic.help.my.style"),
+            Text.translatable("cloudmusic.help.my.playlist.add"),
+            Text.translatable("cloudmusic.help.my.playlist.del"),
+            Text.translatable("cloudmusic.help.my.recommend.music"),
+            Text.translatable("cloudmusic.help.my.recommend.playlist"),
+            Text.translatable("cloudmusic.help.my.sublist.album"),
+            Text.translatable("cloudmusic.help.my.sublist.artist"),
+            Text.translatable("cloudmusic.help.my.sublist.dj"),
+            Text.translatable("cloudmusic.help.my.record.music"),
+            Text.translatable("cloudmusic.help.my.record.djmusic"),
+            Text.translatable("cloudmusic.help.my.record.playlist"),
+            Text.translatable("cloudmusic.help.my.record.album"),
+            Text.translatable("cloudmusic.help.my.record.dj"),
 
-        Text.translatable("cloudmusic.help.style"),
-        Text.translatable("cloudmusic.help.style.all"),
-        Text.translatable("cloudmusic.help.style.children"),
-        Text.translatable("cloudmusic.help.style.music"),
-        Text.translatable("cloudmusic.help.style.playlist"),
-        Text.translatable("cloudmusic.help.style.artist"),
-        Text.translatable("cloudmusic.help.style.album"),
+            Text.translatable("cloudmusic.help.style"),
+            Text.translatable("cloudmusic.help.style.all"),
+            Text.translatable("cloudmusic.help.style.children"),
+            Text.translatable("cloudmusic.help.style.music"),
+            Text.translatable("cloudmusic.help.style.playlist"),
+            Text.translatable("cloudmusic.help.style.artist"),
+            Text.translatable("cloudmusic.help.style.album"),
 
-        Text.translatable("cloudmusic.help.top.list"),
-        Text.translatable("cloudmusic.help.top.artist"),
-        Text.translatable("cloudmusic.help.top.playlist.highquality.tags"),
-        Text.translatable("cloudmusic.help.top.playlist.highquality"),
-        Text.translatable("cloudmusic.help.top.playlist.tags"),
-        Text.translatable("cloudmusic.help.top.playlist.tags.hot"),
-        Text.translatable("cloudmusic.help.top.playlist"),
+            Text.translatable("cloudmusic.help.top.list"),
+            Text.translatable("cloudmusic.help.top.artist"),
+            Text.translatable("cloudmusic.help.top.playlist.highquality.tags"),
+            Text.translatable("cloudmusic.help.top.playlist.highquality"),
+            Text.translatable("cloudmusic.help.top.playlist.tags"),
+            Text.translatable("cloudmusic.help.top.playlist.tags.hot"),
+            Text.translatable("cloudmusic.help.top.playlist"),
 
-        Text.translatable("cloudmusic.help.search.music"),
-        Text.translatable("cloudmusic.help.search.album"),
-        Text.translatable("cloudmusic.help.search.artist"),
-        Text.translatable("cloudmusic.help.search.playlist"),
-        Text.translatable("cloudmusic.help.search.dj"),
+            Text.translatable("cloudmusic.help.search.music"),
+            Text.translatable("cloudmusic.help.search.album"),
+            Text.translatable("cloudmusic.help.search.artist"),
+            Text.translatable("cloudmusic.help.search.playlist"),
+            Text.translatable("cloudmusic.help.search.dj"),
 
-        Text.translatable("cloudmusic.help.login.email"),
-        Text.translatable("cloudmusic.help.login.captcha"),
-        Text.translatable("cloudmusic.help.login.captcha.login"),
-        Text.translatable("cloudmusic.help.login.captcha.phone"),
-        Text.translatable("cloudmusic.help.login.qr"),
+            Text.translatable("cloudmusic.help.login.email"),
+            Text.translatable("cloudmusic.help.login.captcha"),
+            Text.translatable("cloudmusic.help.login.captcha.login"),
+            Text.translatable("cloudmusic.help.login.captcha.phone"),
+            Text.translatable("cloudmusic.help.login.qr"),
 
-        Text.translatable("cloudmusic.help.volume"),
-        Text.translatable("cloudmusic.help.volume.volume"),
+            Text.translatable("cloudmusic.help.volume"),
+            Text.translatable("cloudmusic.help.volume.volume"),
 
-        Text.translatable("cloudmusic.help.page.prev"),
-        Text.translatable("cloudmusic.help.page.next"),
-        Text.translatable("cloudmusic.help.page.to"),
+            Text.translatable("cloudmusic.help.page.prev"),
+            Text.translatable("cloudmusic.help.page.next"),
+            Text.translatable("cloudmusic.help.page.to"),
 
-        Text.translatable("cloudmusic.help.playing"),
-        Text.translatable("cloudmusic.help.playing.all"),
+            Text.translatable("cloudmusic.help.playing"),
+            Text.translatable("cloudmusic.help.playing.all"),
 
-        Text.translatable("cloudmusic.help.stop"),
-        Text.translatable("cloudmusic.help.continue"),
-        Text.translatable("cloudmusic.help.prev"),
-        Text.translatable("cloudmusic.help.next"),
-        Text.translatable("cloudmusic.help.to"),
-        Text.translatable("cloudmusic.help.del"),
-        Text.translatable("cloudmusic.help.trash"),
-        Text.translatable("cloudmusic.help.random"),
-        Text.translatable("cloudmusic.help.exit"),
-        Text.translatable("cloudmusic.help.cloudmusic"),
+            Text.translatable("cloudmusic.help.stop"),
+            Text.translatable("cloudmusic.help.continue"),
+            Text.translatable("cloudmusic.help.prev"),
+            Text.translatable("cloudmusic.help.next"),
+            Text.translatable("cloudmusic.help.to"),
+            Text.translatable("cloudmusic.help.del"),
+            Text.translatable("cloudmusic.help.trash"),
+            Text.translatable("cloudmusic.help.random"),
+            Text.translatable("cloudmusic.help.exit"),
+            Text.translatable("cloudmusic.help.cloudmusic"),
     };
     private static final List<Text> helpsList = new ArrayList<>();
 
@@ -342,10 +351,9 @@ public class MusicCommand {
                 })
         ))));
 
-        LiteralArgumentBuilder<FabricClientCommandSource> COMMENT = literal("comment");
-        LiteralArgumentBuilder<FabricClientCommandSource> HOT_COMMENT = literal("hotComment");
 
-        CloudMusic.then(Music.then(COMMENT.then(
+        // cloudmusic music comment id
+        CloudMusic.then(Music.then(literal("comment").then(
                 argument("id", LongArgumentType.longArg()).executes(contextData -> {
                     runCommand(contextData, context -> {
                         Music music = music163.music(LongArgumentType.getLong(contextData, "id"));
@@ -357,7 +365,8 @@ public class MusicCommand {
                 })
         )));
 
-        CloudMusic.then(Music.then(HOT_COMMENT.then(
+        // cloudmusic music hotComment id
+        CloudMusic.then(Music.then(literal("hotComment").then(
                 argument("id", LongArgumentType.longArg()).executes(contextData -> {
                     runCommand(contextData, context -> {
                         Music music = music163.music(LongArgumentType.getLong(contextData, "id"));
@@ -382,26 +391,52 @@ public class MusicCommand {
         
         // cloudmusic playlist play id
         CloudMusic.then(PlayList.then(literal("play").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    PlayList playList = music163.playlist(LongArgumentType.getLong(context, "id"));
-                    resetPlayer(playList.getMusics());
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.playlist.play", playList.name));
-                    player.start();
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        PlayList playList = music163.playlist(LongArgumentType.getLong(context, "id"));
+                        resetPlayer(playList.getMusics());
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.playlist.play", playList.name));
+                        player.start();
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
+        )));
+
+        // cloudmusic playlist comment id
+        CloudMusic.then(PlayList.then(literal("comment").then(
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        PlayList playList = music163.playlist(LongArgumentType.getLong(contextData, "id"));
+                        page = playList.getComments(false);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.playlist.comments", playList.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
+        )));
+
+        // cloudmusic playlist hotComment id
+        CloudMusic.then(PlayList.then(literal("hotComment").then(
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        PlayList playList = music163.playlist(LongArgumentType.getLong(contextData, "id"));
+                        page = playList.getComments(true);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.playlist.hot.comments", playList.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic playlist subscribe id
         CloudMusic.then(PlayList.then(literal("subscribe").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    PlayList playList = music163.playlist(LongArgumentType.getLong(context, "id"));
-                    playList.subscribe();
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.playlist.subscribe", playList.name));
-                });
-                return Command.SINGLE_SUCCESS;
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        PlayList playList = music163.playlist(LongArgumentType.getLong(context, "id"));
+                        playList.subscribe();
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.playlist.subscribe", playList.name));
+                    });
+                    return Command.SINGLE_SUCCESS;
             })
         )));
 
@@ -545,26 +580,52 @@ public class MusicCommand {
         
         // cloudmusic album play id
         CloudMusic.then(Album.then(literal("play").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    Album album = music163.album(LongArgumentType.getLong(context, "id"));
-                    resetPlayer(album.getMusics());
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.album.play", album.name));
-                    player.start();
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        Album album = music163.album(LongArgumentType.getLong(context, "id"));
+                        resetPlayer(album.getMusics());
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.album.play", album.name));
+                        player.start();
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
+        )));
+
+        // cloudmusic album comment id
+        CloudMusic.then(Album.then(literal("comment").then(
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        Album album = music163.album(LongArgumentType.getLong(context, "id"));
+                        page = album.getComments(false);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.album.comments", album.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
+        )));
+
+        // cloudmusic album hotComment id
+        CloudMusic.then(Album.then(literal("hotComment").then(
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        Album album = music163.album(LongArgumentType.getLong(context, "id"));
+                        page = album.getComments(true);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.album.hot.comments", album.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic album subscribe id
         CloudMusic.then(Album.then(literal("subscribe").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    Album album = music163.album(LongArgumentType.getLong(context, "id"));
-                    album.subscribe();
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.album.subscribe", album.name));
-                });
-                return Command.SINGLE_SUCCESS;
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        Album album = music163.album(LongArgumentType.getLong(context, "id"));
+                        album.subscribe();
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.album.subscribe", album.name));
+                    });
+                    return Command.SINGLE_SUCCESS;
             })
         )));
 
@@ -604,41 +665,94 @@ public class MusicCommand {
             })
         )));
 
+        // cloudmusic dj comment id
+        CloudMusic.then(Dj.then(literal("comment").then(
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        DjRadio djRadio = music163.djRadio(LongArgumentType.getLong(context, "id"));
+                        page = djRadio.getComments(false);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.dj.radio.comments", djRadio.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
+        )));
+
+        // cloudmusic dj hotComment id
+        CloudMusic.then(Dj.then(literal("hotComment").then(
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        DjRadio djRadio = music163.djRadio(LongArgumentType.getLong(context, "id"));
+                        page = djRadio.getComments(true);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.dj.radio.hot.comments", djRadio.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
+        )));
+
+
         LiteralArgumentBuilder<FabricClientCommandSource> DjMusic = literal("music");
 
         // cloudmusic dj music id
         CloudMusic.then(Dj.then(DjMusic.then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    data = music163.djMusic(LongArgumentType.getLong(context, "id"));
-                    ((DjMusic) data).printToChatHud(context.getSource());
-                });
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        data = music163.djMusic(LongArgumentType.getLong(context, "id"));
+                        ((DjMusic) data).printToChatHud(context.getSource());
+                    });
                 return Command.SINGLE_SUCCESS;
             })
         )));
 
         // cloudmusic dj music play id
         CloudMusic.then(Dj.then(DjMusic.then(literal("play").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    DjMusic music = music163.djMusic(LongArgumentType.getLong(context, "id"));
-                    resetPlayer(music);
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.dj.music.play", music.name));
-                    player.start();
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        DjMusic music = music163.djMusic(LongArgumentType.getLong(context, "id"));
+                        resetPlayer(music);
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.dj.music.play", music.name));
+                        player.start();
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
+        ))));
+
+        // cloudmusic dj music comment id
+        CloudMusic.then(Dj.then(DjMusic.then(literal("comment").then(
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        DjMusic music = music163.djMusic(LongArgumentType.getLong(context, "id"));
+                        page = music.getComments(false);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.dj.music.comments", music.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
+        ))));
+
+        // cloudmusic dj music hotComment id
+        CloudMusic.then(Dj.then(DjMusic.then(literal("hotComment").then(
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        DjMusic music = music163.djMusic(LongArgumentType.getLong(context, "id"));
+                        page = music.getComments(true);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.dj.music.hot.comments", music.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         ))));
 
         // cloudmusic dj subscribe id
         CloudMusic.then(Dj.then(literal("subscribe").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    DjRadio djRadio = music163.djRadio(LongArgumentType.getLong(context, "id"));
-                    djRadio.subscribe();
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.dj.subscribe", djRadio.name));
-                });
-                return Command.SINGLE_SUCCESS;
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        DjRadio djRadio = music163.djRadio(LongArgumentType.getLong(context, "id"));
+                        djRadio.subscribe();
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.dj.subscribe", djRadio.name));
+                    });
+                    return Command.SINGLE_SUCCESS;
             })
         )));
 
@@ -1192,12 +1306,17 @@ public class MusicCommand {
             })
         )));
 
+
+        LiteralArgumentBuilder<FabricClientCommandSource> Comment = literal("comment");
+
         // cloudmusic comment
-        CloudMusic.then(COMMENT.then(
+        CloudMusic.then(Comment.then(
                 argument("id", LongArgumentType.longArg()).then(
-                        argument("commendId", StringArgumentType.string()).executes(context -> {
+                        argument("commentId", StringArgumentType.string()).executes(context -> {
                             long id = LongArgumentType.getLong(context, "id");
-                            JsonObject json = page.getJsonItem(jsonObject -> jsonObject.get("commendId").getAsLong() == id);
+                            JsonObject json = page.getJsonItem(jsonObject -> {
+                                return jsonObject.get("commentId").getAsLong() == id;
+                            });
                             if (json == null) {
                                 return Command.SINGLE_SUCCESS;
                             }
@@ -1215,7 +1334,7 @@ public class MusicCommand {
                 ))
         );
 
-        CloudMusic.then(COMMENT.then(literal("floors").then(argument("id", LongArgumentType.longArg()).then(
+        CloudMusic.then(Comment.then(literal("floors").then(argument("id", LongArgumentType.longArg()).then(
                 argument("commendId", StringArgumentType.string()).executes(contextData -> {
                     long id = LongArgumentType.getLong(contextData, "id");
                     JsonObject json = page.getJsonItem(jsonObject -> jsonObject.get("commentId").getAsLong() == id);

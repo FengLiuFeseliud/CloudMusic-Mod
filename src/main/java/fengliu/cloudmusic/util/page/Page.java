@@ -7,7 +7,6 @@ import fengliu.cloudmusic.util.TextClickItem;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,8 +111,7 @@ public abstract class Page {
             client.player.sendMessage(Text.literal("[%s] ".formatted(offset + pageDataList.indexOf(data))).append(this.putPageItem(data).build()));
         }
 
-        client.player.sendMessage(TextClickItem.combine("",
-                mutableText -> mutableText.setStyle(mutableText.getStyle().withBold(true).withColor(Formatting.RED)),
+        client.player.sendMessage(TextClickItem.combine(
                 new TextClickItem("page.prev", "/cloudmusic page prev"),
                 new TextClickItem("page.next", "/cloudmusic page next"),
                 new TextClickItem("page.to", "/cloudmusic page to")
@@ -121,7 +119,12 @@ public abstract class Page {
     }
 
     public JsonObject getJsonItem(Function<JsonObject, Boolean> get) {
-        return (JsonObject) this.data.get(this.pageIn).stream().findAny().filter(item -> get.apply((JsonObject) item)).orElse(null);
+        for (Object json : this.data.get(this.pageIn)) {
+            if (get.apply((JsonObject) json)) {
+                return (JsonObject) json;
+            }
+        }
+        return null;
     }
 
     /**

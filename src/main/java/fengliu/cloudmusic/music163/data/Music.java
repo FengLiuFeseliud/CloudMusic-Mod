@@ -28,6 +28,7 @@ public class Music extends Music163Obj implements IMusic, ICanComment {
     public final JsonObject album;
     public final long duration;
     public final String picUrl;
+    public final String threadId;
     public JsonObject freeTrialInfo = null;
 
     public static String getArtistsName(JsonArray artists) {
@@ -73,15 +74,17 @@ public class Music extends Music163Obj implements IMusic, ICanComment {
         
         if(data.has("dt")){
             this.duration = data.get("dt").getAsLong() / 1000;
-        }else{
+        } else {
             this.duration = data.get("duration").getAsLong() / 1000;
         }
 
-        if(this.album.has("picUrl")){
+        if (this.album.has("picUrl")) {
             this.picUrl = this.album.get("picUrl").getAsString();
-        }else{
+        } else {
             this.picUrl = cover;
         }
+
+        this.threadId = "R_SO_4_%s".formatted(this.id);
     }
 
     /**
@@ -234,13 +237,8 @@ public class Music extends Music163Obj implements IMusic, ICanComment {
     }
 
     @Override
-    public String getCommentId() {
-        return "R_SO_4_%s".formatted(this.id);
-    }
-
-    @Override
     public ApiPage getComments(boolean hot) {
-        return this.comments(this.api, this.id, hot);
+        return this.comments(this.api, this.id, this.threadId, hot);
     }
 
     @Override

@@ -26,7 +26,6 @@ public class Comment extends Music163Obj implements IPrint {
     public final JsonArray beReplied;
     public final JsonObject ipLocation;
 
-
     /**
      * 初始化对象
      *
@@ -78,25 +77,35 @@ public class Comment extends Music163Obj implements IPrint {
         };
     }
 
+    public Text getBeContent() {
+        JsonObject beReplied = this.beReplied.get(0).getAsJsonObject();
+        String beContent;
+        if (!beReplied.get("content").isJsonNull()) {
+            beContent = beReplied.get("content").getAsString();
+        } else {
+            beContent = beReplied.get("status").getAsInt() == -50 ? Text.translatable("cloudmusic.info.page.comment.null").getString() : Text.translatable("cloudmusic.info.page.comment.err.null").getString();
+        }
+        return Text.translatable("cloudmusic.info.comment.be.replied", beReplied.get("user").getAsJsonObject().get("nickname").getAsString(),
+                beReplied.get("ipLocation").getAsJsonObject().get("location").getAsString(), beContent);
+    }
+
     public String getPageItem() {
-        return "§b%s - %s: §r§7%s%s - id: %s".formatted(this.user.get("nickname").getAsString(), this.ipLocation.get("location").getAsString(),
+        if (!this.beReplied.isEmpty()) {
+            return "%s§r§7 - §b%s - %s: §r§f%s §7- %s - id: %s".formatted(this.getBeContent().getString(), this.user.get("nickname").getAsString(), this.ipLocation.get("location").getAsString(),
+                    this.content, Text.translatable("cloudmusic.page.item.comments.like", this.likedCount).getString(), this.id);
+        }
+        return "§b%s - %s: §r§f%s §7- %s - id: %s".formatted(this.user.get("nickname").getAsString(), this.ipLocation.get("location").getAsString(),
                 this.content, Text.translatable("cloudmusic.page.item.comments.like", this.likedCount).getString(), this.id);
     }
 
     @Override
     public void printToChatHud(FabricClientCommandSource source) {
         if (!this.beReplied.isEmpty()) {
-            JsonObject beReplied = this.beReplied.get(0).getAsJsonObject();
-            String beContent = beReplied.get("content").getAsString();
-            if (beContent == null) {
-                beContent = beReplied.get("status").getAsInt() == -50 ? Text.translatable("cloudmusic.info.comment.null").toString() : Text.translatable("cloudmusic.info.comment.err.null").toString();
-            }
-            source.sendFeedback(Text.translatable("cloudmusic.info.comment.be.replied", beReplied.get("user").getAsJsonObject().get("nickname"),
-                    beReplied.get("ipLocation").getAsJsonObject().get("location").getAsString(), beContent));
+            source.sendFeedback(this.getBeContent());
             source.sendFeedback(Text.literal(""));
         }
 
-        source.sendFeedback(Text.translatable("cloudmusic.info.comment.content", this.user.get("nickname").getAsString(), this.ipLocation.get("location").getAsString(), this.content));
+        source.sendFeedback(Text.literal("%s - %s: %s".formatted(this.user.get("nickname").getAsString(), this.ipLocation.get("location").getAsString(), this.content)));
         source.sendFeedback(Text.translatable("cloudmusic.info.comment.time", this.timeStr));
         source.sendFeedback(Text.translatable("cloudmusic.page.item.comments.like", this.likedCount));
     }

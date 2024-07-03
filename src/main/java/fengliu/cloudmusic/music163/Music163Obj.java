@@ -1,7 +1,6 @@
 package fengliu.cloudmusic.music163;
 
 import com.google.gson.JsonObject;
-
 import fengliu.cloudmusic.util.HttpClient;
 
 public class Music163Obj {
@@ -15,4 +14,6 @@ public class Music163Obj {
     public Music163Obj(HttpClient api, JsonObject data){
         this.api = api;
     }
+
+
 }

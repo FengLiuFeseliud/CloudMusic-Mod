@@ -13,17 +13,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface ICanComment {
-    String getCommentId();
-
     ApiPage getComments(boolean hot);
 
-    default ApiPage comments(HttpClient api, long id, boolean hot) {
+    default ApiPage comments(HttpClient api, long id, String threadId, boolean hot) {
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("rid", id);
         data.put("limit", 24);
 
-        String commentId = this.getCommentId();
-        String path = "/api/v1/resource/%s/%s".formatted(hot ? "hotcomments" : "comments", commentId);
+        String path = "/api/v1/resource/%s/%s".formatted(hot ? "hotcomments" : "comments", threadId);
         JsonObject json = api.POST_API(path, data);
 
         int total = json.get("total").getAsInt();
@@ -40,11 +37,11 @@ public interface ICanComment {
 
             @Override
             protected TextClickItem putPageItem(Object data) {
-                Comment comment = new Comment(this.api, (JsonObject) data, commentId);
+                Comment comment = new Comment(this.api, (JsonObject) data, threadId);
                 return new TextClickItem(
                         Text.literal(comment.getPageItem()),
                         Text.translatable(IdUtil.getShowInfo("page.comment")),
-                        "/cloudmusic comment %s %s".formatted(comment.id, commentId)
+                        "/cloudmusic comment %s %s".formatted(comment.id, threadId)
                 );
             }
         };

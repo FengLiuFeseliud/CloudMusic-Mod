@@ -2,19 +2,17 @@ package fengliu.cloudmusic.music163.data;
 
 import com.google.gson.JsonObject;
 import fengliu.cloudmusic.config.Configs;
-import fengliu.cloudmusic.music163.ActionException;
-import fengliu.cloudmusic.music163.IMusic;
-import fengliu.cloudmusic.music163.Music163Obj;
-import fengliu.cloudmusic.music163.Shares;
+import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.TextClickItem;
+import fengliu.cloudmusic.util.page.ApiPage;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class DjMusic extends Music163Obj implements IMusic {
+public class DjMusic extends Music163Obj implements IMusic, ICanComment {
     private final HttpClient api;
     public final long id;
     public final long mainTrackId;
@@ -26,6 +24,7 @@ public class DjMusic extends Music163Obj implements IMusic {
     public final long likedCount;
     public final String[] description;
     public final long duration;
+    public final String threadId;
 
     /**
      * 初始化对象
@@ -51,6 +50,7 @@ public class DjMusic extends Music163Obj implements IMusic {
 
         this.description = data.get("description").getAsString().split("\n");
         this.duration = data.get("duration").getAsLong();
+        this.threadId = "A_DJ_1_%s".formatted(this.id);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class DjMusic extends Music163Obj implements IMusic {
 
         JsonObject result = playApi.POST_API("/api/song/enhance/player/url/v1", data);
         JsonObject music = result.get("data").getAsJsonArray().get(0).getAsJsonObject();
-        if(music.get("code").getAsInt() != 200){
+        if (music.get("code").getAsInt() != 200) {
             throw new ActionException(Text.translatable("cloudmusic.exception.music.get.url", this.name));
         }
         return music.get("url").getAsString();
@@ -87,6 +87,11 @@ public class DjMusic extends Music163Obj implements IMusic {
     @Override
     public long getDuration() {
         return this.duration;
+    }
+
+    @Override
+    public ApiPage getComments(boolean hot) {
+        return this.comments(this.api, this.id, this.threadId, hot);
     }
 
     @Override
@@ -121,6 +126,8 @@ public class DjMusic extends Music163Obj implements IMusic {
 
         source.sendFeedback(TextClickItem.combine(
                 new TextClickItem("play", "/cloudmusic dj music play " + this.id),
+                new TextClickItem("hot.comment", "/cloudmusic dj music hotComment " + this.id),
+                new TextClickItem("comment", "/cloudmusic dj music comment " + this.id),
                 new TextClickItem("shar", Shares.DJ_MUSIC.getShar(this.id))
         ));
     }

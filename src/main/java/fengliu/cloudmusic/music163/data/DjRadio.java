@@ -3,6 +3,7 @@ package fengliu.cloudmusic.music163.data;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fengliu.cloudmusic.config.Configs;
+import fengliu.cloudmusic.music163.ICanComment;
 import fengliu.cloudmusic.music163.ICanSubscribe;
 import fengliu.cloudmusic.music163.IPrint;
 import fengliu.cloudmusic.music163.Shares;
@@ -10,6 +11,7 @@ import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.IdUtil;
 import fengliu.cloudmusic.util.MusicPlayer;
 import fengliu.cloudmusic.util.TextClickItem;
+import fengliu.cloudmusic.util.page.ApiPage;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DjRadio extends MusicPlayer implements ICanSubscribe, IPrint {
+public class DjRadio extends MusicPlayer implements ICanSubscribe, IPrint, ICanComment {
     private final HttpClient api;
     public final Long id;
     public final String name;
@@ -32,6 +34,7 @@ public class DjRadio extends MusicPlayer implements ICanSubscribe, IPrint {
     public final long subCount;
     public final long shareCount;
     public final String[] description;
+    public final String threadId;
 
     public DjRadio(HttpClient api, JsonObject data) {
         super(new ArrayList<>());
@@ -48,6 +51,7 @@ public class DjRadio extends MusicPlayer implements ICanSubscribe, IPrint {
         this.subCount = data.get("subCount").getAsLong();
         this.shareCount = data.get("shareCount").getAsLong();
         this.description = data.get("desc").getAsString().split("\n");
+        this.threadId = "A_DJ_1_%s".formatted(this.id);
     }
 
     /**
@@ -73,15 +77,20 @@ public class DjRadio extends MusicPlayer implements ICanSubscribe, IPrint {
         while(this.loopPlayIn){
             playMusic();
 
-            if(this.playIn == this.playList.size() - 1){
+            if (this.playIn == this.playList.size() - 1) {
                 this.addDjMusic();
-                if (this.playIn == this.playList.size() - 1 && !Configs.PLAY.PLAY_LOOP.getBooleanValue()){
+                if (this.playIn == this.playList.size() - 1 && !Configs.PLAY.PLAY_LOOP.getBooleanValue()) {
                     this.loopPlayIn = false;
                 }
             }
 
             this.playIn += 1;
         }
+    }
+
+    @Override
+    public ApiPage getComments(boolean hot) {
+        return this.comments(this.api, this.id, this.threadId, hot);
     }
 
     @Override
@@ -140,6 +149,8 @@ public class DjRadio extends MusicPlayer implements ICanSubscribe, IPrint {
 
         source.sendFeedback(TextClickItem.combine(
                 new TextClickItem("play", "/cloudmusic dj play " + this.id),
+                new TextClickItem("hot.comment", "/cloudmusic dj hotComment " + this.id),
+                new TextClickItem("comment", "/cloudmusic dj comment " + this.id),
                 new TextClickItem("subscribe", "/cloudmusic dj subscribe " + this.id),
                 new TextClickItem("unsubscribe", "/cloudmusic dj unsubscribe " + this.id),
                 new TextClickItem("shar", Shares.DJ_RADIO.getShar(this.id))

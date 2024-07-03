@@ -7,6 +7,7 @@ import fengliu.cloudmusic.music163.*;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.IdUtil;
 import fengliu.cloudmusic.util.TextClickItem;
+import fengliu.cloudmusic.util.page.ApiPage;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -19,7 +20,7 @@ import java.util.Map;
 /**
  * 歌单对象
  */
-public class PlayList extends Music163Obj implements IMusicList, ICanSubscribe {
+public class PlayList extends Music163Obj implements IMusicList, ICanSubscribe, ICanComment {
     public final long id;
     public final String name;
     public final String cover;
@@ -30,6 +31,7 @@ public class PlayList extends Music163Obj implements IMusicList, ICanSubscribe {
     public final JsonArray tags;
     private final JsonArray tracks;
     private List<IMusic> musics;
+    public final String threadId;
 
     public PlayList(HttpClient api, JsonObject data) {
         super(api, data);
@@ -49,17 +51,18 @@ public class PlayList extends Music163Obj implements IMusicList, ICanSubscribe {
         this.creator = playlist.get("creator").getAsJsonObject();
         if(!playlist.get("description").isJsonNull()){
             this.description = playlist.get("description").getAsString().split("\n");
-        }else{
+        } else {
             this.description = null;
         }
         this.tags = playlist.get("tags").getAsJsonArray();
 
-        if(!playlist.get("tracks").isJsonNull()){
+        if (!playlist.get("tracks").isJsonNull()) {
             this.tracks = playlist.get("tracks").getAsJsonArray();
-        }else{
+        } else {
             this.tracks = new JsonArray();
         }
-        
+
+        this.threadId = "A_PL_0_%s".formatted(this.id);
     }
 
     public void add(long musicId){
@@ -93,6 +96,11 @@ public class PlayList extends Music163Obj implements IMusicList, ICanSubscribe {
             this.musics.add(new Music(api, element.getAsJsonObject(), null));
         });
         return this.musics;
+    }
+
+    @Override
+    public ApiPage getComments(boolean hot) {
+        return this.comments(this.api, this.id, this.threadId, hot);
     }
 
     @Override
@@ -137,6 +145,8 @@ public class PlayList extends Music163Obj implements IMusicList, ICanSubscribe {
 
         source.sendFeedback(TextClickItem.combine(
                 new TextClickItem("play", "/cloudmusic playlist play " + this.id),
+                new TextClickItem("hot.comment", "/cloudmusic playlist hotComment " + this.id),
+                new TextClickItem("comment", "/cloudmusic playlist comment " + this.id),
                 new TextClickItem("subscribe", "/cloudmusic playlist subscribe " + this.id),
                 new TextClickItem("unsubscribe", "/cloudmusic playlist unsubscribe " + this.id),
                 new TextClickItem("shar", Shares.PLAY_LIST.getShar(this.id))
@@ -158,5 +168,4 @@ public class PlayList extends Music163Obj implements IMusicList, ICanSubscribe {
 
         this.api.POST_API("/api/playlist/unsubscribe", data);
     }
-    
 }
