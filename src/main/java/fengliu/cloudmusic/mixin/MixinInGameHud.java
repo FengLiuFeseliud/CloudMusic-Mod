@@ -33,7 +33,9 @@ public abstract class MixinInGameHud {
     static {
         final MinecraftClient client = MinecraftClient.getInstance();
         HudRenderCallback.EVENT.register((drawContext, renderTickCounter) -> {
-            if (!Configs.GUI.LYRIC.getBooleanValue()) {
+            MusicPlayer player = MusicCommand.getPlayer();
+            IMusic playingMusic = player.getPlayingMusic();
+            if (playingMusic == null) {
                 return;
             }
             float lyricScale = (float) Configs.GUI.LYRIC_SCALE.getDoubleValue();

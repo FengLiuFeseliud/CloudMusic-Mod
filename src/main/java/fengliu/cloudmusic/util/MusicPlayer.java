@@ -273,7 +273,7 @@ public class MusicPlayer implements Runnable {
      * 播放下一首
      */
     public void next() {
-        if (this.playList.size() == 0) {
+        if (this.playList.isEmpty()) {
             return;
         }
 
@@ -340,6 +340,14 @@ public class MusicPlayer implements Runnable {
             notifyAll();
         }
         this.loopPlayIn = false;
+        this.clearPlayingMusic();
+    }
+
+    /**
+     * 让正在播放的音乐为null, 以便停止渲染
+     */
+    private void clearPlayingMusic() {
+        this.playingMusic = null;
     }
 
     /**
