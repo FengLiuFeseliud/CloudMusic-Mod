@@ -28,11 +28,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.Function;
 
 @Mixin(InGameHud.class)
-public class MixinInGameHud {
+public abstract class MixinInGameHud {
 
     static {
         final MinecraftClient client = MinecraftClient.getInstance();
-
         HudRenderCallback.EVENT.register((drawContext, renderTickCounter) -> {
             if (!Configs.GUI.LYRIC.getBooleanValue()) {
                 return;
@@ -116,7 +115,7 @@ public class MixinInGameHud {
         }
         Function<Identifier, RenderLayer> renderLayer = RenderLayer::getGuiTexturedOverlay;
         context.fill(width - 145 - x, 40 + y, width - 145 + progress - x, 43 + y, Configs.GUI.MUSIC_PLAYED_PROGRESS_BAR_COLOR.getIntegerValue());
-        context.drawTexture(renderLayer, MusicIconTexture.MUSIC_ICON_ID, width - 172 - x, (int) (2.5f + y), 32, 32, 0, 0, 128, 128, 128, 128);
+        context.drawTexture(renderLayer, MusicIconTexture.MUSIC_ICON_ID, width - 172 - x, (int) (2.5f + y), 32f, 32f, 32, 32, 32, 32);
         context.drawText(this.client.textRenderer, playingMusic.getName().length() > 16 ? playingMusic.getName().substring(0, 16) + "..." : playingMusic.getName(), width - 135 - x, 4 + y, Configs.GUI.MUSIC_INFO_TITLE_FONT_COLOR.getIntegerValue(), true);
 
         int progressFontColor = Configs.GUI.MUSIC_PROGRESS_FONT_COLOR.getIntegerValue();

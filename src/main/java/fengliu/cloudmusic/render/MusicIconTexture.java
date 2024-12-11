@@ -15,7 +15,7 @@ import java.io.FileInputStream;
 
 public class MusicIconTexture {
     private static final MinecraftClient client = MinecraftClient.getInstance();
-    public static Identifier MUSIC_ICON_ID = Identifier.of(CloudMusicClient.MOD_ID, "music_icon.png");
+    public static Identifier MUSIC_ICON_ID = Identifier.of(CloudMusicClient.MOD_ID, "texture/music_icon.png");
     public static Identifier QR_CODE_ID = Identifier.of(CloudMusicClient.MOD_ID, "qr.code");
     private static boolean canUseIcon = false;
 
@@ -38,7 +38,6 @@ public class MusicIconTexture {
             client.execute(
                     () -> client.getTextureManager().registerTexture(MUSIC_ICON_ID, imageTexture)
             );
-
             canUseIcon = true;
         });
         commandThread.setDaemon(true);
