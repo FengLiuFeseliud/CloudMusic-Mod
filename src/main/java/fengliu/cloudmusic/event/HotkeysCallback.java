@@ -33,7 +33,7 @@ public class HotkeysCallback implements IHotkeyCallback {
                         return;
                     }
 
-                    mcClient.player.sendMessage(Text.literal(err.getMessage()));
+                    mcClient.player.sendMessage(Text.literal(err.getMessage()), false);
                 }
             }
         };
@@ -136,7 +136,7 @@ public class HotkeysCallback implements IHotkeyCallback {
                 ((Music) music).addTrashCan();
 
                 if (mc.player != null){
-                    mc.player.sendMessage(Text.translatable("cloudmusic.info.command.trash", music.getName()));
+                    mc.player.sendMessage(Text.translatable("cloudmusic.info.command.trash", music.getName()), false);
                 }
             });
         }
@@ -151,7 +151,7 @@ public class HotkeysCallback implements IHotkeyCallback {
                 ((Music) music).like();
 
                 if (mc.player != null){
-                    mc.player.sendMessage(Text.translatable("cloudmusic.info.command.music.like", music.getName()));
+                    mc.player.sendMessage(Text.translatable("cloudmusic.info.command.music.like", music.getName()), false);
                 }
             });
             return true;

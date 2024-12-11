@@ -4,7 +4,7 @@
   "package": "fengliu.cloudmusic.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "MixinInGameHub",
+    "MixinInGameHud",
     "MixinChatHud"
   ],
   "injectors": {

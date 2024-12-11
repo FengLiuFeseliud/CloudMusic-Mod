@@ -242,16 +242,13 @@ public class MusicCommand {
      * @param job 任务
      */
     private static void runCommand(CommandContext<FabricClientCommandSource> context, Job job){
-        Thread commandThread = new Thread(){
-            @Override
-            public void run() {
-                try {
-                    job.fun(context);
-                } catch (Exception err) {
-                    context.getSource().sendFeedback(Text.literal(err.getMessage()));
-                }
+        Thread commandThread = new Thread(() -> {
+            try {
+                job.fun(context);
+            } catch (Exception err) {
+                context.getSource().sendFeedback(Text.literal(err.getMessage()));
             }
-        };
+        });
         commandThread.setDaemon(true);
         commandThread.setName("CloudMusic Thread");
         commandThread.start();

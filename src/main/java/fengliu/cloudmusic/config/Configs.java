@@ -46,8 +46,8 @@ public class Configs implements IConfigHandler {
         public static final ConfigColor MUSIC_INFO_FONT_COLOR = ConfigUtil.addConfigColor("music.info.font.color", "#00858585");
         public static final ConfigColor LYRIC_COLOR = ConfigUtil.addConfigColor("lyric.color");
         public static final ConfigDouble LYRIC_SCALE = ConfigUtil.addConfigDouble("lyric.scale", 1.5);
-        public static final ConfigInteger LYRIC_X = ConfigUtil.addConfigInteger("lyric.x", 0, 0, 4000);
-        public static final ConfigInteger LYRIC_Y = ConfigUtil.addConfigInteger("lyric.y", 0, 0, 3000);
+        public static final ConfigInteger LYRIC_X = ConfigUtil.addConfigInteger("lyric.x", 2, 0, 4000);
+        public static final ConfigInteger LYRIC_Y = ConfigUtil.addConfigInteger("lyric.y", 5, 0, 3000);
         public static final ConfigString COOKIE = ConfigUtil.addConfigString("login.cookie");
         public static final ConfigInteger COUNTRY_CODE = ConfigUtil.addConfigInteger("login.country.code", 86);
         public static final ConfigInteger QR_CHECK_NUM = ConfigUtil.addConfigInteger("login.qr.check.num", 10, 1, 60);

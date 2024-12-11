@@ -33,9 +33,5 @@
       "config": "cloudmusic.mixins.json",
       "environment": "client"
     }
-  ],
-
-  "depends": {
-    "minecraft": "1.21"
-  }
+  ]
 }

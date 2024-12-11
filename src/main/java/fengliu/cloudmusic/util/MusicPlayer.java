@@ -39,39 +39,40 @@ public class MusicPlayer implements Runnable {
 
     /**
      * 歌曲播放对象
+     *
      * @param playList 歌曲列表
      */
-    public MusicPlayer(List<IMusic> playList){
+    public MusicPlayer(List<IMusic> playList) {
         this.playListSize = playList.size();
         this.playList = playList;
-        if (Configs.ENABLE.PLAY_AUTO_RANDOM.getBooleanValue()){
+        if (Configs.ENABLE.PLAY_AUTO_RANDOM.getBooleanValue()) {
             this.randomPlay();
         }
 
         this.volumeSet(Configs.PLAY.VOLUME.getIntegerValue());
     }
 
-    public boolean isPlaying(){
+    public boolean isPlaying() {
         return this.loopPlayIn && this.load;
     }
 
     @Override
     public void run() {
-        while (this.notExitFlag){
-            while(this.loopPlayIn){
+        while (this.notExitFlag) {
+            while (this.loopPlayIn) {
                 for (; playIn < this.playListSize; this.playIn++) {
                     playMusic();
 
-                    if(!this.loopPlayIn){
+                    if (!this.loopPlayIn) {
                         break;
                     }
 
-                    if(this.playIn == this.playListSize - 1 && !Configs.PLAY.PLAY_LOOP.getBooleanValue()){
+                    if (this.playIn == this.playListSize - 1 && !Configs.PLAY.PLAY_LOOP.getBooleanValue()) {
                         this.loopPlayIn = false;
                     }
                 }
 
-                if(!this.loopPlayIn){
+                if (!this.loopPlayIn) {
                     break;
                 }
                 this.playIn = 0;
@@ -88,7 +89,7 @@ public class MusicPlayer implements Runnable {
     /**
      * 启动歌曲播放
      */
-    public void start(){
+    public void start() {
         Thread thread = new Thread(this);
         thread.setDaemon(true);
         thread.setName("CloudMusicPlayer thread");
@@ -98,48 +99,47 @@ public class MusicPlayer implements Runnable {
     /**
      * 播放歌曲
      */
-    protected void playMusic(){
+    protected void playMusic() {
         IMusic music = this.playList.get(this.playIn);
 
         String musicUrl;
         try {
             musicUrl = music.getPlayUrl();
-        }catch(ActionException err){
+        } catch (ActionException err) {
             MinecraftClient client = MinecraftClient.getInstance();
-            if(client.player != null){
-                client.player.sendMessage(Text.literal(err.getMessage()));
+            if (client.player != null) {
+                client.player.sendMessage(Text.literal(err.getMessage()), false);
             }
             this.stop();
             return;
         }
 
-        if (music instanceof Music aMusic){
-            if (aMusic.freeTrialInfo != null && this.client.player != null){
+        if (music instanceof Music aMusic) {
+            if (aMusic.freeTrialInfo != null && this.client.player != null) {
                 this.client.player.sendMessage(
                         Text.translatable(
                                 "cloudmusic.info.play.free.trial",
                                 music.getName(),
                                 aMusic.freeTrialInfo.get("start").getAsInt(),
                                 aMusic.freeTrialInfo.get("end").getAsInt()
-                        )
-                );
+                        ), false);
             }
         }
 
         MusicIconTexture.getMusicIcon(music);
-        if (music instanceof Music){
+        if (music instanceof Music) {
             this.lyric = ((Music) music).lyric();
         } else {
             this.lyric = null;
         }
 
         this.playingMusic = music;
-        if(!Configs.PLAY.PLAY_URL.getBooleanValue()){
+        if (!Configs.PLAY.PLAY_URL.getBooleanValue()) {
             String[] urls = musicUrl.split("\\.");
             String fileType = urls[urls.length - 1];
 
             File file;
-            if (music instanceof DjMusic){
+            if (music instanceof DjMusic) {
                 file = HttpClient.download(musicUrl, CloudMusicClient.cacheHelper.getWaitCacheFile("djmusic_" + music.getId() + "." + fileType));
             } else {
                 file = HttpClient.download(musicUrl, CloudMusicClient.cacheHelper.getWaitCacheFile(music.getId() + "." + fileType));
@@ -148,7 +148,7 @@ public class MusicPlayer implements Runnable {
             CloudMusicClient.cacheHelper.addUseSize(file);
             this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.getName()), false);
             this.play(file);
-        }else {
+        } else {
             this.client.inGameHud.setOverlayMessage(Text.translatable("record.nowPlaying", music.getName()), false);
             this.play(musicUrl);
         }
@@ -157,7 +157,7 @@ public class MusicPlayer implements Runnable {
     /**
      * 播放歌曲
      */
-    private void play(AudioInputStream audioInputStream) throws IOException, InterruptedException, LineUnavailableException{
+    private void play(AudioInputStream audioInputStream) throws IOException, InterruptedException, LineUnavailableException {
         AudioFormat audioFormat = audioInputStream.getFormat();
         // 转换文件编码
         if (audioFormat.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
@@ -173,7 +173,7 @@ public class MusicPlayer implements Runnable {
         this.volumeSet(volumePercentage);
 
         play.start();
-        if (lyric != null){
+        if (lyric != null) {
             this.lyric.start();
         }
 
@@ -182,26 +182,27 @@ public class MusicPlayer implements Runnable {
 
         this.load = true;
         this.startPlayingTime = System.currentTimeMillis();
-        while((count = audioInputStream.read(tempBuff,0,tempBuff.length)) != -1){
-            synchronized(this){
-            while(!load)
-                wait();
+        while ((count = audioInputStream.read(tempBuff, 0, tempBuff.length)) != -1) {
+            synchronized (this) {
+                while (!load)
+                    wait();
             }
-            play.write(tempBuff,0,count);
+            play.write(tempBuff, 0, count);
             this.playingProgress = System.currentTimeMillis() - this.startPlayingTime;
         }
 
         this.playingProgress = 0;
-        if (lyric != null){
+        if (lyric != null) {
             this.lyric.exit();
         }
     }
 
     /**
      * 通过 URL 播放歌曲
+     *
      * @param url 歌曲 url
      */
-    private void play(String url){
+    private void play(String url) {
         try {
             this.play(AudioSystem.getAudioInputStream(AudioSystem.getAudioInputStream(new URL(url))));
         } catch (Exception e) {
@@ -211,9 +212,10 @@ public class MusicPlayer implements Runnable {
 
     /**
      * 通过文件对象播放歌曲
+     *
      * @param file 文件对象
      */
-    private void play(File file){
+    private void play(File file) {
         try {
             this.play(AudioSystem.getAudioInputStream(file));
         } catch (Exception e) {
@@ -223,19 +225,20 @@ public class MusicPlayer implements Runnable {
 
     /**
      * 设置音量增益
+     *
      * @param volume 音量百分比
      */
-    public void volumeSet(int volume){
-        if(volume < 0){
+    public void volumeSet(int volume) {
+        if (volume < 0) {
             volume = 0;
         }
 
-        if(volume > 100){
+        if (volume > 100) {
             volume = 100;
         }
-        
+
         this.volumePercentage = volume;
-        if(this.play == null){
+        if (this.play == null) {
             return;
         }
 
@@ -246,20 +249,21 @@ public class MusicPlayer implements Runnable {
         Configs.INSTANCE.save();
     }
 
-    public void volumeAdd(){
+    public void volumeAdd() {
         this.volumeSet(++this.volumePercentage);
     }
 
-    public void volumeDown(){
+    public void volumeDown() {
         this.volumeSet(--this.volumePercentage);
     }
 
     /**
      * 获取当前滚动到的歌词
+     *
      * @return 歌词
      */
     public String[] getLyric() {
-        if(lyric == null){
+        if (lyric == null) {
             return new String[]{};
         }
         return lyric.getToLyric();
@@ -268,8 +272,8 @@ public class MusicPlayer implements Runnable {
     /**
      * 播放下一首
      */
-    public void next(){
-        if (this.playList.size() == 0){
+    public void next() {
+        if (this.playList.size() == 0) {
             return;
         }
 
@@ -280,9 +284,9 @@ public class MusicPlayer implements Runnable {
     /**
      * 播放上一首
      */
-    public void prev(){
+    public void prev() {
         this.playIn -= 2;
-        if(this.playIn < -1){
+        if (this.playIn < -1) {
             this.playIn = -1;
         }
 
@@ -291,16 +295,17 @@ public class MusicPlayer implements Runnable {
 
     /**
      * 跳转至...首播放
+     *
      * @param in 歌曲序号 (索引加一)
      */
-    public void to(int in){
+    public void to(int in) {
         in -= 1;
-        if(in < 0){
+        if (in < 0) {
             in = 0;
         }
 
         int maxIndex = this.playList.size() - 1;
-        if(in > maxIndex){
+        if (in > maxIndex) {
             in = maxIndex;
         }
 
@@ -311,8 +316,8 @@ public class MusicPlayer implements Runnable {
     /**
      * 退出播放
      */
-    public void exit(){
-        if (this.lyric != null){
+    public void exit() {
+        if (this.lyric != null) {
             this.lyric.continues();
             this.lyric.exit();
         }
@@ -325,12 +330,12 @@ public class MusicPlayer implements Runnable {
     /**
      * 停止播放
      */
-    public void stop(){
-        if (this.lyric != null){
+    public void stop() {
+        if (this.lyric != null) {
             this.lyric.stop();
         }
 
-        synchronized(this){
+        synchronized (this) {
             this.load = false;
             notifyAll();
         }
@@ -340,13 +345,13 @@ public class MusicPlayer implements Runnable {
     /**
      * 继续播放
      */
-    public void continues(){
-        if (this.lyric != null){
+    public void continues() {
+        if (this.lyric != null) {
             this.lyric.continues();
         }
         this.startPlayingTime = System.currentTimeMillis() - this.playingProgress;
 
-        synchronized(this){
+        synchronized (this) {
             this.load = true;
             notifyAll();
         }
@@ -356,7 +361,7 @@ public class MusicPlayer implements Runnable {
     /**
      * 从播放列表中删除当前播放歌曲
      */
-    public void deletePlayingMusic(){
+    public void deletePlayingMusic() {
         if (this.playListSize == 0) {
             if (this.playList.isEmpty()) {
                 return;
@@ -372,15 +377,17 @@ public class MusicPlayer implements Runnable {
     }
 
     /**
-     * 正在播放 
+     * 正在播放
+     *
      * @return 歌曲对象
      */
-    public IMusic getPlayingMusic(){
+    public IMusic getPlayingMusic() {
         return this.playingMusic;
     }
 
     /**
      * 获取播放进度 (毫秒)
+     *
      * @return 毫秒
      */
     public long getPlayingProgress() {
@@ -389,6 +396,7 @@ public class MusicPlayer implements Runnable {
 
     /**
      * 获取播放进度 (秒)
+     *
      * @return 秒
      */
     public int getPlayingProgressSecond() {
@@ -397,6 +405,7 @@ public class MusicPlayer implements Runnable {
 
     /**
      * 获取播放进度 (字符串)
+     *
      * @return 播放进度字符串 (格式 "分:秒")
      */
     public String getPlayingProgressToString() {
@@ -405,9 +414,10 @@ public class MusicPlayer implements Runnable {
 
     /**
      * 播放队列
+     *
      * @return 页对象
      */
-    public Page playingAll(){
+    public Page playingAll() {
         return new Page(this.playList) {
 
             @Override
@@ -430,16 +440,16 @@ public class MusicPlayer implements Runnable {
 
                 return null;
             }
-            
+
         };
     }
 
     /**
      * 将播放队列随机并重新播放
      */
-    public void randomPlay(){
+    public void randomPlay() {
         Collections.shuffle(this.playList);
-        if (!this.isPlaying()){
+        if (!this.isPlaying()) {
             return;
         }
 

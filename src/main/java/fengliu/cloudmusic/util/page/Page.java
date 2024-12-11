@@ -101,21 +101,21 @@ public abstract class Page {
         List<?> pageDataList = this.data.get(this.pageIn);
         int offset = pageDataList.size() * this.pageIn;
 
-        client.player.sendMessage(Text.literal(""));
+        client.player.sendMessage(Text.literal("1"), false);
         if (this.infoText != null) {
-            client.player.sendMessage(this.infoText);
+            client.player.sendMessage(this.infoText, false);
         }
-        client.player.sendMessage(Text.translatable("cloudmusic.info.page.count", this.pageIn + 1 + "§c§l/§r" + this.pageCount));
+        client.player.sendMessage(Text.translatable("cloudmusic.info.page.count", this.pageIn + 1 + "§c§l/§r" + this.pageCount), false);
 
         for (Object data : pageDataList) {
-            client.player.sendMessage(Text.literal("[%s] ".formatted(offset + pageDataList.indexOf(data))).append(this.putPageItem(data).build()));
+            client.player.sendMessage(Text.literal("[%s] ".formatted(offset + pageDataList.indexOf(data))).append(this.putPageItem(data).build()), false);
         }
 
         client.player.sendMessage(TextClickItem.combine(
                 new TextClickItem("page.prev", "/cloudmusic page prev"),
                 new TextClickItem("page.next", "/cloudmusic page next"),
                 new TextClickItem("page.to", "/cloudmusic page to")
-        ));
+        ), false);
     }
 
     public JsonObject getJsonItem(Function<JsonObject, Boolean> get) {
