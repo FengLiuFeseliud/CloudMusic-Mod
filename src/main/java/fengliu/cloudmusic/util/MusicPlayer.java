@@ -100,6 +100,8 @@ public class MusicPlayer implements Runnable {
      * 播放歌曲
      */
     protected void playMusic() {
+        // 开始播放的时候停止所有的声音(只会停止一瞬间)
+        client.getSoundManager().stopAll();
         IMusic music = this.playList.get(this.playIn);
 
         String musicUrl;

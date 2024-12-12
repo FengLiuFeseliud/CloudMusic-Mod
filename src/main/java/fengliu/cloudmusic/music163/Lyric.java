@@ -52,7 +52,6 @@ public class Lyric implements Runnable{
 
                 lyricMap.put(timeStrToTime(lyricRows[0]), lyricRows[1]);
             }catch(Exception err){
-                continue;
             }
         }
         return lyricMap;

@@ -2,10 +2,11 @@
   "required": true,
   "minVersion": "0.8",
   "package": "fengliu.cloudmusic.mixin",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_21",
   "client": [
-    "MixinInGameHud",
-    "MixinChatHud"
+    "SoundSystemMixin",
+    "MixinChatHud",
+    "MixinInGameHud"
   ],
   "injectors": {
     "defaultRequire": 1
