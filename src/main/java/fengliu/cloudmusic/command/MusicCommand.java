@@ -167,61 +167,64 @@ public class MusicCommand {
     };
     private static final List<Text> helpsList = new ArrayList<>();
 
-    public static MusicPlayer getPlayer(){
+    public static MusicPlayer getPlayer() {
         return player;
     }
 
-    public static void setPage(Page Page){
+    public static void setPage(Page Page) {
         page = Page;
     }
 
-    public static My getMy(boolean reset){
-        if(my == null || reset){
+    public static My getMy(boolean reset) {
+        if (my == null || reset) {
             my = music163.my();
         }
 
         return my;
     }
-    
+
     /**
      * 重置歌曲播放器
+     *
      * @param musics 歌曲列表
      */
-    private static void resetPlayer(List<IMusic> musics){
+    private static void resetPlayer(List<IMusic> musics) {
         try {
             player.exit();
         } catch (Exception e) {
-            
+
         }
         player = new MusicPlayer(musics);
     }
 
     /**
      * 重置歌曲播放器
+     *
      * @param newPlayer 播放器
      */
-    private static void resetPlayer(MusicPlayer newPlayer){
+    private static void resetPlayer(MusicPlayer newPlayer) {
         try {
             player.exit();
         } catch (Exception e) {
-            
+
         }
         player = newPlayer;
     }
 
     /**
      * 重置歌曲播放器
+     *
      * @param music 歌曲
      */
-    private static void resetPlayer(IMusic music){
+    private static void resetPlayer(IMusic music) {
         List<IMusic> musics = new ArrayList<>();
         musics.add(music);
 
         resetPlayer(musics);
     }
 
-    private static void resetCookie(String cookie){
-        if(cookie == null || music163.getHttpClient().getCookies().equals(cookie)){
+    private static void resetCookie(String cookie) {
+        if (cookie == null || music163.getHttpClient().getCookies().equals(cookie)) {
             return;
         }
 
@@ -232,16 +235,17 @@ public class MusicCommand {
         Configs.INSTANCE.save();
     }
 
-    private interface Job{
+    private interface Job {
         void fun(CommandContext<FabricClientCommandSource> context) throws Exception;
     }
 
     /**
      * 新开线程运行指令
+     *
      * @param context 指令上下文
-     * @param job 任务
+     * @param job     任务
      */
-    private static void runCommand(CommandContext<FabricClientCommandSource> context, Job job){
+    private static void runCommand(CommandContext<FabricClientCommandSource> context, Job job) {
         Thread commandThread = new Thread(() -> {
             try {
                 job.fun(context);
@@ -254,7 +258,7 @@ public class MusicCommand {
         commandThread.start();
     }
 
-    public static void registerAll(){
+    public static void registerAll() {
         LiteralArgumentBuilder<FabricClientCommandSource> CloudMusic = literal("cloudmusic");
         LiteralArgumentBuilder<FabricClientCommandSource> Music = literal("music");
         LiteralArgumentBuilder<FabricClientCommandSource> PlayList = literal("playlist");
@@ -286,65 +290,65 @@ public class MusicCommand {
 
         // cloudmusic music id
         CloudMusic.then(Music.then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    data = music163.music(LongArgumentType.getLong(context, "id"));
-                    ((Music) data).printToChatHud(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        data = music163.music(LongArgumentType.getLong(context, "id"));
+                        ((Music) data).printToChatHud(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         ));
-        
+
         // cloudmusic music play id
         CloudMusic.then(Music.then(literal("play").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    Music music = music163.music(LongArgumentType.getLong(context, "id"));
-                    resetPlayer(music);
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.music.play", music.name));
-                    player.start();
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        Music music = music163.music(LongArgumentType.getLong(context, "id"));
+                        resetPlayer(music);
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.music.play", music.name));
+                        player.start();
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
-    
+
         // cloudmusic music like id
         CloudMusic.then(Music.then(literal("like").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    Music music = music163.music(LongArgumentType.getLong(context, "id"));
-                    music.like();
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.music.like", music.name));
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        Music music = music163.music(LongArgumentType.getLong(context, "id"));
+                        music.like();
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.music.like", music.name));
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic music unlike id
         CloudMusic.then(Music.then(literal("unlike").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    Music music = music163.music(LongArgumentType.getLong(context, "id"));
-                    music.unlike();
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.music.unlike", music.name));
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        Music music = music163.music(LongArgumentType.getLong(context, "id"));
+                        music.unlike();
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.music.unlike", music.name));
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         LiteralArgumentBuilder<FabricClientCommandSource> Similar = literal("similar");
 
         // cloudmusic music similar music
         CloudMusic.then(Music.then(Similar.then(literal("music").then(
-             argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                 runCommand(contextData, context -> {
-                     Music music = music163.music(LongArgumentType.getLong(context, "id"));
-                     page = music.similar();
-                     page.setInfoText(Text.translatable("cloudmusic.info.page.music.similar", music.name));
-                     page.look(context.getSource());
-                 });
-                 return Command.SINGLE_SUCCESS;
-             })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        Music music = music163.music(LongArgumentType.getLong(context, "id"));
+                        page = music.similar();
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.music.similar", music.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         ))));
 
         // cloudmusic music similar playlist
@@ -410,7 +414,7 @@ public class MusicCommand {
                     return Command.SINGLE_SUCCESS;
                 })
         ));
-        
+
         // cloudmusic playlist play id
         CloudMusic.then(PlayList.then(literal("play").then(
                 argument("id", LongArgumentType.longArg()).executes(contextData -> {
@@ -473,86 +477,86 @@ public class MusicCommand {
                         context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.playlist.subscribe", playList.name));
                     });
                     return Command.SINGLE_SUCCESS;
-            })
+                })
         )));
 
         // cloudmusic playlist unsubscribe id
         CloudMusic.then(PlayList.then(literal("unsubscribe").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    PlayList playList = music163.playlist(LongArgumentType.getLong(context, "id"));
-                    playList.unsubscribe();
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.playlist.unsubscribe", playList.name));
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        PlayList playList = music163.playlist(LongArgumentType.getLong(context, "id"));
+                        playList.unsubscribe();
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.playlist.unsubscribe", playList.name));
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic playlist add id musicId
         CloudMusic.then(PlayList.then(literal("add").then(
-            argument("id", LongArgumentType.longArg()).then(
-                argument("musicId", LongArgumentType.longArg()).executes(contextData -> {
-                    runCommand(contextData, context -> {
-                        long musicId = LongArgumentType.getLong(context, "musicId");
-                        PlayList playList = music163.playlist(LongArgumentType.getLong(context, "id"));
-                        playList.add(musicId);
-                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.playlist.add", playList.name, musicId));
-                    });
-                    return Command.SINGLE_SUCCESS;
-                })
-            ))
+                argument("id", LongArgumentType.longArg()).then(
+                        argument("musicId", LongArgumentType.longArg()).executes(contextData -> {
+                            runCommand(contextData, context -> {
+                                long musicId = LongArgumentType.getLong(context, "musicId");
+                                PlayList playList = music163.playlist(LongArgumentType.getLong(context, "id"));
+                                playList.add(musicId);
+                                context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.playlist.add", playList.name, musicId));
+                            });
+                            return Command.SINGLE_SUCCESS;
+                        })
+                ))
         ));
 
         // cloudmusic playlist del id musicId
         CloudMusic.then(PlayList.then(literal("del").then(
-            argument("id", LongArgumentType.longArg()).then(
-                argument("musicId", LongArgumentType.longArg()).executes(contextData -> {
-                    runCommand(contextData, context -> {
-                        long musicId = LongArgumentType.getLong(context, "musicId");
-                        PlayList playList = music163.playlist(LongArgumentType.getLong(context, "id"));
-                        playList.del(musicId);
-                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.playlist.del", playList.name, musicId));
-                    });
-                    return Command.SINGLE_SUCCESS;
-                })
-            ))
+                argument("id", LongArgumentType.longArg()).then(
+                        argument("musicId", LongArgumentType.longArg()).executes(contextData -> {
+                            runCommand(contextData, context -> {
+                                long musicId = LongArgumentType.getLong(context, "musicId");
+                                PlayList playList = music163.playlist(LongArgumentType.getLong(context, "id"));
+                                playList.del(musicId);
+                                context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.playlist.del", playList.name, musicId));
+                            });
+                            return Command.SINGLE_SUCCESS;
+                        })
+                ))
         ));
 
         // cloudmusic artist id
         CloudMusic.then(Artist.then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    data = music163.artist(LongArgumentType.getLong(context, "id"));
-                    ((Artist) data).printToChatHud(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        data = music163.artist(LongArgumentType.getLong(context, "id"));
+                        ((Artist) data).printToChatHud(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         ));
 
         // cloudmusic artist top id
         CloudMusic.then(Artist.then(literal("top").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    Artist artist = music163.artist(LongArgumentType.getLong(context, "id"));
-                    resetPlayer(artist.topSong());
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.artist.top.play", artist.name));
-                    player.start();
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        Artist artist = music163.artist(LongArgumentType.getLong(context, "id"));
+                        resetPlayer(artist.topSong());
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.artist.top.play", artist.name));
+                        player.start();
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic artist album id
         CloudMusic.then(Artist.then(literal("album").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    Artist artist = music163.artist(LongArgumentType.getLong(context, "id"));
-                    page = artist.albumPage();
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.artist.album", artist.name));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        Artist artist = music163.artist(LongArgumentType.getLong(context, "id"));
+                        page = artist.albumPage();
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.artist.album", artist.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic artist similar id
@@ -570,26 +574,26 @@ public class MusicCommand {
 
         // cloudmusic artist subscribe id
         CloudMusic.then(Artist.then(literal("subscribe").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    Artist artist = music163.artist(LongArgumentType.getLong(context, "id"));
-                    artist.subscribe();
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.artist.subscribe", artist.name));
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        Artist artist = music163.artist(LongArgumentType.getLong(context, "id"));
+                        artist.subscribe();
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.artist.subscribe", artist.name));
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic artist unsubscribe id
         CloudMusic.then(Artist.then(literal("unsubscribe").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    Artist artist = music163.artist(LongArgumentType.getLong(context, "id"));
-                    artist.unsubscribe();
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.artist.unsubscribe", artist.name));
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        Artist artist = music163.artist(LongArgumentType.getLong(context, "id"));
+                        artist.unsubscribe();
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.artist.unsubscribe", artist.name));
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic artist music id
@@ -605,15 +609,15 @@ public class MusicCommand {
 
         // cloudmusic album id
         CloudMusic.then(Album.then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    data = music163.album(LongArgumentType.getLong(context, "id"));
-                    ((Album) data).printToChatHud(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        data = music163.album(LongArgumentType.getLong(context, "id"));
+                        ((Album) data).printToChatHud(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         ));
-        
+
         // cloudmusic album play id
         CloudMusic.then(Album.then(literal("play").then(
                 argument("id", LongArgumentType.longArg()).executes(contextData -> {
@@ -676,30 +680,30 @@ public class MusicCommand {
                         context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.album.subscribe", album.name));
                     });
                     return Command.SINGLE_SUCCESS;
-            })
+                })
         )));
 
         // cloudmusic album unsubscribe id
         CloudMusic.then(Album.then(literal("unsubscribe").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    Album album = music163.album(LongArgumentType.getLong(context, "id"));
-                    album.unsubscribe();
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.album.unsubscribe", album.name));
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        Album album = music163.album(LongArgumentType.getLong(context, "id"));
+                        album.unsubscribe();
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.album.unsubscribe", album.name));
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic dj id
         CloudMusic.then(Dj.then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    data = music163.djRadio(LongArgumentType.getLong(context, "id"));
-                    ((DjRadio) data).printToChatHud(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        data = music163.djRadio(LongArgumentType.getLong(context, "id"));
+                        ((DjRadio) data).printToChatHud(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         ));
 
         // cloudmusic dj play id
@@ -764,8 +768,8 @@ public class MusicCommand {
                         data = music163.djMusic(LongArgumentType.getLong(context, "id"));
                         ((DjMusic) data).printToChatHud(context.getSource());
                     });
-                return Command.SINGLE_SUCCESS;
-            })
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic dj music play id
@@ -830,99 +834,99 @@ public class MusicCommand {
                         context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.dj.subscribe", djRadio.name));
                     });
                     return Command.SINGLE_SUCCESS;
-            })
+                })
         )));
 
         // cloudmusic dj unsubscribe id
         CloudMusic.then(Dj.then(literal("unsubscribe").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    DjRadio djRadio = music163.djRadio(LongArgumentType.getLong(context, "id"));
-                    djRadio.unsubscribe();
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.dj.unsubscribe", djRadio.name));
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        DjRadio djRadio = music163.djRadio(LongArgumentType.getLong(context, "id"));
+                        djRadio.unsubscribe();
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.dj.unsubscribe", djRadio.name));
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic user id
         CloudMusic.then(User.then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    data = music163.user(LongArgumentType.getLong(context, "id"));
-                    ((User) data).printToChatHud(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        data = music163.user(LongArgumentType.getLong(context, "id"));
+                        ((User) data).printToChatHud(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         ));
 
         // cloudmusic user playlist id
         CloudMusic.then(User.then(literal("playlist").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    User user = music163.user(LongArgumentType.getLong(context, "id"));
-                    page = user.playListsPage();
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.user.playlist", user.name));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            }))
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        User user = music163.user(LongArgumentType.getLong(context, "id"));
+                        page = user.playListsPage();
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.user.playlist", user.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                }))
         ));
 
         // cloudmusic user dj id
         CloudMusic.then(User.then(literal("dj").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    User user = music163.user(LongArgumentType.getLong(context, "id"));
-                    page = user.djRadio();
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.user.dj", user.name));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            }))
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        User user = music163.user(LongArgumentType.getLong(context, "id"));
+                        page = user.djRadio();
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.user.dj", user.name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                }))
         ));
 
         // cloudmusic user like id
         CloudMusic.then(User.then(literal("like").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    User user = music163.user(LongArgumentType.getLong(context, "id"));
-                    resetPlayer(user.likeMusicPlayList().getMusics());
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.like", user.name));
-                    player.start();
-                });
-                return Command.SINGLE_SUCCESS;
-            }))
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        User user = music163.user(LongArgumentType.getLong(context, "id"));
+                        resetPlayer(user.likeMusicPlayList().getMusics());
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.like", user.name));
+                        player.start();
+                    });
+                    return Command.SINGLE_SUCCESS;
+                }))
         ));
 
         LiteralArgumentBuilder<FabricClientCommandSource> Record = literal("record");
 
         // cloudmusic user record all id
         CloudMusic.then(User.then(Record.then(literal("all").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    User user = music163.user(LongArgumentType.getLong(context, "id"));
-                    resetPlayer(user.recordAll());
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.user.record.all", user.name));
-                    player.start();
-                });
-                return Command.SINGLE_SUCCESS;
-            })))
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        User user = music163.user(LongArgumentType.getLong(context, "id"));
+                        resetPlayer(user.recordAll());
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.user.record.all", user.name));
+                        player.start();
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })))
         ));
 
         // cloudmusic user record week id
         CloudMusic.then(User.then(Record.then(literal("week").then(
-            argument("id", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    User user = music163.user(LongArgumentType.getLong(context, "id"));
-                    resetPlayer(user.recordWeek());
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.user.record.week", user.name));
-                    player.start();
-                });
-                return Command.SINGLE_SUCCESS;
-            })))
+                argument("id", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        User user = music163.user(LongArgumentType.getLong(context, "id"));
+                        resetPlayer(user.recordWeek());
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.user.record.week", user.name));
+                        player.start();
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })))
         ));
-        
+
         // cloudmusic my
         CloudMusic.then(My.executes(contextData -> {
             runCommand(contextData, context -> {
@@ -1047,26 +1051,26 @@ public class MusicCommand {
 
         // cloudmusic my playlist add musicId
         CloudMusic.then(My.then(MyPlayList.then(literal("add").then(
-            argument("musicId", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    page = getMy(false).playListSetMusic(LongArgumentType.getLong(context, "musicId"), "add");
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.user.playlist.add", getMy(false).name));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("musicId", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        page = getMy(false).playListSetMusic(LongArgumentType.getLong(context, "musicId"), "add");
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.user.playlist.add", getMy(false).name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         ))));
 
         // cloudmusic my playlist del musicId
         CloudMusic.then(My.then(MyPlayList.then(literal("del").then(
-            argument("musicId", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    page = getMy(false).playListSetMusic(LongArgumentType.getLong(context, "musicId"), "del");
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.user.playlist.del", getMy(false).name));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("musicId", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        page = getMy(false).playListSetMusic(LongArgumentType.getLong(context, "musicId"), "del");
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.user.playlist.del", getMy(false).name));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         ))));
 
         LiteralArgumentBuilder<FabricClientCommandSource> Recommend = literal("recommend");
@@ -1125,13 +1129,13 @@ public class MusicCommand {
 
         // cloudmusic style id
         CloudMusic.then(Style.then(
-            argument("id", IntegerArgumentType.integer()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    data = music163.style(IntegerArgumentType.getInteger(context, "id"));
-                    ((StyleTag) data).printToChatHud(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", IntegerArgumentType.integer()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        data = music163.style(IntegerArgumentType.getInteger(context, "id"));
+                        ((StyleTag) data).printToChatHud(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         ));
 
         // cloudmusic style all
@@ -1146,71 +1150,71 @@ public class MusicCommand {
 
         // cloudmusic style children id
         CloudMusic.then(Style.then(literal("children").then(
-            argument("id", IntegerArgumentType.integer()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
-                    page = style.childrenStyles();
-                    if (page == null) {
-                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.style.not.children", style.name, style.enName));
-                        return;
-                    }
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.style.children", style.name, style.enName));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", IntegerArgumentType.integer()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
+                        page = style.childrenStyles();
+                        if (page == null) {
+                            context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.style.not.children", style.name, style.enName));
+                            return;
+                        }
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.style.children", style.name, style.enName));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic style music id
         CloudMusic.then(Style.then(literal("music").then(
-            argument("id", IntegerArgumentType.integer()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
-                    page = style.music();
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.style.music", style.name, style.enName));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", IntegerArgumentType.integer()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
+                        page = style.music();
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.style.music", style.name, style.enName));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic style playlist id
         CloudMusic.then(Style.then(literal("playlist").then(
-            argument("id", IntegerArgumentType.integer()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
-                    page = style.playlist();
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.style.playlist", style.name, style.enName));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", IntegerArgumentType.integer()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
+                        page = style.playlist();
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.style.playlist", style.name, style.enName));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic style artist id
         CloudMusic.then(Style.then(literal("artist").then(
-            argument("id", IntegerArgumentType.integer()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
-                    page = style.artist();
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.style.artist", style.name, style.enName));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", IntegerArgumentType.integer()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
+                        page = style.artist();
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.style.artist", style.name, style.enName));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic style album id
         CloudMusic.then(Style.then(literal("album").then(
-            argument("id", IntegerArgumentType.integer()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
-                    page = style.album();
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.style.album", style.name, style.enName));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("id", IntegerArgumentType.integer()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        StyleTag style = music163.style(IntegerArgumentType.getInteger(context, "id"));
+                        page = style.album();
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.style.album", style.name, style.enName));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic top list
@@ -1258,19 +1262,19 @@ public class MusicCommand {
 
         // cloudmusic top playlist highquality tag
         CloudMusic.then(Top.then(TopPlayList.then(HighQuality.then(
-            argument("tag", StringArgumentType.string()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    String tag = StringArgumentType.getString(context, "tag");
-                    page = music163.topPlayListHighQuality(tag);
-                    if (page == null) {
-                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.tag.not.top.playlist.highquality", tag));
-                        return;
-                    }
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.top.playlist.highquality", tag));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("tag", StringArgumentType.string()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        String tag = StringArgumentType.getString(context, "tag");
+                        page = music163.topPlayListHighQuality(tag);
+                        if (page == null) {
+                            context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.tag.not.top.playlist.highquality", tag));
+                            return;
+                        }
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.top.playlist.highquality", tag));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         ))));
 
         LiteralArgumentBuilder<FabricClientCommandSource> Tags = literal("tags");
@@ -1307,80 +1311,80 @@ public class MusicCommand {
 
         // cloudmusic top playlist tag
         CloudMusic.then(Top.then(TopPlayList.then(
-            argument("tag", StringArgumentType.string()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    String tag = StringArgumentType.getString(context, "tag");
-                    page = music163.topPlayList(tag);
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.top.playlist", tag));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("tag", StringArgumentType.string()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        String tag = StringArgumentType.getString(context, "tag");
+                        page = music163.topPlayList(tag);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.top.playlist", tag));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic search music
         CloudMusic.then(Search.then(literal("music").then(
-            argument("key", StringArgumentType.string()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    String key = StringArgumentType.getString(context, "key");
-                    page = music163.searchMusic(key);
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.search", key));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("key", StringArgumentType.string()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        String key = StringArgumentType.getString(context, "key");
+                        page = music163.searchMusic(key);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.search", key));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic search album
         CloudMusic.then(Search.then(literal("album").then(
-            argument("key", StringArgumentType.string()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    String key = StringArgumentType.getString(context, "key");
-                    page = music163.searchAlbum(key);
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.search", key));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("key", StringArgumentType.string()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        String key = StringArgumentType.getString(context, "key");
+                        page = music163.searchAlbum(key);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.search", key));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic search artist
         CloudMusic.then(Search.then(literal("artist").then(
-            argument("key", StringArgumentType.string()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    String key = StringArgumentType.getString(context, "key");
-                    page = music163.searchArtist(key);
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.search", key));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("key", StringArgumentType.string()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        String key = StringArgumentType.getString(context, "key");
+                        page = music163.searchArtist(key);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.search", key));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic search playlist
         CloudMusic.then(Search.then(literal("playlist").then(
-            argument("key", StringArgumentType.string()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    String key = StringArgumentType.getString(context, "key");
-                    page = music163.searchPlayList(key);
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.search", key));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("key", StringArgumentType.string()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        String key = StringArgumentType.getString(context, "key");
+                        page = music163.searchPlayList(key);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.search", key));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic search dj
         CloudMusic.then(Search.then(literal("dj").then(
-            argument("key", StringArgumentType.string()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    String key = StringArgumentType.getString(context, "key");
-                    page = music163.searchDjRadio(key);
-                    page.setInfoText(Text.translatable("cloudmusic.info.page.search", key));
-                    page.look(context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("key", StringArgumentType.string()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        String key = StringArgumentType.getString(context, "key");
+                        page = music163.searchDjRadio(key);
+                        page.setInfoText(Text.translatable("cloudmusic.info.page.search", key));
+                        page.look(context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
 
@@ -1512,10 +1516,10 @@ public class MusicCommand {
                     return Command.SINGLE_SUCCESS;
                 }))
         );
-        
+
         // cloudmusic page prev
         CloudMusic.then(Page.then(literal("prev").executes(context -> {
-            if(page == null){
+            if (page == null) {
                 return Command.SINGLE_SUCCESS;
             }
             page.prev(context.getSource());
@@ -1524,7 +1528,7 @@ public class MusicCommand {
 
         // cloudmusic page next
         CloudMusic.then(Page.then(literal("next").executes(contextData -> {
-            if(page == null){
+            if (page == null) {
                 return Command.SINGLE_SUCCESS;
             }
 
@@ -1536,18 +1540,18 @@ public class MusicCommand {
 
         // cloudmusic page to page
         CloudMusic.then(Page.then(literal("to").then(
-            argument("page", IntegerArgumentType.integer()).executes(contextData -> {
-                if(page == null){
-                    return Command.SINGLE_SUCCESS;
-                }
+                argument("page", IntegerArgumentType.integer()).executes(contextData -> {
+                    if (page == null) {
+                        return Command.SINGLE_SUCCESS;
+                    }
 
-                runCommand(contextData, context -> {
-                    page.to(IntegerArgumentType.getInteger(context, "page") - 1, context.getSource());
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                    runCommand(contextData, context -> {
+                        page.to(IntegerArgumentType.getInteger(context, "page") - 1, context.getSource());
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
-        
+
         // cloudmusic playing
         CloudMusic.then(Playing.executes(context -> {
             player.getPlayingMusic().printToChatHud(context.getSource());
@@ -1556,59 +1560,59 @@ public class MusicCommand {
 
         // cloudmusic playing all
         CloudMusic.then(Playing.then(literal("all").executes(context -> {
-                page = player.playingAll();
-                page.setInfoText(Text.translatable("cloudmusic.info.page.playing.all"));
-                page.look(context.getSource());
-                return Command.SINGLE_SUCCESS;
-            })
-        ));
-        
-        // cloudmusic login email email password
-        CloudMusic.then(Login.then(literal("email").then(
-            argument("email", StringArgumentType.string()).then(
-                argument("password", StringArgumentType.string()).executes(contextData -> {
-                    runCommand(contextData, context -> {
-                        resetCookie(loginMusic163.email(StringArgumentType.getString(context, "email"), StringArgumentType.getString(context, "password")));
-                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.login", my.name));
-                    });
+                    page = player.playingAll();
+                    page.setInfoText(Text.translatable("cloudmusic.info.page.playing.all"));
+                    page.look(context.getSource());
                     return Command.SINGLE_SUCCESS;
                 })
-            ))
+        ));
+
+        // cloudmusic login email email password
+        CloudMusic.then(Login.then(literal("email").then(
+                argument("email", StringArgumentType.string()).then(
+                        argument("password", StringArgumentType.string()).executes(contextData -> {
+                            runCommand(contextData, context -> {
+                                resetCookie(loginMusic163.email(StringArgumentType.getString(context, "email"), StringArgumentType.getString(context, "password")));
+                                context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.login", my.name));
+                            });
+                            return Command.SINGLE_SUCCESS;
+                        })
+                ))
         ));
 
         // cloudmusic login captcha phone
         CloudMusic.then(Login.then(literal("captcha").then(
-            argument("phone", LongArgumentType.longArg()).executes(contextData -> {
-                runCommand(contextData, context -> {
-                    loginMusic163.sendCaptcha(LongArgumentType.getLong(context, "phone"), Configs.LOGIN.COUNTRY_CODE.getIntegerValue());
-                    context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.login.send.captcha"));
-                });
-                return Command.SINGLE_SUCCESS;
-            })
+                argument("phone", LongArgumentType.longArg()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        loginMusic163.sendCaptcha(LongArgumentType.getLong(context, "phone"), Configs.LOGIN.COUNTRY_CODE.getIntegerValue());
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.login.send.captcha"));
+                    });
+                    return Command.SINGLE_SUCCESS;
+                })
         )));
 
         // cloudmusic login captcha phone captcha
         CloudMusic.then(Login.then(literal("captcha").then(
-            argument("phone", LongArgumentType.longArg()).then(
-                argument("captcha", IntegerArgumentType.integer()).executes(contextData -> {
-                    runCommand(contextData, context -> {
-                        resetCookie(loginMusic163.cellphone(LongArgumentType.getLong(context, "phone"), IntegerArgumentType.getInteger(context, "captcha"), Configs.LOGIN.COUNTRY_CODE.getIntegerValue()));
-                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.login", my.name));
-                    });
-                    return Command.SINGLE_SUCCESS;
-                }))
+                argument("phone", LongArgumentType.longArg()).then(
+                        argument("captcha", IntegerArgumentType.integer()).executes(contextData -> {
+                            runCommand(contextData, context -> {
+                                resetCookie(loginMusic163.cellphone(LongArgumentType.getLong(context, "phone"), IntegerArgumentType.getInteger(context, "captcha"), Configs.LOGIN.COUNTRY_CODE.getIntegerValue()));
+                                context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.login", my.name));
+                            });
+                            return Command.SINGLE_SUCCESS;
+                        }))
         )));
 
         // cloudmusic login phone phone password
         CloudMusic.then(Login.then(literal("phone").then(
-            argument("phone", LongArgumentType.longArg()).then(
-                argument("password", StringArgumentType.string()).executes(contextData -> {
-                    runCommand(contextData, context -> {
-                        resetCookie(loginMusic163.cellphone(LongArgumentType.getLong(context, "phone"), StringArgumentType.getString(context, "password"), Configs.LOGIN.COUNTRY_CODE.getIntegerValue()));
-                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.login", my.name));
-                    });
-                    return Command.SINGLE_SUCCESS;
-                }))
+                argument("phone", LongArgumentType.longArg()).then(
+                        argument("password", StringArgumentType.string()).executes(contextData -> {
+                            runCommand(contextData, context -> {
+                                resetCookie(loginMusic163.cellphone(LongArgumentType.getLong(context, "phone"), StringArgumentType.getString(context, "password"), Configs.LOGIN.COUNTRY_CODE.getIntegerValue()));
+                                context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.login", my.name));
+                            });
+                            return Command.SINGLE_SUCCESS;
+                        }))
         )));
 
         // cloudmusic login qr
@@ -1619,10 +1623,10 @@ public class MusicCommand {
                 try {
                     loadQRCode = true;
                     resetCookie(loginMusic163.qrLogin(qrKey));
-                }catch (ActionException err){
+                } catch (ActionException err) {
                     context.getSource().sendFeedback(Text.literal(err.getMessage()));
                     return;
-                }finally {
+                } finally {
                     loadQRCode = false;
                 }
 
@@ -1631,82 +1635,82 @@ public class MusicCommand {
             return Command.SINGLE_SUCCESS;
         })));
 
-        ClientCommandRegistrationCallback.EVENT.register((  dispatcher, registryAccess) -> {
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             dispatcher.register(
-                CloudMusic
-                    .then(
-                        // cloudmusic stop
-                        literal("stop").executes(context -> {
-                            player.stop();
-                            return Command.SINGLE_SUCCESS;
-                        })
-                    )
-                    .then(
-                        // cloudmusic continue
-                        literal("continue").executes(context -> {
-                            player.continues();
-                            return Command.SINGLE_SUCCESS;
-                        })
-                    )
-                    .then(
-                        // cloudmusic prev
-                        literal("prev").executes(context -> {
-                            player.prev();
-                            return Command.SINGLE_SUCCESS;
-                        })
-                    )
-                    .then(
-                        // cloudmusic next
-                        literal("next").executes(context -> {
-                            player.next();
-                            return Command.SINGLE_SUCCESS;
-                        })
-                    )
-                    .then(
-                        // cloudmusic to
-                        literal("to").then(
-                            argument("index",IntegerArgumentType.integer()).executes(context -> {
-                                player.to(IntegerArgumentType.getInteger(context, "index"));
-                                return Command.SINGLE_SUCCESS;
-                            })
-                    ))
-                    .then(
-                        // cloudmusic del
-                        literal("del").executes(context -> {
-                            player.deletePlayingMusic();
-                            return Command.SINGLE_SUCCESS;
-                        })
-                    )
-                    .then(
-                        // cloudmusic trash
-                        literal("trash").executes(contextData -> {
-                            IMusic music = player.getPlayingMusic();
-                            if (!(music instanceof Music)){
-                                return Command.SINGLE_SUCCESS;
-                            }
+                    CloudMusic
+                            .then(
+                                    // cloudmusic stop
+                                    literal("stop").executes(context -> {
+                                        player.stop();
+                                        return Command.SINGLE_SUCCESS;
+                                    })
+                            )
+                            .then(
+                                    // cloudmusic continue
+                                    literal("continue").executes(context -> {
+                                        player.continues();
+                                        return Command.SINGLE_SUCCESS;
+                                    })
+                            )
+                            .then(
+                                    // cloudmusic prev
+                                    literal("prev").executes(context -> {
+                                        player.prev();
+                                        return Command.SINGLE_SUCCESS;
+                                    })
+                            )
+                            .then(
+                                    // cloudmusic next
+                                    literal("next").executes(context -> {
+                                        player.next();
+                                        return Command.SINGLE_SUCCESS;
+                                    })
+                            )
+                            .then(
+                                    // cloudmusic to
+                                    literal("to").then(
+                                            argument("index", IntegerArgumentType.integer()).executes(context -> {
+                                                player.to(IntegerArgumentType.getInteger(context, "index"));
+                                                return Command.SINGLE_SUCCESS;
+                                            })
+                                    ))
+                            .then(
+                                    // cloudmusic del
+                                    literal("del").executes(context -> {
+                                        player.deletePlayingMusic();
+                                        return Command.SINGLE_SUCCESS;
+                                    })
+                            )
+                            .then(
+                                    // cloudmusic trash
+                                    literal("trash").executes(contextData -> {
+                                        IMusic music = player.getPlayingMusic();
+                                        if (!(music instanceof Music)) {
+                                            return Command.SINGLE_SUCCESS;
+                                        }
 
-                            player.deletePlayingMusic();
-                            runCommand(contextData, context -> {
-                                ((Music) music).addTrashCan();
-                                context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.trash", music.getName()));
-                            });
-                            return Command.SINGLE_SUCCESS;
-                        })
-                    )
-                    .then(
-                        // cloudmusic random
-                        literal("random").executes(context -> {
-                            player.randomPlay();
-                            return Command.SINGLE_SUCCESS;
-                        })
-                    )
-                    .then(
-                        // cloudmusic exit
-                        literal("exit").executes(context -> {
-                            resetPlayer(new ArrayList<>());
-                            return Command.SINGLE_SUCCESS;
-                        })
-                    )
+                                        player.deletePlayingMusic();
+                                        runCommand(contextData, context -> {
+                                            ((Music) music).addTrashCan();
+                                            context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.trash", music.getName()));
+                                        });
+                                        return Command.SINGLE_SUCCESS;
+                                    })
+                            )
+                            .then(
+                                    // cloudmusic random
+                                    literal("random").executes(context -> {
+                                        player.randomPlay();
+                                        return Command.SINGLE_SUCCESS;
+                                    })
+                            )
+                            .then(
+                                    // cloudmusic exit
+                                    literal("exit").executes(context -> {
+                                        resetPlayer(new ArrayList<>());
+                                        return Command.SINGLE_SUCCESS;
+                                    })
+                            )
 
             );
         });

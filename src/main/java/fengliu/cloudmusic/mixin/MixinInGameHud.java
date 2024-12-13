@@ -60,7 +60,7 @@ public abstract class MixinInGameHud {
             return;
         }
         Function<Identifier, RenderLayer> renderLayer = RenderLayer::getGuiTexturedOverlay;
-        context.drawTexture(renderLayer, MusicIconTexture.QR_CODE_ID, this.client.getWindow().getScaledWidth() - 64, 72, 64, 64, 0, 0, 128, 128, 128, 128);
+        context.drawTexture(renderLayer, MusicIconTexture.QR_CODE_ID, 5, 10, 1f, 1f, 64, 64, 64, 64);
     }
 
     @Unique
