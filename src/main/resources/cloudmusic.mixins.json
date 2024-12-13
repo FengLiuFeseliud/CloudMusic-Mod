@@ -4,9 +4,10 @@
   "package": "fengliu.cloudmusic.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "SoundSystemMixin",
+    "MinecraftClientMixin",
     "MixinChatHud",
-    "MixinInGameHud"
+    "MixinInGameHud",
+    "SoundSystemMixin"
   ],
   "injectors": {
     "defaultRequire": 1
