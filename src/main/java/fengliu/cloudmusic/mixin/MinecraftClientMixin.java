@@ -1,10 +1,3 @@
-/*
- * Copyright © 2024 RTAkland
- * Author: RTAkland
- * Date: 2024/12/13
- */
-
-
 package fengliu.cloudmusic.mixin;
 
 import fengliu.cloudmusic.command.MusicCommand;
