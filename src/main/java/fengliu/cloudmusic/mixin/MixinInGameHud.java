@@ -30,14 +30,12 @@ import java.util.function.Function;
 @Mixin(InGameHud.class)
 public abstract class MixinInGameHud {
 
-    static {
-        final MinecraftClient client = MinecraftClient.getInstance();
+    @Inject(method = "<init>", at = @At("TAIL"))
+    public void initLyricRender(MinecraftClient client, CallbackInfo ci) {
         HudRenderCallback.EVENT.register((drawContext, renderTickCounter) -> {
             MusicPlayer player = MusicCommand.getPlayer();
             IMusic playingMusic = player.getPlayingMusic();
-            if (playingMusic == null) {
-                return;
-            }
+            if (playingMusic == null) return;
             float lyricScale = (float) Configs.GUI.LYRIC_SCALE.getDoubleValue();
             int lyricY = Configs.GUI.LYRIC_Y.getIntegerValue();
             int lyricX = Configs.GUI.LYRIC_X.getIntegerValue();
