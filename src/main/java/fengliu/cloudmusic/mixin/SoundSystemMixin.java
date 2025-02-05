@@ -1,6 +1,7 @@
 package fengliu.cloudmusic.mixin;
 
 import fengliu.cloudmusic.command.MusicCommand;
+import fengliu.cloudmusic.config.Configs;
 import fengliu.cloudmusic.music163.IMusic;
 import fengliu.cloudmusic.util.MusicPlayer;
 import net.minecraft.client.sound.SoundInstance;
@@ -22,26 +23,38 @@ public abstract class SoundSystemMixin {
     @Unique
     public SoundCategory currentCategory;
 
-    @Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;)V", at = @At("HEAD"), cancellable = true)
-    public void play(SoundInstance soundInstance, CallbackInfo ci) {
-        currentCategory = soundInstance.getCategory();
+    /**
+     * 判断是否需要停止播放背景音乐
+     * @param soundCategory 音乐类
+     * @return false 不播放
+     */
+    private static boolean canStopGameMusic(SoundCategory soundCategory){
+        if (!Configs.PLAY.NOT_PLAY_GAME_MUSIC.getBooleanValue()){
+            return false;
+        }
+
         MusicPlayer player = MusicCommand.getPlayer();
         IMusic playingMusic = player.getPlayingMusic();
-        if (playingMusic != null) {
-            if (currentCategory == SoundCategory.MUSIC) {
-                ci.cancel();
-            }
+        if (playingMusic == null) {
+            return false;
         }
+
+        return soundCategory == SoundCategory.MUSIC;
+    }
+
+    @Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;)V", at = @At("HEAD"), cancellable = true)
+    public void play(SoundInstance soundInstance, CallbackInfo ci) {
+        if (!canStopGameMusic(soundInstance.getCategory())){
+            return;
+        }
+        ci.cancel();
     }
 
     @Inject(method = "tick()V", at = @At("HEAD"), cancellable = true)
     public void tick(CallbackInfo ci) {
-        MusicPlayer player = MusicCommand.getPlayer();
-        IMusic playingMusic = player.getPlayingMusic();
-        if (playingMusic != null) {
-            if (currentCategory == SoundCategory.MUSIC) {
-                ci.cancel();
-            }
+        if (!canStopGameMusic(currentCategory)){
+            return;
         }
+        ci.cancel();
     }
 }

@@ -464,5 +464,11 @@
     "cloudmusic.config.hotkey.playlist.del.music": "歌单删除歌曲 | playlist.del.music",
     "cloudmusic.config.hotkey.playlist.del.music.comment": "歌单删除当前播放歌曲",
     "cloudmusic.config.hotkey.playlist.random": "随机播放 | playlist.random",
-    "cloudmusic.config.hotkey.playlist.random.comment": "将播放队列随机并重新播放"
+    "cloudmusic.config.hotkey.playlist.random.comment": "将播放队列随机并重新播放",
+    "cloudmusic.config.play.not.game.music": "禁止播放游戏背景音乐 | play.not.game.music",
+    "cloudmusic.config.play.not.game.music.comment": "播放音乐时自动停止播放游戏背景音乐 ",
+    "cloudmusic.config.exit.game.stop.music": "标题界面停止播放音乐 | exit.game.stop.music",
+    "cloudmusic.config.exit.game.stop.music.comment": "返回标题界面后停止播放音乐",
+    "cloudmusic.config.stop.play.show.ui": "停止播放后隐藏歌曲信息 | stop.play.show.ui",
+    "cloudmusic.config.stop.play.show.ui.comment": "停止播放后隐藏歌曲信息, 继续播放后显示歌曲信息"
 }

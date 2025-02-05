@@ -35,7 +35,14 @@ public abstract class MixinInGameHud {
         HudRenderCallback.EVENT.register((drawContext, renderTickCounter) -> {
             MusicPlayer player = MusicCommand.getPlayer();
             IMusic playingMusic = player.getPlayingMusic();
-            if (playingMusic == null) return;
+            if (playingMusic == null){
+                return;
+            }
+
+            if (Configs.GUI.STOP_PLAY_SHOW_UI.getBooleanValue() && !player.isPlaying()){
+                return;
+            }
+
             float lyricScale = (float) Configs.GUI.LYRIC_SCALE.getDoubleValue();
             int lyricY = Configs.GUI.LYRIC_Y.getIntegerValue();
             int lyricX = Configs.GUI.LYRIC_X.getIntegerValue();
@@ -93,6 +100,10 @@ public abstract class MixinInGameHud {
         IMusic playingMusic = player.getPlayingMusic();
 
         if (playingMusic == null) {
+            return;
+        }
+
+        if (Configs.GUI.STOP_PLAY_SHOW_UI.getBooleanValue() && !player.isPlaying()){
             return;
         }
 

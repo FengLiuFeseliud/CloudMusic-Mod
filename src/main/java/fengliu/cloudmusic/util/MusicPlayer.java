@@ -342,14 +342,6 @@ public class MusicPlayer implements Runnable {
             notifyAll();
         }
         this.loopPlayIn = false;
-        this.clearPlayingMusic();
-    }
-
-    /**
-     * 让正在播放的音乐为null, 以便停止渲染
-     */
-    private void clearPlayingMusic() {
-        this.playingMusic = null;
     }
 
     /**
