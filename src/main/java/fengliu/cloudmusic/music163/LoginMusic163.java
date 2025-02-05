@@ -131,7 +131,7 @@ public class LoginMusic163 {
      * @return key
      */
     public String qrKey(){
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("type", 1);
 
         JsonObject json = this.api.POST_API("/api/login/qrcode/unikey", data);
@@ -145,7 +145,7 @@ public class LoginMusic163 {
      * @return HttpResult
      */
     private HttpClient.HttpResult qrCheck(String qrKey){
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("key", qrKey);
         data.put("type", 1);
 

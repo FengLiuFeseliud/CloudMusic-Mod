@@ -34,8 +34,8 @@
       "environment": "client"
     }
   ],
-
   "depends": {
-    "minecraft": "1.21"
+    "minecraft": "${minecraft_version}",
+    "malilib": ">=${malilib_version}"
   }
 }

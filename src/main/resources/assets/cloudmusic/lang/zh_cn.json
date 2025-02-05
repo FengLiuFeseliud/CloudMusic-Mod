@@ -32,7 +32,6 @@
     "cloudmusic.help.album.send.comment": "向专辑发送评论 /cloudmusic album send comment [threadId] [content]",
     "cloudmusic.help.dj": "获取电台 /cloudmusic dj [id]",
     "cloudmusic.help.dj.play": "播放电台 /cloudmusic dj play [id]",
-    "cloudmusic.help.dj.send.comment": "向电台发送评论 /cloudmusic dj send comment [threadId] [content]",
     "cloudmusic.help.dj.music": "获取电台节目 /cloudmusic dj music [id]",
     "cloudmusic.help.dj.music.play": "播放电台节目 /cloudmusic dj music play [id]",
     "cloudmusic.help.dj.music.comment": "获取电台节目评论 /cloudmusic dj music comment [id]",
