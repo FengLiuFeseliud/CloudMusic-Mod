@@ -107,6 +107,8 @@ public class MusicCommand {
             Text.translatable("cloudmusic.help.my.playlist.del"),
             Text.translatable("cloudmusic.help.my.recommend.music"),
             Text.translatable("cloudmusic.help.my.recommend.playlist"),
+            Text.translatable("cloudmusic.help.my.recommend.history"),
+            Text.translatable("cloudmusic.help.my.recommend.history.date"),
             Text.translatable("cloudmusic.help.my.sublist.album"),
             Text.translatable("cloudmusic.help.my.sublist.artist"),
             Text.translatable("cloudmusic.help.my.sublist.dj"),

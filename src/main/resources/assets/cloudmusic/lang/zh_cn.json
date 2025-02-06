@@ -64,6 +64,8 @@
     "cloudmusic.help.my.playlist.del": "向我的歌单删除歌曲 /cloudmusic my playlist del [musicId]",
     "cloudmusic.help.my.recommend.music": "每日推荐歌曲 /cloudmusic my recommend music",
     "cloudmusic.help.my.recommend.playlist": "每日推荐歌单 /cloudmusic my recommend playlist",
+    "cloudmusic.help.my.recommend.history": "获取历史每日推荐歌曲 /cloudmusic my recommend history",
+    "cloudmusic.help.my.recommend.history.date": "播放历史每日推荐歌曲 /cloudmusic my recommend history [date]",
     "cloudmusic.help.my.sublist.album": "我收藏的专辑 /cloudmusic my sublist album",
     "cloudmusic.help.my.sublist.artist": "我收藏的歌手 /cloudmusic my sublist artist",
     "cloudmusic.help.my.sublist.dj": "我收藏的歌手 /cloudmusic my sublist dj",
