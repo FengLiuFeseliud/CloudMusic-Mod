@@ -10,21 +10,18 @@ package fengliu.cloudmusic.mixin;
 import com.mojang.authlib.GameProfile;
 import fengliu.cloudmusic.command.MusicCommand;
 import fengliu.cloudmusic.config.Configs;
-import fengliu.cloudmusic.music163.IMusic;
 import fengliu.cloudmusic.util.MusicPlayer;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.Monster;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -44,6 +41,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     @Unique
     private int previousVolume = 0;
 
+    @Unique
     private void runDownVolume(Consumer<Boolean> run){
         if (!Configs.ENABLE.ENABLE_NEARBY_MONSTER_DECREASE_VOLUME.getBooleanValue()) {
             return;

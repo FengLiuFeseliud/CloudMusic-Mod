@@ -28,7 +28,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.Function;
 
 @Mixin(InGameHud.class)
-public abstract class MixinInGameHud {
+public abstract class InGameHudMixin {
+
+    @Unique
+    private final MinecraftClient client = MinecraftClient.getInstance();
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void initLyricRender(MinecraftClient client, CallbackInfo ci) {
@@ -55,9 +58,6 @@ public abstract class MixinInGameHud {
             }
         });
     }
-
-    @Unique
-    private final MinecraftClient client = MinecraftClient.getInstance();
 
     @Unique
     public void renderLoginQrCode(DrawContext context) {

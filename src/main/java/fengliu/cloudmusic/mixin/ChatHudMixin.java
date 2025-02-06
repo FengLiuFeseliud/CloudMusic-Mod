@@ -19,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Mixin(ChatHud.class)
-public class MixinChatHud {
+public class ChatHudMixin {
     @Unique
     private static final Pattern SHAR_PATTERN = Pattern.compile("CloudMusic#.+\\sid:\\s[^\\sid:a-zA-Z]\\w[^\\sa-zA-Z]+$", Pattern.CASE_INSENSITIVE);
 
