@@ -2,6 +2,7 @@ package fengliu.cloudmusic.music163.data;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import fengliu.cloudmusic.music163.IMusic;
 import fengliu.cloudmusic.util.HttpClient;
 import fengliu.cloudmusic.util.IdUtil;
@@ -32,9 +33,7 @@ public class My extends User {
         JsonObject data = this.api.POST_API("/api/v3/discovery/recommend/songs", null);
 
         List<IMusic> musics = new ArrayList<>();
-        data.get("data").getAsJsonObject().get("dailySongs").getAsJsonArray().forEach(musicData -> {
-            musics.add(new Music(api, musicData.getAsJsonObject(), null));
-        });
+        data.get("data").getAsJsonObject().get("dailySongs").getAsJsonArray().forEach(musicData -> musics.add(new Music(api, musicData.getAsJsonObject(), null)));
         return musics;
     }
 
@@ -61,6 +60,39 @@ public class My extends User {
                 );
             }
         };
+    }
+
+    /**
+     * 历史每日推荐歌曲记录
+     * @return 页对象
+     */
+    public Page recommendHistorySongsRecent(){
+        JsonObject data = this.api.POST_API("/api/discovery/recommend/songs/history/recent", null);
+        return new Page(data.get("data").getAsJsonObject().get("dates").getAsJsonArray()) {
+            @Override
+            protected TextClickItem putPageItem(Object data) {
+                String historySongsRecent = ((JsonPrimitive) data).getAsString();
+                return new TextClickItem(
+                        Text.literal("§b%s".formatted(historySongsRecent)),
+                        Text.translatable(IdUtil.getShowInfo("page.history.songs.recent"), historySongsRecent),
+                        "/cloudmusic my recommend history " + historySongsRecent);
+            }
+        };
+    }
+
+    /**
+     * 历史每日推荐歌曲
+     * @param date 历史推荐日期
+     * @return 歌曲列表
+     */
+    public List<IMusic> recommendHistorySongs(String date){
+        Map<String, Object> data = new HashMap<>();
+        data.put("date", date);
+        JsonObject recommendHistorySongsData = this.api.POST_API("/api/discovery/recommend/songs/history/detail", data);
+
+        List<IMusic> musics = new ArrayList<>();
+        recommendHistorySongsData.get("data").getAsJsonObject().get("songs").getAsJsonArray().forEach(musicData -> musics.add(new Music(api, musicData.getAsJsonObject(), null)));
+        return musics;
     }
 
     /**

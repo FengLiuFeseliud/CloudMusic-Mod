@@ -1095,6 +1095,28 @@ public class MusicCommand {
             return Command.SINGLE_SUCCESS;
         }))));
 
+        // cloudmusic my recommend history
+        CloudMusic.then(My.then(Recommend.then(literal("history").executes(contextData -> {
+            runCommand(contextData, context -> {
+                page = getMy(false).recommendHistorySongsRecent();
+                page.setInfoText(Text.translatable("cloudmusic.info.page.recommend.history", getMy(false).name));
+                page.look(context.getSource());
+            });
+            return Command.SINGLE_SUCCESS;
+        }))));
+
+        // cloudmusic my recommend history date
+        CloudMusic.then(My.then(Recommend.then(literal("history").then(
+                argument("date", StringArgumentType.string()).executes(contextData -> {
+                    runCommand(contextData, context -> {
+                        String date = StringArgumentType.getString(context, "date");
+                        resetPlayer(getMy(false).recommendHistorySongs(date));
+                        context.getSource().sendFeedback(Text.translatable("cloudmusic.info.command.recommend.history.music", date));
+                        player.start();
+                    });
+                    return Command.SINGLE_SUCCESS;
+        })))));
+
         LiteralArgumentBuilder<FabricClientCommandSource> Sublist = literal("sublist");
 
         // cloudmusic my sublist album
