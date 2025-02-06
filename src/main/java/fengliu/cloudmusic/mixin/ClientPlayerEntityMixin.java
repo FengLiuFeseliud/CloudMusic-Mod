@@ -70,7 +70,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
             var world = player.getWorld();
             var nearbyMobs = world.getEntitiesByClass(
                     LivingEntity.class,
-                    player.getBoundingBox().expand(10),
+                    player.getBoundingBox().expand(Configs.ALL.NEARBY_MONSTER_DECREASE_VOLUME_RADIUS.getIntegerValue()),
                     entity -> entity instanceof Monster
             );
             if (nearbyMobs.isEmpty() && isVolumeAdjusted) {
