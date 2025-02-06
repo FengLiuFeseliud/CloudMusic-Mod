@@ -471,7 +471,13 @@
     "cloudmusic.config.exit.game.stop.music.comment": "返回标题界面后停止播放音乐",
     "cloudmusic.config.stop.play.show.ui": "停止播放后隐藏歌曲信息 | stop.play.show.ui",
     "cloudmusic.config.stop.play.show.ui.comment": "停止播放后隐藏歌曲信息, 继续播放后显示歌曲信息",
-    "cloudmusic.config.enable.nearby.monster.decrease.volume": "开启附近有敌对生物时减小音量 | enable.nearby.decrease.volume",
-    "cloudmusic.config.nearby.monster.decrease.volume.value": "附近有地对生物时减少的音量值 | nearby.decrease.sound.value",
-    "cloudmusic.config.nearby.monster.decrease.volume.radius": "敌对生物检测半径 | nearby.decrease.sound.radiu"
+    "cloudmusic.config.enable.nearby.monster.decrease.volume": "附近有敌对生物时减小音量 | enable.nearby.decrease.volume",
+    "cloudmusic.config.enable.nearby.monster.decrease.volume.comment": "在附近有敌对生物时减小音量",
+    "cloudmusic.config.enable.nearby.monster.decrease.volume.pretty": "在附近有敌对生物时减小音量",
+    "cloudmusic.config.nearby.monster.decrease.volume.value": "附近有敌对生物时减少的音量值 | nearby.decrease.sound.value",
+    "cloudmusic.config.nearby.monster.decrease.volume.value.comment": "附近有敌对生物时减少的音量值",
+    "cloudmusic.config.nearby.monster.decrease.volume.radius": "敌对生物检测半径 | nearby.decrease.sound.radius",
+    "cloudmusic.config.nearby.monster.decrease.volume.radius.comment": "附近敌对生物的检测半径",
+    "cloudmusic.config.nearby.monster.is.survival": "只有生存下有敌对生物时减小音量 | nearby.monster.is.survival",
+    "cloudmusic.config.nearby.monster.is.survival.comment": "只有生存模式下附近有敌对生物时减小音量"
 }

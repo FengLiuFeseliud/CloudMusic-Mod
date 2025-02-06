@@ -79,6 +79,7 @@ public class Configs implements IConfigHandler {
         public static final ConfigBooleanHotkeyed ENABLE_NEARBY_MONSTER_DECREASE_VOLUME = ConfigUtil.addConfigBooleanHotkeyed("enable.nearby.monster.decrease.volume");
         public static final ConfigInteger NEARBY_MONSTER_DECREASE_VOLUME_VALUE = ConfigUtil.addConfigInteger("nearby.monster.decrease.volume.value", 10);
         public static final ConfigInteger NEARBY_MONSTER_DECREASE_VOLUME_RADIUS = ConfigUtil.addConfigInteger("nearby.monster.decrease.volume.radius", 10);
+        public static final ConfigBoolean NEARBY_MONSTER_IS_SURVIVAL = ConfigUtil.addConfigBoolean("nearby.monster.is.survival", true);
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 VOLUME,
@@ -137,7 +138,8 @@ public class Configs implements IConfigHandler {
                 PLAYLIST_RANDOM,
                 NEARBY_MONSTER_DECREASE_VOLUME_RADIUS,
                 NEARBY_MONSTER_DECREASE_VOLUME_VALUE,
-                ENABLE_NEARBY_MONSTER_DECREASE_VOLUME
+                ENABLE_NEARBY_MONSTER_DECREASE_VOLUME,
+                NEARBY_MONSTER_IS_SURVIVAL
         );
     }
 
@@ -153,8 +155,10 @@ public class Configs implements IConfigHandler {
         public static final ConfigString CACHE_PATH = ALL.CACHE_PATH;
         public static final ConfigInteger CACHE_MAX_MB = ALL.CACHE_MAX_MB;
         public static final ConfigInteger CACHE_DELETE_MB = ALL.CACHE_DELETE_MB;
+        public static final ConfigBooleanHotkeyed ENABLE_NEARBY_MONSTER_DECREASE_VOLUME = ALL.ENABLE_NEARBY_MONSTER_DECREASE_VOLUME;
         public static final ConfigInteger NEARBY_MONSTER_DECREASE_VOLUME_VALUE = ALL.NEARBY_MONSTER_DECREASE_VOLUME_VALUE;
         public static final ConfigInteger NEARBY_MONSTER_DECREASE_VOLUME_RADIUS = ALL.NEARBY_MONSTER_DECREASE_VOLUME_RADIUS;
+        public static final ConfigBoolean NEARBY_MONSTER_IS_SURVIVAL = ALL.NEARBY_MONSTER_IS_SURVIVAL;
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 VOLUME,
@@ -168,8 +172,10 @@ public class Configs implements IConfigHandler {
                 CACHE_PATH,
                 CACHE_MAX_MB,
                 CACHE_DELETE_MB,
+                ENABLE_NEARBY_MONSTER_DECREASE_VOLUME,
                 NEARBY_MONSTER_DECREASE_VOLUME_VALUE,
-                NEARBY_MONSTER_DECREASE_VOLUME_RADIUS
+                NEARBY_MONSTER_DECREASE_VOLUME_RADIUS,
+                NEARBY_MONSTER_IS_SURVIVAL
         );
     }
 

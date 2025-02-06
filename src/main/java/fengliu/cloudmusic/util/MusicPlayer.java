@@ -53,7 +53,7 @@ public class MusicPlayer implements Runnable {
     }
 
     public boolean isPlaying() {
-        return this.loopPlayIn && this.load;
+        return this.loopPlayIn && this.load && this.getPlayingMusic() != null;
     }
 
     @Override

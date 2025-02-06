@@ -33,9 +33,7 @@ public abstract class SoundSystemMixin {
             return false;
         }
 
-        MusicPlayer player = MusicCommand.getPlayer();
-        IMusic playingMusic = player.getPlayingMusic();
-        if (playingMusic == null) {
+        if (!MusicCommand.getPlayer().isPlaying()) {
             return false;
         }
 

@@ -22,6 +22,10 @@ public class MinecraftClientMixin {
         }
 
         MusicPlayer player = MusicCommand.getPlayer();
+        if (!player.isPlaying()) {
+            return;
+        }
+
         player.stop();
     }
 }
