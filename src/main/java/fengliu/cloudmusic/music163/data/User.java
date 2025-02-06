@@ -25,6 +25,11 @@ public class User extends Music163Obj implements IPrint {
     public final String name;
     public final String signature;
     public final int level;
+    /**
+     *  0: 无会员
+     *
+     *  11: VIP || SVIP
+     */
     public final int vip;
     public final long listenSongs;
     public final int playlistCount;
@@ -202,11 +207,10 @@ public class User extends Music163Obj implements IPrint {
     @Override
     public void printToChatHud(FabricClientCommandSource source) {
         source.sendFeedback(Text.literal(""));
-        source.sendFeedback(Text.literal(this.name));
+        source.sendFeedback(Text.literal("%s%s".formatted(this.name, this.vip > 0 ? "§7 - vip": "")));
         source.sendFeedback(Text.literal(""));
 
         source.sendFeedback(Text.translatable("cloudmusic.info.user.level", this.level));
-        source.sendFeedback(Text.translatable("cloudmusic.info.user.vip", this.vip));
         source.sendFeedback(Text.translatable("cloudmusic.info.user.id", this.id));
 
         source.sendFeedback(Text.literal(""));
