@@ -76,6 +76,9 @@ public class Configs implements IConfigHandler {
         public static final ConfigHotkey PLAYLIST_DEL_MUSIC = ConfigUtil.addConfigHotkey("playlist.del.music");
         public static final ConfigHotkey PLAYLIST_RANDOM = ConfigUtil.addConfigHotkey("playlist.random");
         public static final ConfigBooleanHotkeyed CLICK_RUN_COMMAND = ConfigUtil.addConfigBooleanHotkeyed("click.run.command");
+        public static final ConfigBooleanHotkeyed ENABLE_NEARBY_MONSTER_DECREASE_VOLUME = ConfigUtil.addConfigBooleanHotkeyed("enable.nearby.monster.decrease.volume");
+        public static final ConfigInteger NEARBY_MONSTER_DECREASE_VOLUME_VALUE = ConfigUtil.addConfigInteger("nearby.monster.decrease.volume.value", 10);
+        public static final ConfigInteger NEARBY_MONSTER_DECREASE_VOLUME_RADIUS = ConfigUtil.addConfigInteger("nearby.monster.decrease.volume.radius", 10);
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 VOLUME,
@@ -131,7 +134,10 @@ public class Configs implements IConfigHandler {
                 LIKE_MUSIC,
                 PLAYLIST_ADD_MUSIC,
                 PLAYLIST_DEL_MUSIC,
-                PLAYLIST_RANDOM
+                PLAYLIST_RANDOM,
+                NEARBY_MONSTER_DECREASE_VOLUME_RADIUS,
+                NEARBY_MONSTER_DECREASE_VOLUME_VALUE,
+                ENABLE_NEARBY_MONSTER_DECREASE_VOLUME
         );
     }
 
@@ -147,6 +153,8 @@ public class Configs implements IConfigHandler {
         public static final ConfigString CACHE_PATH = ALL.CACHE_PATH;
         public static final ConfigInteger CACHE_MAX_MB = ALL.CACHE_MAX_MB;
         public static final ConfigInteger CACHE_DELETE_MB = ALL.CACHE_DELETE_MB;
+        public static final ConfigInteger NEARBY_MONSTER_DECREASE_VOLUME_VALUE = ALL.NEARBY_MONSTER_DECREASE_VOLUME_VALUE;
+        public static final ConfigInteger NEARBY_MONSTER_DECREASE_VOLUME_RADIUS = ALL.NEARBY_MONSTER_DECREASE_VOLUME_RADIUS;
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 VOLUME,
@@ -159,7 +167,9 @@ public class Configs implements IConfigHandler {
                 EXIT_GAME_STOP_MUSIC,
                 CACHE_PATH,
                 CACHE_MAX_MB,
-                CACHE_DELETE_MB
+                CACHE_DELETE_MB,
+                NEARBY_MONSTER_DECREASE_VOLUME_VALUE,
+                NEARBY_MONSTER_DECREASE_VOLUME_RADIUS
         );
     }
 
@@ -252,6 +262,7 @@ public class Configs implements IConfigHandler {
         public static final ConfigBooleanHotkeyed PLAY_AUTO_RANDOM = ALL.PLAY_AUTO_RANDOM;
         public static final ConfigBooleanHotkeyed MUSIC_INFO_EFFECT_OFFSET = ALL.MUSIC_INFO_EFFECT_OFFSET;
         public static final ConfigBooleanHotkeyed HTTP_PROXY = ALL.HTTP_PROXY;
+        public static final ConfigBooleanHotkeyed ENABLE_NEARBY_MONSTER_DECREASE_VOLUME = ALL.ENABLE_NEARBY_MONSTER_DECREASE_VOLUME;
 
         public static final ImmutableList<ConfigBooleanHotkeyed> HOTKEY_LIST = ImmutableList.of(
                 MUSIC_INFO,
@@ -259,7 +270,8 @@ public class Configs implements IConfigHandler {
                 PLAY_LOOP,
                 PLAY_AUTO_RANDOM,
                 MUSIC_INFO_EFFECT_OFFSET,
-                HTTP_PROXY
+                HTTP_PROXY,
+                ENABLE_NEARBY_MONSTER_DECREASE_VOLUME
         );
     }
 
@@ -304,7 +316,7 @@ public class Configs implements IConfigHandler {
         File configFile = new File(FileUtils.getConfigDirectory(), CONFIG_FILE_NAME);
         if (configFile.isFile() && configFile.exists()) {
             JsonElement element = JsonUtils.parseJsonFile(configFile);
-            if(element == null || !element.isJsonObject()){
+            if (element == null || !element.isJsonObject()) {
                 return;
             }
 

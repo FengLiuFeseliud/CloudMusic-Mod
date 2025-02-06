@@ -260,6 +260,14 @@ public class MusicPlayer implements Runnable {
     }
 
     /**
+     * 获取音量百分比
+     * @return 音量百分比
+     */
+    public int getVolumePercentage() {
+        return volumePercentage;
+    }
+
+    /**
      * 获取当前滚动到的歌词
      *
      * @return 歌词
