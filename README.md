@@ -10,6 +10,12 @@
 
 ![run.png](https://github.com/FengLiuFeseliud/CloudMusic-Mod/blob/main/img/social.png?raw=true)
 
+#### [CloudMusicRoom-Mod](https://github.com/FengLiuFeseliud/CloudMusicRoom-Mod) 用于在服务器配合本 mod 一起听歌使用(正在开发) , 不安装一样保持纯客户端使用
+
+"新建文件夹了"
+![image](https://github.com/user-attachments/assets/cb810462-1d72-49de-8d22-a97f85880aaf)
+
+
 ## 分享
 
 可以在服务器内使用聊天框分享资源, 点击消息后自动填充获取资源指令
