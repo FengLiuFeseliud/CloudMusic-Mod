@@ -82,7 +82,7 @@ public abstract class Page {
         source.sendFeedback(Text.translatable("cloudmusic.info.page.count", this.pageIn + 1 + "§c§l/§r" + this.pageCount));
 
         for (Object data : pageDataList) {
-            source.sendFeedback(Text.literal("[%s] ".formatted(offset + pageDataList.indexOf(data))).append(this.putPageItem(data).build()));
+            source.sendFeedback(Text.literal("[%s] ".formatted(offset + pageDataList.indexOf(data) + 1)).append(this.putPageItem(data).build()));
         }
 
         source.sendFeedback(TextClickItem.combine(
@@ -101,14 +101,14 @@ public abstract class Page {
         List<?> pageDataList = this.data.get(this.pageIn);
         int offset = pageDataList.size() * this.pageIn;
 
-        client.player.sendMessage(Text.literal("1"), false);
+        client.player.sendMessage(Text.literal(" "), false);
         if (this.infoText != null) {
             client.player.sendMessage(this.infoText, false);
         }
         client.player.sendMessage(Text.translatable("cloudmusic.info.page.count", this.pageIn + 1 + "§c§l/§r" + this.pageCount), false);
 
         for (Object data : pageDataList) {
-            client.player.sendMessage(Text.literal("[%s] ".formatted(offset + pageDataList.indexOf(data))).append(this.putPageItem(data).build()), false);
+            client.player.sendMessage(Text.literal("[%s] ".formatted(offset + pageDataList.indexOf(data) + 1)).append(this.putPageItem(data).build()), false);
         }
 
         client.player.sendMessage(TextClickItem.combine(
