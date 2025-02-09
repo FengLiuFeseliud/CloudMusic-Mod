@@ -12,8 +12,7 @@
 
 #### [CloudMusicRoom-Mod](https://github.com/FengLiuFeseliud/CloudMusicRoom-Mod) 用于在服务器配合本 mod 一起听歌使用(正在开发) , 不安装一样保持纯客户端使用
 
-"新建文件夹了"
-![image](https://github.com/user-attachments/assets/cb810462-1d72-49de-8d22-a97f85880aaf)
+![image](https://github.com/FengLiuFeseliud/CloudMusicRoom-Mod/raw/main/src/main/resources/assets/cloudmusicroom/icon.png?raw=true)
 
 
 ## 分享
